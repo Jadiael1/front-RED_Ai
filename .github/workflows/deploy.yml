@@ -27,7 +27,7 @@ jobs:
 
     - name: Clean VPS directory
       run: |
-        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_SSH_PORT }} ${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }} "rm -rf ${{ secrets.VPS_APP_DIR }}/node_modules; find ${{ secrets.VPS_APP_DIR }} -mindepth 1 -exec rm -rf {} +"
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_SSH_PORT }} ${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }} "rm -rf ${{ secrets.VPS_APP_DIR }}/node_modules; find ${{ secrets.VPS_APP_DIR }} -ignore_readdir_race -mindepth 1 -exec rm -rf {} + || true"
 
     - name: Copy files to VPS
       run: |
@@ -43,7 +43,7 @@ jobs:
 
     - name: Delete all except the dist folder
       run: |
-        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_SSH_PORT }} ${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }} "rm -rf ${{ secrets.VPS_APP_DIR }}/node_modules; find ${{ secrets.VPS_APP_DIR }} -mindepth 1 -not -name 'dist' -not -path '${{ secrets.VPS_APP_DIR }}/dist/*' -exec rm -rf {} +"
+        ssh -o StrictHostKeyChecking=no -p ${{ secrets.VPS_SSH_PORT }} ${{ secrets.VPS_SSH_USER }}@${{ secrets.VPS_HOST }} "rm -rf ${{ secrets.VPS_APP_DIR }}/node_modules; find ${{ secrets.VPS_APP_DIR }} -ignore_readdir_race -mindepth 1 -not -name 'dist' -not -path '${{ secrets.VPS_APP_DIR }}/dist/*' -exec rm -rf {} + || true"
 
     - name: Move all from the dist folder to the current directory
       run: |
