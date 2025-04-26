@@ -17,7 +17,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (user && !isLoading) {
-      navigate("/profile");
+      navigate("/");
     }
   }, [user, isLoading, navigate]);
 
@@ -103,6 +103,7 @@ const SignInPage = () => {
             />
             <i
               className="fas fa-eye toggle-password"
+              id="togglePassword"
               onClick={toggleShowPassword}
             ></i>
           </div>
