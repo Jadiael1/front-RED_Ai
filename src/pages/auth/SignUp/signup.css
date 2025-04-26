@@ -130,7 +130,7 @@ span {
 
 @media (max-width: 600px) {
     .register-container {
-        margin: 20px;
         padding: 20px;
+        width: 90%;
     }
 }
