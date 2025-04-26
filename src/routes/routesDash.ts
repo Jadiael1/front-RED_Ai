@@ -1,14 +1,5 @@
 import IRoutes from "./IRoutes";
 
-const routesDash: IRoutes[] = [
-  {
-    path: "/dashboard",
-    component: ()=>(<></>),
-    visibleInDisplay: false,
-    displayName: "Home",
-    protected: true,
-    adminOnly: true,
-  },
-];
+const routesDash: IRoutes[] = [];
 
 export default routesDash;
