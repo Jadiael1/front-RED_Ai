@@ -1,11 +1,12 @@
 import "./signup.css";
-import logob from "../../../assets/logob.png";
+import logoc from "../../../assets/logoc.png";
 import "../../../assets/fontawesome/css/all.min.css";
 import { useEffect, useState, useTransition } from "react";
 import { signUp } from "../../../api/endpoints/signUp";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { useNavigate } from "react-router-dom";
 import { inviteRequired } from "../../../api/endpoints/inviteRequired.js";
+import { parsePhoneNumberFromString } from "libphonenumber-js";
 
 type TError = {
   name: string;
@@ -46,8 +47,12 @@ const SignUpPage = () => {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
+    document.title = "Cadastro - RED Ai";
+  }, []);
+
+  useEffect(() => {
     if (user && !isLoading) {
-      navigate("/profile");
+      navigate("/");
     }
   }, [user, isLoading, navigate]);
 
@@ -63,43 +68,43 @@ const SignUpPage = () => {
   }, [shouldRefresh]);
 
   const validatePhone = (phone: string) => {
-    const numbers = phone.replace(/\D/g, "");
-    return numbers.length >= 10 && numbers.length <= 11;
+    // const numbers = phone.replace(/\D/g, "");
+    // return numbers.length >= 10 && numbers.length <= 11;
+    const parsedPhone = parsePhoneNumberFromString(phone, "AO");
+    return parsedPhone
+      ? parsedPhone.isValid() && parsedPhone.country === "AO"
+      : false;
   };
 
   const formatPhone = (value: string) => {
-    const numbers = value.replace(/\D/g, "");
-    const isValid = validatePhone(numbers);
-    if (!isValid) {
-      setError((prev) => ({
-        ...prev,
-        phone: "Por favor, insira um telefone válido",
-      }));
-    } else {
-      setError((prev) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { phone, ...rest } = prev;
-        return rest;
-      });
+    const phoneNumber = parsePhoneNumberFromString(value, "AO");
+    if (phoneNumber && phoneNumber.isValid()) {
+      return phoneNumber.formatInternational(); // Ex: +244 929 815 143
     }
-
-    return numbers.replace(
-      /^(\d{0,2})(\d{0,5})(\d{0,4}).*/,
-      (_, g1, g2, g3) => {
-        if (!g2) return g1;
-        if (!g3) return `(${g1}) ${g2}`;
-        return `(${g1}) ${g2}-${g3}`;
-      }
-    );
+    return value;
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
+      const formattedPhone = formatPhone(value);
+      const isValid = validatePhone(formattedPhone);
       setFormData({
         ...formData,
-        [name]: formatPhone(value),
+        [name]: formattedPhone,
       });
+      if (!isValid) {
+        setError((prev) => ({
+          ...prev,
+          phone: "Por favor, insira um telefone válido de Angola (+244)",
+        }));
+      } else {
+        setError((prev) => {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          const { phone, ...rest } = prev;
+          return rest;
+        });
+      }
     } else {
       setFormData({ ...formData, [name]: value });
     }
@@ -166,12 +171,12 @@ const SignUpPage = () => {
 
   return (
     <div className="register-container">
-      <img src={logob} alt="RED Aí Investimentos" className="logo" />
+      <img src={logoc} alt="RED Ai" className="logo" />
       <h1>Crie sua conta</h1>
 
       <form id="registerForm" onSubmit={handleRegister} method="POST">
         <div className="form-group">
-          <label htmlFor="nome">Nome Completo</label>
+          <label htmlFor="nome">Nome Completo*</label>
           <input
             type="text"
             id="nome"
@@ -188,13 +193,13 @@ const SignUpPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="telefone">Telefone</label>
+          <label htmlFor="telefone">Telefone*</label>
           <input
             type="tel"
             id="telefone"
             name="phone"
+            maxLength={16}
             required
-            maxLength={15}
             value={formData.phone}
             onChange={handleChange}
           />
@@ -206,7 +211,7 @@ const SignUpPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email*</label>
           <input
             type="email"
             id="email"
@@ -223,7 +228,7 @@ const SignUpPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="password">Senha</label>
+          <label htmlFor="password">Senha*</label>
           <div className="password-container">
             <input
               type={showPassword ? "text" : "password"}
@@ -247,7 +252,7 @@ const SignUpPage = () => {
         </div>
 
         <div className="form-group">
-          <label htmlFor="confirmPassword">Confirmar Senha</label>
+          <label htmlFor="confirmPassword">Confirmar Senha*</label>
           <div className="password-container">
             <input
               type={showPasswordConfirm ? "text" : "password"}
@@ -271,11 +276,12 @@ const SignUpPage = () => {
         </div>
         {referralCode && (
           <div className="form-group">
-            <label htmlFor="indicacao">Código de Indicação</label>
+            <label htmlFor="indicacao">Código de Indicação*</label>
             <input
               type="text"
               id="indicacao"
               name="invite_code"
+              required
               value={formData.invite_code}
               onChange={handleChange}
             />
@@ -286,22 +292,7 @@ const SignUpPage = () => {
             )}
           </div>
         )}
-        <div className="form-group">
-          <label htmlFor="iban">Iban</label>
-          <input
-            type="text"
-            id="iban"
-            name="iban"
-            value={formData.iban}
-            onChange={handleChange}
-          />
-          {error.iban && (
-            <div id="ibanError" className="error-message">
-              {error.iban}
-            </div>
-          )}
-        </div>
-
+        <span> Todos os pontos (*) são obrigatórios para o cadastro.</span>
         <button
           type="submit"
           className={`btn ${isPending ? "loading" : ""}`}
@@ -312,24 +303,8 @@ const SignUpPage = () => {
 
         {success && (
           <div id="successMessage" className="success-message">
-            Cadastro realizado com sucesso! Verifique seu e-mail para ativar sua
-            conta, e em seguida acesse a pagina de{" "}
-            <b>
-              <a
-                onClick={() => {
-                  navigate("/auth/signin");
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                Login
-              </a>
-            </b>
-          </div>
-        )}
-
-        {error.submit && (
-          <div id="submitError" className="error-message">
-            {error.submit}
+            Cadastro realizado com sucesso! Verifique seu e-mail/telefone para
+            ativar sua conta.
           </div>
         )}
 
