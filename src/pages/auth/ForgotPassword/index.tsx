@@ -13,7 +13,7 @@ const ForgotPasswordPage = () => {
   useEffect(() => {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "/public/assets/css/forgotPassword.css";
+      link.href = "/assets/css/forgotPassword.css";
       link.id = "forgotpassword-page-style";
       document.head.appendChild(link);
   

@@ -49,13 +49,13 @@ const HomePage = () => {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/public/assets/css/HomePage.css";
+    link.href = "/assets/css/HomePage.css";
     link.id = "home-page-style";
     document.head.appendChild(link);
 
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
-    link2.href = "/public/assets/fontawesome/css/all.min.css";
+    link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
 
