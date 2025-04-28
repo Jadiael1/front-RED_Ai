@@ -1,11 +1,26 @@
-import './loading.css';
+import { useEffect } from "react";
 const LoadingPage = () => {
-    return (
-      <div className="loading-container">
-        <div className="spinner"></div>
-        <p>Carregando ...</p>
-      </div>
-    );
-}
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/src/pages/utils/loading.css";
+    link.id = "loading-page-style";
+    document.head.appendChild(link);
+
+    return () => {
+      const existingLink = document.getElementById("loading-page-style");
+      if (existingLink) {
+        existingLink.remove();
+      }
+    };
+  }, []);
+
+  return (
+    <div className="loading-container">
+      <div className="spinner"></div>
+      <p>Carregando ...</p>
+    </div>
+  );
+};
 
 export default LoadingPage;
