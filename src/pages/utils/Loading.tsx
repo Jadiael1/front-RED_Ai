@@ -3,7 +3,7 @@ const LoadingPage = () => {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/src/pages/utils/loading.css";
+    link.href = "/assets/css/loading.css";
     link.id = "loading-page-style";
     document.head.appendChild(link);
 
