@@ -1,5 +1,3 @@
-import "./signin.css";
-import "../../../assets/fontawesome/css/all.min.css";
 import logob from "../../../assets/logob.png";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
@@ -20,6 +18,31 @@ const SignInPage = () => {
       navigate("/");
     }
   }, [user, isLoading, navigate]);
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/src/pages/auth/SignIn/signin.css";
+    link.id = "signin-page-style";
+    document.head.appendChild(link);
+
+    const link2 = document.createElement("link");
+    link2.rel = "stylesheet";
+    link2.href = "/src/assets/fontawesome/css/all.min.css";
+    link2.id = "fontawesome-page-style";
+    document.head.appendChild(link2);
+
+    return () => {
+      const existingLink = document.getElementById("signin-page-style");
+      if (existingLink) {
+        existingLink.remove();
+      }
+      const existingLink2 = document.getElementById("fontawesome-page-style");
+      if (existingLink2) {
+        existingLink2.remove();
+      }
+    };
+  }, []);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
