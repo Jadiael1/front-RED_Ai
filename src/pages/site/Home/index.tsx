@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import banner1 from "./assets/imgs/banner1.png";
 import banner2 from "./assets/imgs/banner2.png";
 import banner3 from "./assets/imgs/banner3.png";
@@ -30,7 +30,7 @@ const usersData: User[] = [
   { phoneMasked: "91*****89", amount: "350.000 kz" },
 ];
 
-const HomePage: React.FC = () => {
+const HomePage = () => {
   const [slideIndex, setSlideIndex] = useState<number>(0);
 
   const nextSlide = useCallback(() => {
