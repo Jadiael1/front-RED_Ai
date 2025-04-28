@@ -1,5 +1,6 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
+import LoadingPage from "../pages/utils/Loading";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -7,25 +8,24 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading, token } = useAuth();
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   // se o usuario não fez login, e o loading terminou.
-  if (!user && !isLoading) {
+  if (!isLoading && !user) {
     return <Navigate to="/auth/signin" />;
   }
 
   // se usuario tiver logado, e o loading tiver terminado, porem não ativou seu cadastro
-  if (user && !isLoading && !user?.email_verified_at) {
+  if (!isLoading && user && !user?.email_verified_at) {
     return <Navigate to="/auth/activate-account" />;
   }
 
   // se chegou aqui é porque usuario fez login, e aqui verifica se loading terminou
   if (!isLoading) {
     return <>{children}</>;
-  }
-
-  // verifica se está carregando e se não usuario não fez logi, e se não tem token
-  if (isLoading && !user && !token) {
-    return <div>Loading...</div>;
   }
 };
