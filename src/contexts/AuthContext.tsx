@@ -15,19 +15,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!token) return;
-    startTransition(() => {
-      (async () => {
-        try {
-          const data: IApiResponseBase<IUser> = await getUser();
-          if (data.status === "success") {
-            setUser(data.data);
-          } else {
-            logout();
-          }
-        } catch {
+    startTransition(async () => {
+      try {
+        const data: IApiResponseBase<IUser> = await getUser();
+        if (data.status === "success") {
+          setUser(data.data);
+        } else {
           logout();
         }
-      })();
+      } catch {
+        logout();
+      }
     });
   }, [token]);
 
