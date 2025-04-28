@@ -1,6 +1,5 @@
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import logob from "../../../assets/logob.png";
-import "./forgotPassword.css";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../../../api/endpoints/forgotPassword";
 
@@ -10,6 +9,23 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/src/pages/auth/ForgotPassword/forgotPassword.css";
+      link.id = "forgotpassword-page-style";
+      document.head.appendChild(link);
+  
+      return () => {
+        const existingLink = document.getElementById(
+          "forgotpassword-page-style"
+        );
+        if (existingLink) {
+          existingLink.remove();
+        }
+      };
+    }, []);
 
   const handleForgotPassword = async (
     event: React.FormEvent<HTMLFormElement>
