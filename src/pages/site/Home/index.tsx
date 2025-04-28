@@ -3,6 +3,7 @@ import banner1 from "./assets/imgs/banner1.png";
 import banner2 from "./assets/imgs/banner2.png";
 import banner3 from "./assets/imgs/banner3.png";
 import logoc from "./assets/imgs/logoc.png";
+import { useNavigate } from "react-router-dom";
 
 interface Slide {
   src: string;
@@ -31,6 +32,7 @@ const usersData: User[] = [
 
 const HomePage = () => {
   const [slideIndex, setSlideIndex] = useState<number>(0);
+  const navigate = useNavigate();
 
   const nextSlide = useCallback(() => {
     setSlideIndex((prevIndex) => (prevIndex + 1) % slidesData.length);
@@ -41,9 +43,8 @@ const HomePage = () => {
     return () => clearInterval(intervalId);
   }, [nextSlide]);
 
-  const handleActionClick = (path: string, label: string) => {
-    console.log(`Ação selecionada: ${label}`);
-    window.location.href = path;
+  const handleActionClick = (path: string) => {
+    navigate(path);
   };
 
   useEffect(() => {
@@ -103,30 +104,15 @@ const HomePage = () => {
 
         {/* <!-- Botões de Ação --> */}
         <div className="action-buttons">
-          <button
-            className="action-btn"
-            onClick={() =>
-              handleActionClick("../secundarias/deposito.html", "DEPÓSITO")
-            }
-          >
+          <button className="action-btn" onClick={() => handleActionClick("/")}>
             <i className="fas fa-money-bill-wave"></i>
             <span className="action-label">DEPÓSITO</span>
           </button>
-          <button
-            className="action-btn"
-            onClick={() =>
-              handleActionClick("../secundarias/retirada.html", "RETIRADA")
-            }
-          >
+          <button className="action-btn" onClick={() => handleActionClick("/")}>
             <i className="fas fa-wallet"></i>
             <span className="action-label">RETIRADA</span>
           </button>
-          <button
-            className="action-btn"
-            onClick={() =>
-              handleActionClick("../secundarias/suporte.html", "SUPORTE")
-            }
-          >
+          <button className="action-btn" onClick={() => handleActionClick("/")}>
             <i className="fas fa-headset"></i>
             <span className="action-label">SUPORTE</span>
           </button>
@@ -148,19 +134,35 @@ const HomePage = () => {
 
       {/* Menu de navegação inferior */}
       <div className="footer-nav">
-        <a href="../primarias/home.html" className="nav-item active">
+        <a
+          onClick={() => handleActionClick("/")}
+          style={{ cursor: "pointer" }}
+          className="nav-item active"
+        >
           <i className="fas fa-home"></i>
           <span>Home</span>
         </a>
-        <a href="../primarias/produtos.html" className="nav-item">
+        <a
+          onClick={() => handleActionClick("/products")}
+          style={{ cursor: "pointer" }}
+          className="nav-item"
+        >
           <i className="fas fa-box"></i>
           <span>Produtos</span>
         </a>
-        <a href="../primarias/equipe.html" className="nav-item ">
+        <a
+          onClick={() => handleActionClick("/teams")}
+          style={{ cursor: "pointer" }}
+          className="nav-item "
+        >
           <i className="fas fa-network-wired"></i>
           <span>Equipe</span>
         </a>
-        <a href="../primarias/perfil.html" className="nav-item">
+        <a
+          onClick={() => handleActionClick("/profile")}
+          style={{ cursor: "pointer" }}
+          className="nav-item"
+        >
           <i className="fas fa-user"></i>
           <span>Perfil</span>
         </a>

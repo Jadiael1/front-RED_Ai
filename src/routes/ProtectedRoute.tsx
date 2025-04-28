@@ -8,14 +8,14 @@ interface ProtectedRouteProps {
 }
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, token } = useAuth();
 
   if (isLoading) {
     return <LoadingPage />;
   }
 
   // se o usuario não fez login, e o loading terminou.
-  if (!isLoading && !user) {
+  if (!isLoading && !user && !token) {
     return <Navigate to="/auth/signin" />;
   }
 
