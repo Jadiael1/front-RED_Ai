@@ -1,8 +1,7 @@
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logob from "../../../assets/logob.png";
 import { passwordReset } from "../../../api/endpoints/passwordReset";
-import "./resetPassword.css";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -15,6 +14,21 @@ const ResetPasswordPage = () => {
   const token = queryParams.get("token");
   const email = queryParams.get("email");
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/src/pages/auth/ResetPassword/resetPassword.css";
+    link.id = "resetpassword-page-style";
+    document.head.appendChild(link);
+
+    return () => {
+      const existingLink = document.getElementById("resetpassword-page-style");
+      if (existingLink) {
+        existingLink.remove();
+      }
+    };
+  }, []);
 
   const handleResetPassword = async (
     event: React.FormEvent<HTMLFormElement>
