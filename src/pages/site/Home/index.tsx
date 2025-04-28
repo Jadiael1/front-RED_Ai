@@ -3,7 +3,6 @@ import banner1 from "./assets/imgs/banner1.png";
 import banner2 from "./assets/imgs/banner2.png";
 import banner3 from "./assets/imgs/banner3.png";
 import logoc from "./assets/imgs/logoc.png";
-import "../../../assets/fontawesome/css/all.min.css";
 
 interface Slide {
   src: string;
@@ -50,13 +49,13 @@ const HomePage = () => {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/src/pages/site/Home/HomePage.css";
+    link.href = "/public/assets/css/HomePage.css";
     link.id = "home-page-style";
     document.head.appendChild(link);
 
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
-    link2.href = "/src/assets/fontawesome/css/all.min.css";
+    link2.href = "/public/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
 

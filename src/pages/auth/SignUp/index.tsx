@@ -51,13 +51,13 @@ const SignUpPage = () => {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/src/pages/auth/SignUp/signup.css";
+    link.href = "/public/assets/css/signup.css";
     link.id = "signup-page-style";
     document.head.appendChild(link);
 
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
-    link2.href = "/src/assets/fontawesome/css/all.min.css";
+    link2.href = "/public/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
 

@@ -18,7 +18,7 @@ const ResetPasswordPage = () => {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/src/pages/auth/ResetPassword/resetPassword.css";
+    link.href = "/public/assets/css/resetPassword.css";
     link.id = "resetpassword-page-style";
     document.head.appendChild(link);
 
