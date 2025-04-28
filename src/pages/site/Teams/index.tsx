@@ -7,7 +7,7 @@ const TeamsPage = () => {
   useEffect(() => {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "/public/assets/css/teamPage.css";
+      link.href = "/assets/css/teamPage.css";
       link.id = "teampage-page-style";
       document.head.appendChild(link);
   
