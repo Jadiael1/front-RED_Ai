@@ -1,6 +1,4 @@
-import "./signup.css";
 import logoc from "../../../assets/logoc.png";
-import "../../../assets/fontawesome/css/all.min.css";
 import { useEffect, useState, useTransition } from "react";
 import { signUp } from "../../../api/endpoints/signUp";
 import { useAuth } from "../../../hooks/useAuth.js";
@@ -48,6 +46,31 @@ const SignUpPage = () => {
 
   useEffect(() => {
     document.title = "Cadastro - RED Ai";
+  }, []);
+
+  useEffect(() => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "/src/pages/auth/SignUp/signup.css";
+    link.id = "signup-page-style";
+    document.head.appendChild(link);
+
+    const link2 = document.createElement("link");
+    link2.rel = "stylesheet";
+    link2.href = "/src/assets/fontawesome/css/all.min.css";
+    link2.id = "fontawesome-page-style";
+    document.head.appendChild(link2);
+
+    return () => {
+      const existingLink = document.getElementById("signup-page-style");
+      if (existingLink) {
+        existingLink.remove();
+      }
+      const existingLink2 = document.getElementById("fontawesome-page-style");
+      if (existingLink2) {
+        existingLink2.remove();
+      }
+    };
   }, []);
 
   useEffect(() => {
