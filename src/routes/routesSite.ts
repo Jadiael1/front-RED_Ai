@@ -1,5 +1,5 @@
 import IRoutes from "./IRoutes";
-import Home from '../pages/site/Home';
+import Home from "../pages/site/Home";
 import ProfilePage from "../pages/site/Profile";
 
 const routesSite: IRoutes[] = [
