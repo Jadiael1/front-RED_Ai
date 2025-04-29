@@ -58,7 +58,7 @@ const ProfilePage = () => {
           <button
             className="action-btn"
             onClick={() => {
-              /* ../secundarias/deposito.html */
+              navigate("/deposit");
             }}
           >
             <i className="fas fa-money-bill-wave"></i>
@@ -89,7 +89,7 @@ const ProfilePage = () => {
           <div
             className="tool-card"
             onClick={() => {
-              /* ../secundarias/meus-investimentos.html */
+              navigate("/my-investments");
             }}
           >
             <div className="tool-icon">
@@ -103,7 +103,7 @@ const ProfilePage = () => {
           <div
             className="tool-card"
             onClick={() => {
-              /* ../secundarias/historico.html */
+              navigate("/transaction-history");
             }}
           >
             <div className="tool-icon">
@@ -118,7 +118,7 @@ const ProfilePage = () => {
           <div
             className="tool-card"
             onClick={() => {
-              /* ../primarias/equipe.html */
+              navigate("/teams");
             }}
           >
             <div className="tool-icon">
@@ -133,7 +133,7 @@ const ProfilePage = () => {
           <div
             className="tool-card"
             onClick={() => {
-              /* ../secundarias/gestao-conta.html */
+              navigate("/account-management");
             }}
           >
             <div className="tool-icon">
@@ -151,7 +151,7 @@ const ProfilePage = () => {
           <div
             className="menu-item"
             onClick={() => {
-              /* ../secundarias/sobre.html */
+              navigate("/about-us");
             }}
           >
             <i className="fas fa-info-circle"></i>
@@ -161,7 +161,7 @@ const ProfilePage = () => {
           <div
             className="menu-item"
             onClick={() => {
-              /* ../secundarias/suporte.html */
+              navigate("/support-center");
             }}
           >
             <i className="fas fa-question-circle"></i>
@@ -172,7 +172,7 @@ const ProfilePage = () => {
           <div
             className="menu-item"
             onClick={() => {
-              /* ../secundarias/termos-condicoes.html */
+              navigate("/terms-and-conditions");
             }}
           >
             <i className="fas fa-file-contract"></i>
@@ -182,7 +182,7 @@ const ProfilePage = () => {
           <div
             className="menu-item"
             onClick={() => {
-              /* ../secundarias/politica-privacidade.html */
+              navigate("/privacy-policy");
             }}
           >
             <i className="fas fa-user-shield"></i>
@@ -196,7 +196,7 @@ const ProfilePage = () => {
           <div
             className="menu-item"
             onClick={() => {
-              /* ../secundarias/baixar-app.html */
+              navigate("/download-app");
             }}
           >
             <i className="fas fa-download"></i>
