@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/AboutUs.module.css";
+import logoc from "../../../assets/images/logoc.png";
 
 const AboutUsPage = () => {
   const navigate = useNavigate();
@@ -23,11 +24,7 @@ const AboutUsPage = () => {
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <img
-            src="/assets/images/logoc.png"
-            alt="RED Ai"
-            className={styles.logo}
-          />
+          <img src={logoc} alt="RED Ai" className={styles.logo} />
           <h1>RED Ai</h1>
           <p>Sua ponte para o crescimento financeiro inteligente.</p>
         </div>

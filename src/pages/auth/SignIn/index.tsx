@@ -1,4 +1,4 @@
-import logob from "../../../assets/logob.png";
+import logob from "../../../assets/images/logob.png";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";

@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
-import banner1 from "./assets/imgs/banner1.png";
-import banner2 from "./assets/imgs/banner2.png";
-import banner3 from "./assets/imgs/banner3.png";
-import logoc from "./assets/imgs/logoc.png";
+import banner1 from "../../../assets/images/banner1.png";
+import banner2 from "../../../assets/images/banner2.png";
+import banner3 from "../../../assets/images/banner3.png";
+import logoc from "../../../assets/images/logoc.png";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Home.module.css";
 

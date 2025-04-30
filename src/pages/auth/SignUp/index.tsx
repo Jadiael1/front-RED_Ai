@@ -1,4 +1,4 @@
-import logoc from "../../../assets/logoc.png";
+import logoc from "../../../assets/images/logoc.png";
 import { useEffect, useState, useTransition } from "react";
 import { signUp } from "../../../api/endpoints/signUp";
 import { useAuth } from "../../../hooks/useAuth.js";

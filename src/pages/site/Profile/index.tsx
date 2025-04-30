@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import styles from "./assets/css/Profile.module.css";
+import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const ProfilePage = () => {
       <div className={styles.container}>
         <div className={styles["profile-header"]}>
           <img
-            src="/assets/images/avatar.png"
+            src={avatarPlaceHolder}
             alt="Foto do Perfil"
             className={styles["profile-avatar"]}
           />

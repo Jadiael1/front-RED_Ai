@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/DownloadApp.module.css";
+import logod from "../../../assets/images/logod.png";
+import qrcodePlaceHolder from "../../../assets/images/qrcode_placeholder.png";
 
 const DownloadAppPage = () => {
   const navigate = useNavigate();
@@ -23,11 +25,7 @@ const DownloadAppPage = () => {
     <>
       <div className={styles.container}>
         <div className={styles["download-section"]}>
-          <img
-            src="/assets/images/logod.png"
-            alt="RED Ai App"
-            className={styles["app-icon"]}
-          />
+          <img src={logod} alt="RED Ai App" className={styles["app-icon"]} />
           <h1></h1>
           <p>
             Baixe nosso aplicativo e gerencie seus investimentos de qualquer
@@ -58,11 +56,7 @@ const DownloadAppPage = () => {
           </div>
 
           <div className={styles["qr-code"]}>
-            <img
-              src="/assets/images/qrcode_placeholder.png"
-              alt="QR Code"
-              width="200"
-            />
+            <img src={qrcodePlaceHolder} alt="QR Code" width="200" />
             <p>Aponte a câmera, faz o scan para baixar</p>
           </div>
 

@@ -1,6 +1,6 @@
 import { useState, useTransition } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import logob from "../../../assets/logob.png";
+import logob from "../../../assets/images/logob.png";
 import { passwordReset } from "../../../api/endpoints/passwordReset";
 import styles from "./assets/css/ResetPassword.module.css";
 
