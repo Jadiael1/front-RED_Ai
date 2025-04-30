@@ -7,16 +7,17 @@ const MyInvestmentsPage = () => {
   const [countdown, setCountdown] = useState("23:59:59");
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
     };
   }, []);
 
@@ -195,7 +196,7 @@ const MyInvestmentsPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

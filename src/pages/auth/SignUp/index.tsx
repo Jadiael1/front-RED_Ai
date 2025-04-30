@@ -50,16 +50,29 @@ const SignUpPage = () => {
   }, []);
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+    document.body.style.display = "flex";
+    document.body.style.justifyContent = "center";
+    document.body.style.alignItems = "center";
+    document.body.style.minHeight = "100vh";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
+      document.body.style.display = "";
+      document.body.style.justifyContent = "";
+      document.body.style.alignItems = "";
+      document.body.style.minHeight = "";
     };
   }, []);
 
@@ -185,12 +198,15 @@ const SignUpPage = () => {
   return (
     <div className={styles["register-container"]}>
       <img src={logoc} alt="RED Ai" className={styles.logo} />
-      <h1>Crie sua conta</h1>
+      <h1 className={styles.h1s}>Crie sua conta</h1>
 
       <form id="registerForm" onSubmit={handleRegister} method="POST">
         <div className={styles["form-group"]}>
-          <label htmlFor="nome">Nome Completo*</label>
+          <label className={styles.labels} htmlFor="nome">
+            Nome Completo*
+          </label>
           <input
+            className={styles.inputs}
             type="text"
             id="nome"
             name="name"
@@ -206,8 +222,11 @@ const SignUpPage = () => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="telefone">Telefone*</label>
+          <label className={styles.labels} htmlFor="telefone">
+            Telefone*
+          </label>
           <input
+            className={styles.inputs}
             type="tel"
             id="telefone"
             name="phone"
@@ -224,8 +243,11 @@ const SignUpPage = () => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="email">Email*</label>
+          <label className={styles.labels} htmlFor="email">
+            Email*
+          </label>
           <input
+            className={styles.inputs}
             type="email"
             id="email"
             name="email"
@@ -241,9 +263,12 @@ const SignUpPage = () => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="password">Senha*</label>
+          <label className={styles.labels} htmlFor="password">
+            Senha*
+          </label>
           <div className={styles["password-container"]}>
             <input
+              className={styles.inputs}
               type={showPassword ? "text" : "password"}
               id="password"
               name="password"
@@ -265,9 +290,12 @@ const SignUpPage = () => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="confirmPassword">Confirmar Senha*</label>
+          <label className={styles.labels} htmlFor="confirmPassword">
+            Confirmar Senha*
+          </label>
           <div className={styles["password-container"]}>
             <input
+              className={styles.inputs}
               type={showPasswordConfirm ? "text" : "password"}
               id="confirmPassword"
               name="password_confirmation"
@@ -290,8 +318,11 @@ const SignUpPage = () => {
 
         {referralCode && (
           <div className={styles["form-group"]}>
-            <label htmlFor="indicacao">Código de Indicação*</label>
+            <label className={styles.labels} htmlFor="indicacao">
+              Código de Indicação*
+            </label>
             <input
+              className={styles.inputs}
               type="text"
               id="indicacao"
               name="invite_code"
@@ -307,7 +338,10 @@ const SignUpPage = () => {
           </div>
         )}
 
-        <span> Todos os pontos (*) são obrigatórios para o cadastro.</span>
+        <span className={styles.spans}>
+          {" "}
+          Todos os pontos (*) são obrigatórios para o cadastro.
+        </span>
 
         <button
           type="submit"
@@ -327,6 +361,7 @@ const SignUpPage = () => {
         <div className={styles["login-link"]}>
           Já tem uma conta?{" "}
           <a
+            className={styles.as}
             onClick={() => {
               navigate("/auth/signin");
             }}

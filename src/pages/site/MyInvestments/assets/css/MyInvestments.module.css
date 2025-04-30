@@ -6,13 +6,6 @@
     --light-color: #ecf0f1;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -141,7 +134,7 @@ body {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 15px;
     margin-bottom: 5px;
 }

@@ -8,16 +8,6 @@
     --warning-color: #f39c12;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-    font-size: 12px;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -104,7 +94,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-.action-btn i {
+.action-btn .is {
     font-size: 24px;
     color: var(--primary-color);
     margin-bottom: 10px;
@@ -177,7 +167,7 @@ body {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 22px;
     margin-bottom: 5px;
 }

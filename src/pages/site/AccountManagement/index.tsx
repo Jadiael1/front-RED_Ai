@@ -8,16 +8,21 @@ const AccountManagementPage = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -25,7 +30,7 @@ const AccountManagementPage = () => {
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>Gestão da Minha Conta</h1>
+          <h1 className={styles.h1s}>Gestão da Minha Conta</h1>
           <p>
             Gerencie suas informações pessoais e segurança <br />O fornecimento
             de dados falsos compromete o estado da sua conta.
@@ -41,8 +46,11 @@ const AccountManagementPage = () => {
           <form id="personal-info-form">
             <div className={styles["form-row"]}>
               <div className={styles["form-group"]}>
-                <label htmlFor="full-name">Nome Completo</label>
+                <label className={styles.labels} htmlFor="full-name">
+                  Nome Completo
+                </label>
                 <input
+                  className={styles.inputs}
                   type="text"
                   id="full-name"
                   value="Nelo Designer"
@@ -51,8 +59,11 @@ const AccountManagementPage = () => {
               </div>
 
               <div className={styles["form-group"]}>
-                <label htmlFor="phone">Telefone</label>
+                <label className={styles.labels} htmlFor="phone">
+                  Telefone
+                </label>
                 <input
+                  className={styles.inputs}
                   type="tel"
                   id="phone"
                   value="+244 923 456 789"
@@ -62,8 +73,16 @@ const AccountManagementPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="email">Email</label>
-              <input type="email" id="email" value="nelo@email.com" required />
+              <label className={styles.labels} htmlFor="email">
+                Email
+              </label>
+              <input
+                className={styles.inputs}
+                type="email"
+                id="email"
+                value="nelo@email.com"
+                required
+              />
             </div>
 
             <button type="submit" className={styles.btn}>
@@ -80,11 +99,13 @@ const AccountManagementPage = () => {
 
           <form id="bank-account-form">
             <div className={styles["form-group"]}>
-              <label htmlFor="iban">IBAN (21 dígitos)</label>
+              <label className={styles.labels} htmlFor="iban">
+                IBAN (21 dígitos)
+              </label>
               <input
+                className={`${styles["iban-input"]} ${styles.inputs}`}
                 type="text"
                 id="iban"
-                className={styles["iban-input"]}
                 placeholder="AO060055000092345672101"
                 maxLength={21}
                 pattern="[0-9]{21}"
@@ -96,7 +117,9 @@ const AccountManagementPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="bank-name">Banco</label>
+              <label className={styles.labels} htmlFor="bank-name">
+                Banco
+              </label>
               <select id="bank-name" required>
                 <option value="">Selecione seu banco</option>
                 <option value="BAI" selected>
@@ -125,13 +148,27 @@ const AccountManagementPage = () => {
 
           <form id="password-form">
             <div className={styles["form-group"]}>
-              <label htmlFor="current-password">Senha Atual</label>
-              <input type="password" id="current-password" required />
+              <label className={styles.labels} htmlFor="current-password">
+                Senha Atual
+              </label>
+              <input
+                className={styles.inputs}
+                type="password"
+                id="current-password"
+                required
+              />
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="new-password">Nova Senha</label>
-              <input type="password" id="new-password" required />
+              <label className={styles.labels} htmlFor="new-password">
+                Nova Senha
+              </label>
+              <input
+                className={styles.inputs}
+                type="password"
+                id="new-password"
+                required
+              />
               <div className={styles["password-strength"]}>
                 <div className={styles["strength-bar"]} id="strength-bar"></div>
               </div>
@@ -142,8 +179,15 @@ const AccountManagementPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="confirm-password">Confirmar Nova Senha</label>
-              <input type="password" id="confirm-password" required />
+              <label className={styles.labels} htmlFor="confirm-password">
+                Confirmar Nova Senha
+              </label>
+              <input
+                className={styles.inputs}
+                type="password"
+                id="confirm-password"
+                required
+              />
             </div>
 
             <button type="submit" className={styles.btn}>
@@ -182,7 +226,7 @@ const AccountManagementPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

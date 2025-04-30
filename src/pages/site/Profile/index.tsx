@@ -9,19 +9,24 @@ const ProfilePage = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
 
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
+
   return (
     <>
       <div className={styles.container}>
@@ -53,7 +58,7 @@ const ProfilePage = () => {
               navigate("/deposit");
             }}
           >
-            <i className="fas fa-money-bill-wave"></i>
+            <i className={`fas fa-money-bill-wave ${styles.is}`}></i>
             <span className={styles["action-label"]}>DEPÓSITO</span>
           </button>
           <button
@@ -62,7 +67,7 @@ const ProfilePage = () => {
               /* ../secundarias/retirada.html */
             }}
           >
-            <i className="fas fa-wallet"></i>
+            <i className={`fas fa-wallet ${styles.is}`}></i>
             <span className={styles["action-label"]}>RETIRADA</span>
           </button>
           <button
@@ -71,7 +76,7 @@ const ProfilePage = () => {
               /* ../secundarias/suporte.html */
             }}
           >
-            <i className="fas fa-headset"></i>
+            <i className={`fas fa-headset ${styles.is}`}></i>
             <span className={styles["action-label"]}>SUPORTE</span>
           </button>
         </div>
@@ -85,11 +90,11 @@ const ProfilePage = () => {
             }}
           >
             <div className={styles["tool-icon"]}>
-              <i className="fas fa-chart-line"></i>
+              <i className={`fas fa-chart-line ${styles.is}`}></i>
             </div>
             <div className={styles["tool-info"]}>
-              <h3>MEUS INVESTIMENTOS</h3>
-              <p>Acompanhe seus investimentos</p>
+              <h3 className={styles.h3s}>MEUS INVESTIMENTOS</h3>
+              <p className={styles.ps}>Acompanhe seus investimentos</p>
             </div>
           </div>
           <div
@@ -99,11 +104,11 @@ const ProfilePage = () => {
             }}
           >
             <div className={styles["tool-icon"]}>
-              <i className="fas fa-file-invoice-dollar"></i>
+              <i className={`fas fa-file-invoice-dollar ${styles.is}`}></i>
             </div>
             <div className={styles["tool-info"]}>
-              <h3>EXTRATOS</h3>
-              <p>Histórico de transações</p>
+              <h3 className={styles.h3s}>EXTRATOS</h3>
+              <p className={styles.ps}>Histórico de transações</p>
             </div>
           </div>
 
@@ -114,11 +119,11 @@ const ProfilePage = () => {
             }}
           >
             <div className={styles["tool-icon"]}>
-              <i className="fas fa-gift"></i>
+              <i className={`fas fa-gift ${styles.is}`}></i>
             </div>
             <div className={styles["tool-info"]}>
-              <h3>BÔNUS</h3>
-              <p>Promoções e recompensas</p>
+              <h3 className={styles.h3s}>BÔNUS</h3>
+              <p className={styles.ps}>Promoções e recompensas</p>
             </div>
           </div>
 
@@ -129,11 +134,13 @@ const ProfilePage = () => {
             }}
           >
             <div className={styles["tool-icon"]}>
-              <i className="fas fa-user-cog"></i>
+              <i className={`fas fa-user-cog ${styles.is}`}></i>
             </div>
             <div className={styles["tool-info"]}>
-              <h3>CONTA</h3>
-              <p>Gerencie informações pessoais e segurança</p>
+              <h3 className={styles.h3s}>CONTA</h3>
+              <p className={styles.ps}>
+                Gerencie informações pessoais e segurança
+              </p>
             </div>
           </div>
         </div>
@@ -146,9 +153,11 @@ const ProfilePage = () => {
               navigate("/about-us");
             }}
           >
-            <i className="fas fa-info-circle"></i>
+            <i className={`fas fa-info-circle ${styles.is}`}></i>
             <span className={styles["menu-label"]}>SOBRE NÓS</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
           <div
             className={styles["menu-item"]}
@@ -156,9 +165,11 @@ const ProfilePage = () => {
               navigate("/support-center");
             }}
           >
-            <i className="fas fa-question-circle"></i>
+            <i className={`fas fa-question-circle ${styles.is}`}></i>
             <span className={styles["menu-label"]}>CENTRAL DE SUPORTE</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
 
           <div
@@ -167,9 +178,11 @@ const ProfilePage = () => {
               navigate("/terms-and-conditions");
             }}
           >
-            <i className="fas fa-file-contract"></i>
+            <i className={`fas fa-file-contract ${styles.is}`}></i>
             <span className={styles["menu-label"]}>TERMOS & CONDIÇÕES</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
           <div
             className={styles["menu-item"]}
@@ -177,9 +190,11 @@ const ProfilePage = () => {
               navigate("/privacy-policy");
             }}
           >
-            <i className="fas fa-user-shield"></i>
+            <i className={`fas fa-user-shield ${styles.is}`}></i>
             <span className={styles["menu-label"]}>POLITICA E PRIVACIDADE</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
         </div>
 
@@ -191,14 +206,18 @@ const ProfilePage = () => {
               navigate("/download-app");
             }}
           >
-            <i className="fas fa-download"></i>
+            <i className={`fas fa-download ${styles.is}`}></i>
             <span className={styles["menu-label"]}>DESCARREGAR APP</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
           <div className={styles["menu-item"]} onClick={() => logout()}>
-            <i className="fas fa-sign-out-alt"></i>
+            <i className={`fas fa-sign-out-alt ${styles.is}`}></i>
             <span className={styles["menu-label"]}>SAIR</span>
-            <i className={`fas fa-chevron-right ${styles["menu-arrow"]}`}></i>
+            <i
+              className={`fas fa-chevron-right ${styles["menu-arrow"]} ${styles.is}`}
+            ></i>
           </div>
         </div>
       </div>
@@ -209,7 +228,7 @@ const ProfilePage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-home"></i>
+          <i className={`fas fa-home ${styles.is}`}></i>
           <span>Home</span>
         </a>
         <a
@@ -217,7 +236,7 @@ const ProfilePage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-box"></i>
+          <i className={`fas fa-box ${styles.is}`}></i>
           <span>Produtos</span>
         </a>
         <a
@@ -225,7 +244,7 @@ const ProfilePage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-network-wired"></i>
+          <i className={`fas fa-network-wired ${styles.is}`}></i>
           <span>Equipe</span>
         </a>
         <a
@@ -233,7 +252,7 @@ const ProfilePage = () => {
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]} ${styles.active}`}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

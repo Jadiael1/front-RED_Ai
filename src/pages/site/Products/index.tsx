@@ -1,21 +1,26 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import styles from './assets/css/Products.module.css'
+import styles from "./assets/css/Products.module.css";
 
 const ProductPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -339,7 +344,7 @@ const ProductPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-home"></i>
+          <i className={`fas fa-home ${styles.is}`}></i>
           <span>Home</span>
         </a>
         <a
@@ -347,7 +352,7 @@ const ProductPage = () => {
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]} ${styles.active}`}
         >
-          <i className="fas fa-box"></i>
+          <i className={`fas fa-box ${styles.is}`}></i>
           <span>Produtos</span>
         </a>
         <a
@@ -355,7 +360,7 @@ const ProductPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-network-wired"></i>
+          <i className={`fas fa-network-wired ${styles.is}`}></i>
           <span>Equipe</span>
         </a>
         <a
@@ -363,7 +368,7 @@ const ProductPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

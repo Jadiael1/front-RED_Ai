@@ -7,16 +7,21 @@ const SupportCenterPage = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null); // já abre o primeiro
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -61,8 +66,10 @@ const SupportCenterPage = () => {
             <div className={styles["support-icon"]}>
               <i className="fab fa-whatsapp"></i>
             </div>
-            <h2>WhatsApp</h2>
-            <p>Atendimento rápido e direto pelo WhatsApp</p>
+            <h2 className={styles.h2s}>WhatsApp</h2>
+            <p className={styles.ps}>
+              Atendimento rápido e direto pelo WhatsApp
+            </p>
             <a
               href="https://wa.me/244923456789"
               className={styles["btn-support"]}
@@ -75,8 +82,8 @@ const SupportCenterPage = () => {
             <div className={styles["support-icon"]}>
               <i className="fab fa-telegram"></i>
             </div>
-            <h2>Telegram</h2>
-            <p>Canal oficial de comunicação</p>
+            <h2 className={styles.h2s}>Telegram</h2>
+            <p className={styles.ps}>Canal oficial de comunicação</p>
             <a
               href="https://t.me/REDAi_Canal"
               className={styles["btn-support"]}
@@ -89,8 +96,8 @@ const SupportCenterPage = () => {
             <div className={styles["support-icon"]}>
               <i className="fas fa-users"></i>
             </div>
-            <h2>Grupo de Investidores</h2>
-            <p>Comunidade de investidores da RED Ai</p>
+            <h2 className={styles.h2s}>Grupo de Investidores</h2>
+            <p className={styles.ps}>Comunidade de investidores da RED Ai</p>
             <a
               href="https://t.me/REDAi_Canal"
               className={styles["btn-support"]}
@@ -128,21 +135,21 @@ const SupportCenterPage = () => {
           <h2 style={{ color: "var(--secondary-color)", marginTop: 0 }}>
             Outros Contatos
           </h2>
-          <p>
+          <p className={styles.ps}>
             <i
               className="fas fa-envelope"
               style={{ color: "var(--secondary-color)" }}
             ></i>{" "}
             <strong>Email:</strong> suporte@redai.pt
           </p>
-          <p>
+          <p className={styles.ps}>
             <i
               className="fas fa-phone-alt"
               style={{ color: "var(--secondary-color)" }}
             ></i>{" "}
             <strong>Telefone:</strong> +351 23 456 789
           </p>
-          <p>
+          <p className={styles.ps}>
             <i
               className="fas fa-clock"
               style={{ color: "var(--secondary-color)" }}
@@ -160,7 +167,7 @@ const SupportCenterPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

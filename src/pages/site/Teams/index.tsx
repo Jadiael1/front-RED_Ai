@@ -6,16 +6,21 @@ const TeamsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -79,7 +84,8 @@ const TeamsPage = () => {
         <div className={styles.card}>
           <h2 className={styles["card-title"]}>
             <span>
-              <i className="fas fa-money-bill-wave"></i> BÔNUS POR NÍVEL
+              <i className={`fas fa-money-bill-wave ${styles.is}`}></i> BÔNUS
+              POR NÍVEL
             </span>
             <span className={styles.badge}>GANHOS</span>
           </h2>
@@ -142,49 +148,53 @@ const TeamsPage = () => {
         <div className={styles.card}>
           <h2 className={styles["card-title"]}>
             <span>
-              <i className="fas fa-money-bill-wave"></i> BÔNUS DA REDE
+              <i className={`fas fa-money-bill-wave ${styles.is}`}></i> BÔNUS DA
+              REDE
             </span>
             <span className={styles.badge}>GANHOS</span>
           </h2>
           <table className={styles["earnings-table"]}>
             <thead>
-              <tr>
-                <th>Data</th>
-                <th>Nível</th>
-                <th>Convidado</th>
-                <th>Investimento</th>
-                <th>Seu Lucro</th>
+              <tr className={styles.trs}>
+                <th className={styles.ths}>Data</th>
+                <th className={styles.ths}>Nível</th>
+                <th className={styles.ths}>Convidado</th>
+                <th className={styles.ths}>Investimento</th>
+                <th className={styles.ths}>Seu Lucro</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>15/05/2023</td>
-                <td>1</td>
-                <td>João Silva</td>
-                <td>50.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds}>15/05/2023</td>
+                <td className={styles.tds}>1</td>
+                <td className={styles.tds}>João Silva</td>
+                <td className={styles.tds}>50.000 Kz</td>
                 <td
+                  className={styles.tds}
                   style={{ color: "var(--success-color)", fontWeight: "bold" }}
                 >
                   5.000 Kz
                 </td>
               </tr>
-              <tr>
-                <td>10/05/2023</td>
-                <td>2</td>
-                <td>Maria Souza</td>
-                <td>30.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds}>10/05/2023</td>
+                <td className={styles.tds}>2</td>
+                <td className={styles.tds}>Maria Souza</td>
+                <td className={styles.tds}>30.000 Kz</td>
                 <td
+                  className={styles.tds}
                   style={{ color: "var(--success-color)", fontWeight: "bold" }}
                 >
                   1.500 Kz
                 </td>
               </tr>
-              <tr>
-                <td>05/05/2023</td>
-                <td>1</td>
-                <td>Carlos Oliveira</td>
-                <td>100.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds}>05/05/2023</td>
+                <td className={styles.tds}>1</td>
+                <td className={styles.tds}>Carlos Oliveira</td>
+                <td className={styles.tds}>100.000 Kz</td>
                 <td
+                  className={styles.tds}
                   style={{ color: "var(--success-color)", fontWeight: "bold" }}
                 >
                   10.000 Kz
@@ -198,7 +208,8 @@ const TeamsPage = () => {
         <div className={styles.card}>
           <h2 className={styles["card-title"]}>
             <span>
-              <i className="fas fa-calendar-alt"></i> RENDA POR PRODUTO
+              <i className={`fas fa-calendar-alt ${styles.is}`}></i> RENDA POR
+              PRODUTO
             </span>
             <span className={styles.badge}>ANÁLISE</span>
           </h2>
@@ -287,7 +298,7 @@ const TeamsPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-home"></i>
+          <i className={`fas fa-home ${styles.is}`}></i>
           <span>Home</span>
         </a>
         <a
@@ -295,7 +306,7 @@ const TeamsPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-box"></i>
+          <i className={`fas fa-box ${styles.is}`}></i>
           <span>Produtos</span>
         </a>
         <a
@@ -303,7 +314,7 @@ const TeamsPage = () => {
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]} ${styles.active}`}
         >
-          <i className="fas fa-network-wired"></i>
+          <i className={`fas fa-network-wired ${styles.is}`}></i>
           <span>Equipe</span>
         </a>
         <a
@@ -311,7 +322,7 @@ const TeamsPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

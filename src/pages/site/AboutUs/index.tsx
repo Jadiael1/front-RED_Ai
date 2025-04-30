@@ -5,18 +5,23 @@ import logoc from "../../../assets/images/logoc.png";
 
 const AboutUsPage = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
 
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -25,7 +30,7 @@ const AboutUsPage = () => {
       <div className={styles.container}>
         <div className={styles.header}>
           <img src={logoc} alt="RED Ai" className={styles.logo} />
-          <h1>RED Ai</h1>
+          <h1 className={styles.h1s}>RED Ai</h1>
           <p>Sua ponte para o crescimento financeiro inteligente.</p>
         </div>
 
@@ -162,7 +167,7 @@ const AboutUsPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

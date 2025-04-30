@@ -5,15 +5,6 @@
     --dark-color: #34495e;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -56,12 +47,12 @@ body {
     margin-bottom: 15px;
 }
 
-.support-card h2 {
+.support-card .h2s {
     color: var(--secondary-color);
     margin-top: 0;
 }
 
-.support-card p {
+.support-card .ps {
     color: #7f8c8d;
     margin-bottom: 20px;
 }
@@ -129,7 +120,7 @@ body {
     text-align: center;
 }
 
-.contact-info p {
+.contact-info .ps {
     margin-bottom: 10px;
 }
 
@@ -161,7 +152,7 @@ body {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 22px;
     margin-bottom: 5px;
 }

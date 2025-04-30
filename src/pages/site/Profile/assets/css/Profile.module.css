@@ -8,15 +8,6 @@
     --warning-color: #f39c12;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -105,7 +96,7 @@ body {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-.action-btn i {
+.action-btn .is {
     font-size: 24px;
     color: var(--primary-color);
     margin-bottom: 10px;
@@ -160,18 +151,18 @@ body {
     margin-right: 15px;
 }
 
-.tool-icon i {
+.tool-icon .is {
     color: var(--primary-color);
     font-size: 18px;
 }
 
-.tool-info h3 {
+.tool-info .h3s {
     margin: 0;
     font-size: 16px;
     color: var(--secondary-color);
 }
 
-.tool-info p {
+.tool-info .ps {
     margin: 5px 0 0 0;
     font-size: 13px;
     color: #7f8c8d;
@@ -202,7 +193,7 @@ body {
     background-color: #f8f9fa;
 }
 
-.menu-item i {
+.menu-item .is {
     width: 30px;
     color: var(--primary-color);
     font-size: 18px;
@@ -246,7 +237,7 @@ body {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 22px;
     margin-bottom: 5px;
 }

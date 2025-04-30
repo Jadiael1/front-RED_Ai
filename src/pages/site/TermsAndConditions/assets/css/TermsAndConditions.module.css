@@ -5,16 +5,6 @@
     --dark-color: #34495e;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-    font-size: 15px;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -26,7 +16,7 @@ body {
     margin-bottom: 30px;
 }
 
-.header h1 {
+.header .h1s {
     color: var(--secondary-color);
     margin-bottom: 10px;
 }
@@ -44,39 +34,39 @@ body {
     margin-top: 30px;
 }
 
-h2.section-title {
+.h2s.section-title {
     border-bottom: 2px solid var(--light-color);
     padding-bottom: 8px;
 }
 
-ol.terms-list {
+.ols.terms-list {
     counter-reset: section;
     padding-left: 0;
 }
 
-ol.terms-list>li {
+.ols.terms-list>.lis {
     counter-increment: section;
     list-style-type: none;
     margin-bottom: 20px;
 }
 
-ol.terms-list>li:before {
+.ols.terms-list>.lis:before {
     content: counters(section, ".") " ";
     color: var(--secondary-color);
     font-weight: bold;
 }
 
-ol.terms-list ol {
+.ols.terms-list .ols {
     counter-reset: subsection;
     padding-left: 30px;
 }
 
-ol.terms-list ol li {
+.ols.terms-list .ols .lis {
     counter-increment: subsection;
     list-style-type: none;
 }
 
-ol.terms-list ol li:before {
+.ols.terms-list .ols .lis:before {
     content: counters(section, ".") "." counters(subsection, ".") " ";
     color: var(--secondary-color);
     font-weight: bold;
@@ -118,7 +108,7 @@ ol.terms-list ol li:before {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 22px;
     margin-bottom: 5px;
 }

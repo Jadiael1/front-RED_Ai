@@ -11,19 +11,6 @@
     cursor: not-allowed !important;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
 .register-container {
     width: 100%;
     max-width: 500px;
@@ -39,7 +26,7 @@ body {
     margin: 0 auto 20px;
 }
 
-h1 {
+.h1s {
     color: var(--secondary-color);
     text-align: center;
     margin-bottom: 30px;
@@ -50,15 +37,15 @@ h1 {
     margin-bottom: 20px;
 }
 
-label {
+.labels {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     color: var(--secondary-color);
 }
 
-input,
-select {
+.inputs,
+.selects {
     width: 100%;
     padding: 12px 15px;
     border: 1px solid #ddd;
@@ -98,7 +85,7 @@ select {
     background-color: #2980b9;
 }
 
-span {
+.spans {
     font-size: 12px;
 }
 
@@ -107,12 +94,12 @@ span {
     margin-top: 20px;
 }
 
-.login-link a {
+.login-link .as {
     color: var(--primary-color);
     text-decoration: none;
 }
 
-.login-link a:hover {
+.login-link .as:hover {
     text-decoration: underline;
 }
 

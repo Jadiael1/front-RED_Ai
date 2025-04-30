@@ -6,16 +6,21 @@ const TransactionHistoryPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -23,14 +28,14 @@ const TransactionHistoryPage = () => {
     <>
       <div className={styles.container}>
         <div className={styles.header}>
-          <h1>Histórico de Transações</h1>
+          <h1 className={styles.h1s}>Histórico de Transações</h1>
           <p>Todas as suas movimentações financeiras</p>
         </div>
 
         <div className={styles.filters}>
           <div className={styles["filter-group"]}>
             <label htmlFor="filter-type">Filtrar por tipo:</label>
-            <select id="filter-type">
+            <select className={styles.selects} id="filter-type">
               <option value="all">Todos</option>
               <option value="deposit">Depósito</option>
               <option value="withdrawal">Retirada</option>
@@ -41,7 +46,7 @@ const TransactionHistoryPage = () => {
 
           <div className={styles["filter-group"]}>
             <label htmlFor="filter-status">Filtrar por status:</label>
-            <select id="filter-status">
+            <select className={styles.selects} id="filter-status">
               <option value="all">Todos</option>
               <option value="approved">Aprovado</option>
               <option value="pending">Pendente</option>
@@ -51,7 +56,7 @@ const TransactionHistoryPage = () => {
 
           <div className={styles["filter-group"]}>
             <label htmlFor="filter-date">Filtrar por data:</label>
-            <input type="date" id="filter-date" />
+            <input className={styles.inputs} type="date" id="filter-date" />
           </div>
         </div>
 
@@ -150,7 +155,7 @@ const TransactionHistoryPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

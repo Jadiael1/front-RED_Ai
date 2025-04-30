@@ -8,16 +8,21 @@ const DownloadAppPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const link2 = document.createElement("link");
-    link2.rel = "stylesheet";
-    link2.href = "/assets/fontawesome/css/all.min.css";
-    link2.id = "fontawesome-page-style";
-    document.head.appendChild(link2);
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0 0 80px 0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+
     return () => {
-      const existingLink2 = document.getElementById("fontawesome-page-style");
-      if (existingLink2) {
-        existingLink2.remove();
-      }
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
     };
   }, []);
 
@@ -37,7 +42,7 @@ const DownloadAppPage = () => {
               href="https://play.google.com/store/apps/details?id=ao.redai"
               className={styles["download-btn"]}
             >
-              <i className="fab fa-google-play"></i>
+              <i className={`fab fa-google-play ${styles.is}`}></i>
               <span>Google Play</span>
             </a>
 
@@ -45,12 +50,12 @@ const DownloadAppPage = () => {
               href="https://apps.apple.com/ao/app/red-ai/id123456789"
               className={styles["download-btn"]}
             >
-              <i className="fab fa-apple"></i>
+              <i className={`fab fa-apple ${styles.is}`}></i>
               <span>App Store</span>
             </a>
 
             <a href="download/redai-app.apk" className={styles["download-btn"]}>
-              <i className="fas fa-download"></i>
+              <i className={`fas fa-download ${styles.is}`}></i>
               <span>APK Directo</span>
             </a>
           </div>
@@ -62,19 +67,19 @@ const DownloadAppPage = () => {
 
           <div className={styles.features}>
             <div className={styles["feature-card"]}>
-              <i className="fas fa-bolt"></i>
+              <i className={`fas fa-bolt ${styles.is}`}></i>
               <h3>Rápido</h3>
               <p>Operações em poucos segundos</p>
             </div>
 
             <div className={styles["feature-card"]}>
-              <i className="fas fa-shield-alt"></i>
+              <i className={`fas fa-shield-alt ${styles.is}`}></i>
               <h3>Seguro</h3>
               <p>Proteção bancária avançada</p>
             </div>
 
             <div className={styles["feature-card"]}>
-              <i className="fas fa-sync-alt"></i>
+              <i className={`fas fa-sync-alt ${styles.is}`}></i>
               <h3>Atualizado</h3>
               <p>Rendimentos em tempo real</p>
             </div>
@@ -89,7 +94,7 @@ const DownloadAppPage = () => {
           style={{ cursor: "pointer" }}
           className={styles["nav-item"]}
         >
-          <i className="fas fa-user"></i>
+          <i className={`fas fa-user ${styles.is}`}></i>
           <span>Perfil</span>
         </a>
       </div>

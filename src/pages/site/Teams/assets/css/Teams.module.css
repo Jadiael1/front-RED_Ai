@@ -8,15 +8,6 @@
     --warning-color: #f39c12;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    padding: 0 0 80px 0;
-    background-color: #f5f7fa;
-    color: #333;
-    line-height: 1.6;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -91,19 +82,19 @@ body {
     margin: 20px 0;
 }
 
-.earnings-table th,
-.earnings-table td {
+.earnings-table .ths,
+.earnings-table .tds {
     padding: 8px;
     text-align: left;
     border-bottom: 1px solid var(--light-color);
 }
 
-.earnings-table th {
+.earnings-table .ths {
     background: var(--secondary-color);
     color: white;
 }
 
-.earnings-table tr:nth-child(even) {
+.earnings-table .trs:nth-child(even) {
     background: var(--light-color);
 }
 
@@ -135,7 +126,7 @@ body {
     justify-content: space-between;
 }
 
-.card-title i {
+.card-title .is {
     margin-right: 12px;
     color: var(--primary-color);
 }
@@ -178,7 +169,7 @@ body {
     opacity: 1;
 }
 
-.nav-item i {
+.nav-item .is {
     font-size: 22px;
     margin-bottom: 5px;
 }

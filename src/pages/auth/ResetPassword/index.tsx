@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logob from "../../../assets/images/logob.png";
 import { passwordReset } from "../../../api/endpoints/passwordReset";
@@ -15,6 +15,33 @@ const ResetPasswordPage = () => {
   const token = queryParams.get("token");
   const email = queryParams.get("email");
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    document.body.style.fontFamily =
+      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    document.body.style.margin = "0";
+    document.body.style.padding = "0";
+    document.body.style.backgroundColor = "#f5f7fa";
+    document.body.style.color = "#333";
+    document.body.style.lineHeight = "1.6";
+    document.body.style.display = "flex";
+    document.body.style.justifyContent = "center";
+    document.body.style.alignItems = "center";
+    document.body.style.minHeight = "100vh";
+
+    return () => {
+      document.body.style.fontFamily = "";
+      document.body.style.margin = "";
+      document.body.style.padding = "";
+      document.body.style.backgroundColor = "";
+      document.body.style.color = "";
+      document.body.style.lineHeight = "";
+      document.body.style.display = "";
+      document.body.style.justifyContent = "";
+      document.body.style.alignItems = "";
+      document.body.style.minHeight = "";
+    };
+  }, []);
 
   const handleResetPassword = async (
     event: React.FormEvent<HTMLFormElement>
@@ -77,8 +104,11 @@ const ResetPasswordPage = () => {
 
       <form id="newPasswordForm" onSubmit={handleResetPassword}>
         <div className={styles["form-group"]}>
-          <label htmlFor="password">Nova Senha</label>
+          <label className={styles.labels} htmlFor="password">
+            Nova Senha
+          </label>
           <input
+            className={styles.inputs}
             type="password"
             id="password"
             name="password"
@@ -90,8 +120,11 @@ const ResetPasswordPage = () => {
         </div>
 
         <div className={styles["form-group"]}>
-          <label htmlFor="confirmPassword">Confirmar Nova Senha</label>
+          <label className={styles.labels} htmlFor="confirmPassword">
+            Confirmar Nova Senha
+          </label>
           <input
+            className={styles.inputs}
             type="password"
             id="confirmPassword"
             name="confirmPassword"
