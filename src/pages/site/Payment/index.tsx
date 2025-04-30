@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./assets/css/Payment.module.css";
 
 interface Reference {
   ref: string;
@@ -79,23 +80,12 @@ const PaymentPage = () => {
   };
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/payment.css";
-    link.id = "payment-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById("payment-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -136,19 +126,20 @@ const PaymentPage = () => {
       case "transferencia":
         return (
           <>
-            <div className="reference-box">
-              <div className="reference-item">
-                <span className="reference-label">Banco:</span> BAI
+            <div className={styles["reference-box"]}>
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Banco:</span> BAI
               </div>
-              <div className="reference-item">
-                <span className="reference-label">IBAN:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>IBAN:</span>{" "}
                 {currentRef.account}
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Titular:</span> Nome da Conta
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Titular:</span> Nome
+                da Conta
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Válido até:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Válido até:</span>{" "}
                 {currentRef.validUntil}
               </div>
             </div>
@@ -161,17 +152,19 @@ const PaymentPage = () => {
       case "mbway":
         return (
           <>
-            <div className="reference-box">
-              <div className="reference-item">
-                <span className="reference-label">Número MB Way:</span> 923 456
-                789
+            <div className={styles["reference-box"]}>
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>
+                  Número MB Way:
+                </span>{" "}
+                923 456 789
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Referência:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Referência:</span>{" "}
                 {currentRef.ref}
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Válida até:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Válida até:</span>{" "}
                 {currentRef.validUntil}
               </div>
             </div>
@@ -184,20 +177,25 @@ const PaymentPage = () => {
       case "dinheiro":
         return (
           <>
-            <div className="reference-box">
-              <div className="reference-item">
-                <span className="reference-label">Locais de depósito:</span>{" "}
+            <div className={styles["reference-box"]}>
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>
+                  Locais de depósito:
+                </span>{" "}
                 Agências Bancárias
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Número da conta:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>
+                  Número da conta:
+                </span>{" "}
                 {currentRef.account}
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Titular:</span> Nome da Conta
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Titular:</span> Nome
+                da Conta
               </div>
-              <div className="reference-item">
-                <span className="reference-label">Válida até:</span>{" "}
+              <div className={styles["reference-item"]}>
+                <span className={styles["reference-label"]}>Válida até:</span>{" "}
                 {currentRef.validUntil}
               </div>
             </div>
@@ -214,19 +212,19 @@ const PaymentPage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="payment-card">
-          <h2 className="section-title">Método de Pagamento</h2>
-          <div className="method-grid">
+      <div className={styles.container}>
+        <div className={styles["payment-card"]}>
+          <h2 className={styles["section-title"]}>Método de Pagamento</h2>
+          <div className={styles["method-grid"]}>
             {["transferencia", "mbway", "dinheiro"].map((method) => (
               <div
                 key={method}
-                className={`method-card ${
-                  selectedMethod === method ? "active" : ""
+                className={`${styles["method-card"]} ${
+                  selectedMethod === method ? styles.active : ""
                 }`}
                 onClick={() => setSelectedMethod(method)}
               >
-                <div className="method-icon">
+                <div className={styles["method-icon"]}>
                   <i
                     className={`fas ${
                       method === "transferencia"
@@ -250,11 +248,11 @@ const PaymentPage = () => {
           <div id="methodDetails">{renderMethodDetails()}</div>
         </div>
 
-        <div className="payment-card">
-          <h2 className="section-title">Enviar Comprovante</h2>
+        <div className={styles["payment-card"]}>
+          <h2 className={styles["section-title"]}>Enviar Comprovante</h2>
           <label htmlFor="fileInput">
-            <div className="upload-box">
-              <div className="upload-icon">
+            <div className={styles["upload-box"]}>
+              <div className={styles["upload-icon"]}>
                 <i className="fas fa-cloud-upload-alt"></i>
               </div>
               <div>Clique para enviar comprovante</div>
@@ -271,7 +269,7 @@ const PaymentPage = () => {
             style={{ display: "none" }}
           />
           {file && (
-            <div className="file-preview">
+            <div className={styles["file-preview"]}>
               <i className="fas fa-check-circle"></i>
               <span>{file.name}</span>
             </div>
@@ -287,7 +285,7 @@ const PaymentPage = () => {
             </div>
           </div>
           <button
-            className="submit-btn"
+            className={styles["submit-btn"]}
             disabled={!isSubmitEnabled}
             onClick={submitPayment}
           >
@@ -298,11 +296,11 @@ const PaymentPage = () => {
         </div>
       </div>
 
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-home"></i>
           <span>Home</span>
@@ -310,7 +308,7 @@ const PaymentPage = () => {
         <a
           onClick={() => navigate("/products")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-box"></i>
           <span>Produtos</span>
@@ -318,7 +316,7 @@ const PaymentPage = () => {
         <a
           onClick={() => navigate("/teams")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-network-wired"></i>
           <span>Equipe</span>
@@ -326,7 +324,7 @@ const PaymentPage = () => {
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

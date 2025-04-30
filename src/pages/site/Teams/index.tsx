@@ -1,39 +1,29 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/Teams.module.css";
 
 const TeamsPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "/assets/css/teamPage.css";
-      link.id = "teampage-page-style";
-      document.head.appendChild(link);
-  
-      const link2 = document.createElement("link");
-      link2.rel = "stylesheet";
-      link2.href = "/assets/fontawesome/css/all.min.css";
-      link2.id = "fontawesome-page-style";
-      document.head.appendChild(link2);
-  
-      return () => {
-        const existingLink = document.getElementById("teampage-page-style");
-        if (existingLink) {
-          existingLink.remove();
-        }
-        const existingLink2 = document.getElementById("fontawesome-page-style");
-        if (existingLink2) {
-          existingLink2.remove();
-        }
-      };
-    }, []);
-    
+    const link2 = document.createElement("link");
+    link2.rel = "stylesheet";
+    link2.href = "/assets/fontawesome/css/all.min.css";
+    link2.id = "fontawesome-page-style";
+    document.head.appendChild(link2);
+    return () => {
+      const existingLink2 = document.getElementById("fontawesome-page-style");
+      if (existingLink2) {
+        existingLink2.remove();
+      }
+    };
+  }, []);
+
   return (
     <>
-      <div className="container">
+      <div className={styles.container}>
         {/* <!-- Seção 1: Link de Convite --> */}
-        <div className="invite-section">
+        <div className={styles["invite-section"]}>
           <h2>
             Seu Link de Convite <i className="fas fa-user-plus"></i>
           </h2>
@@ -42,10 +32,10 @@ const TeamsPage = () => {
             investirem
           </p>
 
-          <div className="invite-code">
+          <div className={styles["invite-code"]}>
             <span id="inviteLink">https://redai.com/invite/RED123456</span>
             <button
-              className="copy-btn"
+              className={styles["copy-btn"]}
               onClick={() => {
                 /*copy invite*/
               }}
@@ -54,7 +44,7 @@ const TeamsPage = () => {
             </button>
           </div>
 
-          <div className="social-share">
+          <div className={styles["social-share"]}>
             <a href="https://chat.whatsapp.com/GIWptDybiWJAHeyblPyoOw">
               <button
                 style={{
@@ -85,17 +75,17 @@ const TeamsPage = () => {
           </div>
         </div>
 
-        {/* <!-- Seção 2: Níveis de Convite ja expliquei mais ou menos como deve funcionar esta pagina lá no maniifesto, vai mostrar o total de ganho poor cada nivel--> */}
-        <div className="card">
-          <h2 className="card-title">
+        {/* <!-- Seção 2: Níveis de Convite --> */}
+        <div className={styles.card}>
+          <h2 className={styles["card-title"]}>
             <span>
               <i className="fas fa-money-bill-wave"></i> BÔNUS POR NÍVEL
             </span>
-            <span className="badge">GANHOS</span>
+            <span className={styles.badge}>GANHOS</span>
           </h2>
-          <div className="level-card">
+          <div className={styles["level-card"]}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="level-badge">1</div>
+              <div className={styles["level-badge"]}>1</div>
               <div style={{ marginLeft: "15px" }}>
                 <h3 style={{ margin: 0 }}>Nível 1</h3>
                 <p style={{ margin: "5px 0 0 0", color: "#7f8c8d" }}>
@@ -111,9 +101,9 @@ const TeamsPage = () => {
             </div>
           </div>
 
-          <div className="level-card">
+          <div className={styles["level-card"]}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="level-badge">2</div>
+              <div className={styles["level-badge"]}>2</div>
               <div style={{ marginLeft: "15px" }}>
                 <h3 style={{ margin: 0 }}>Nível 2</h3>
                 <p style={{ margin: "5px 0 0 0", color: "#7f8c8d" }}>
@@ -129,9 +119,9 @@ const TeamsPage = () => {
             </div>
           </div>
 
-          <div className="level-card">
+          <div className={styles["level-card"]}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              <div className="level-badge">3</div>
+              <div className={styles["level-badge"]}>3</div>
               <div style={{ marginLeft: "15px" }}>
                 <h3 style={{ margin: 0 }}>Nível 3</h3>
                 <p style={{ margin: "5px 0 0 0", color: "#7f8c8d" }}>
@@ -148,16 +138,15 @@ const TeamsPage = () => {
           </div>
         </div>
 
-        {/* <!-- Seção 3: Tabela de Lucros ela deverá mostrar apenas 3 convidados mais recentes-->  */}
-
-        <div className="card">
-          <h2 className="card-title">
+        {/* <!-- Seção 3: Tabela de Lucros --> */}
+        <div className={styles.card}>
+          <h2 className={styles["card-title"]}>
             <span>
               <i className="fas fa-money-bill-wave"></i> BÔNUS DA REDE
             </span>
-            <span className="badge">GANHOS</span>
+            <span className={styles.badge}>GANHOS</span>
           </h2>
-          <table className="earnings-table">
+          <table className={styles["earnings-table"]}>
             <thead>
               <tr>
                 <th>Data</th>
@@ -206,14 +195,14 @@ const TeamsPage = () => {
         </div>
 
         {/* <!-- Seção C: Tabela de Rendimentos Diários --> */}
-        <div className="card">
-          <h2 className="card-title">
+        <div className={styles.card}>
+          <h2 className={styles["card-title"]}>
             <span>
               <i className="fas fa-calendar-alt"></i> RENDA POR PRODUTO
             </span>
-            <span className="badge">ANÁLISE</span>
+            <span className={styles.badge}>ANÁLISE</span>
           </h2>
-          <table className="earnings-table">
+          <table className={styles["earnings-table"]}>
             <thead>
               <tr>
                 <th>Produto</th>
@@ -292,11 +281,11 @@ const TeamsPage = () => {
         </div>
       </div>
 
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-home"></i>
           <span>Home</span>
@@ -304,7 +293,7 @@ const TeamsPage = () => {
         <a
           onClick={() => navigate("/Products")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-box"></i>
           <span>Produtos</span>
@@ -312,7 +301,7 @@ const TeamsPage = () => {
         <a
           onClick={() => navigate("/teams")}
           style={{ cursor: "pointer" }}
-          className="nav-item active"
+          className={`${styles["nav-item"]} ${styles.active}`}
         >
           <i className="fas fa-network-wired"></i>
           <span>Equipe</span>
@@ -320,7 +309,7 @@ const TeamsPage = () => {
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

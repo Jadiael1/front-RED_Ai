@@ -5,6 +5,7 @@ import { useAuth } from "../../../hooks/useAuth.js";
 import { useNavigate } from "react-router-dom";
 import { inviteRequired } from "../../../api/endpoints/inviteRequired.js";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
+import styles from "./assets/css/SignUp.module.css";
 
 type TError = {
   name: string;
@@ -49,23 +50,12 @@ const SignUpPage = () => {
   }, []);
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/signup.css";
-    link.id = "signup-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById("signup-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -193,12 +183,12 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="register-container">
-      <img src={logoc} alt="RED Ai" className="logo" />
+    <div className={styles["register-container"]}>
+      <img src={logoc} alt="RED Ai" className={styles.logo} />
       <h1>Crie sua conta</h1>
 
       <form id="registerForm" onSubmit={handleRegister} method="POST">
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="nome">Nome Completo*</label>
           <input
             type="text"
@@ -209,13 +199,13 @@ const SignUpPage = () => {
             onChange={handleChange}
           />
           {error.name && (
-            <div id="nomeError" className="error-message">
+            <div id="nomeError" className={styles["error-message"]}>
               {error.name}
             </div>
           )}
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="telefone">Telefone*</label>
           <input
             type="tel"
@@ -227,13 +217,13 @@ const SignUpPage = () => {
             onChange={handleChange}
           />
           {error.phone && (
-            <div id="telefoneError" className="error-message">
+            <div id="telefoneError" className={styles["error-message"]}>
               {error.phone}
             </div>
           )}
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="email">Email*</label>
           <input
             type="email"
@@ -244,15 +234,15 @@ const SignUpPage = () => {
             onChange={handleChange}
           />
           {error.email && (
-            <div id="emailError" className="error-message">
+            <div id="emailError" className={styles["error-message"]}>
               {error.email}
             </div>
           )}
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="password">Senha*</label>
-          <div className="password-container">
+          <div className={styles["password-container"]}>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
@@ -262,21 +252,21 @@ const SignUpPage = () => {
               onChange={handleChange}
             />
             <i
-              className="fas fa-eye toggle-password"
+              className={`fas fa-eye ${styles["toggle-password"]}`}
               id="togglePassword"
               onClick={toggleShowPassword}
             ></i>
           </div>
           {error.password && (
-            <div id="passwordError" className="error-message">
+            <div id="passwordError" className={styles["error-message"]}>
               {error.password}
             </div>
           )}
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="confirmPassword">Confirmar Senha*</label>
-          <div className="password-container">
+          <div className={styles["password-container"]}>
             <input
               type={showPasswordConfirm ? "text" : "password"}
               id="confirmPassword"
@@ -286,19 +276,20 @@ const SignUpPage = () => {
               onChange={handleChange}
             />
             <i
-              className="fas fa-eye toggle-password"
+              className={`fas fa-eye ${styles["toggle-password"]}`}
               id="togglePassword"
               onClick={toggleShowPasswordConfirm}
             ></i>
           </div>
           {error.password_confirmation && (
-            <div id="confirmError" className="error-message">
+            <div id="confirmError" className={styles["error-message"]}>
               {error.password_confirmation}
             </div>
           )}
         </div>
+
         {referralCode && (
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label htmlFor="indicacao">Código de Indicação*</label>
             <input
               type="text"
@@ -309,29 +300,31 @@ const SignUpPage = () => {
               onChange={handleChange}
             />
             {error.invite_code && (
-              <div id="inviteCodeError" className="error-message">
+              <div id="inviteCodeError" className={styles["error-message"]}>
                 {error.invite_code}
               </div>
             )}
           </div>
         )}
+
         <span> Todos os pontos (*) são obrigatórios para o cadastro.</span>
+
         <button
           type="submit"
-          className={`btn ${isPending ? "loading" : ""}`}
+          className={`${styles.btn} ${isPending ? styles.loading : ""}`}
           disabled={isPending}
         >
           Cadastrar
         </button>
 
         {success && (
-          <div id="successMessage" className="success-message">
+          <div id="successMessage" className={styles["success-message"]}>
             Cadastro realizado com sucesso! Verifique seu e-mail/telefone para
             ativar sua conta.
           </div>
         )}
 
-        <div className="login-link">
+        <div className={styles["login-link"]}>
           Já tem uma conta?{" "}
           <a
             onClick={() => {

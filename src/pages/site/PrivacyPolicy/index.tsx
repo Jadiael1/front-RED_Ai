@@ -1,27 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/PrivacyPolicy.module.css";
 
 const PrivacyPolicyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/privacypolicy.css";
-    link.id = "privacypolicy-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById("privacypolicy-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -31,21 +21,23 @@ const PrivacyPolicyPage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="header">
+      <div className={styles.container}>
+        <div className={styles.header}>
           <h1>Política de Privacidade</h1>
           <p>RED Aí Investimentos - Última atualização: 15/03/2023</p>
         </div>
 
-        <div className="privacy-content">
-          <div className="highlight-box">
+        <div className={styles["privacy-content"]}>
+          <div className={styles["highlight-box"]}>
             <p>
               <strong>Importante:</strong> Esta política descreve como
               coletamos, usamos e protegemos suas informações pessoais.
             </p>
           </div>
 
-          <h2 className="section-title">1. Informações que Coletamos</h2>
+          <h2 className={styles["section-title"]}>
+            1. Informações que Coletamos
+          </h2>
           <p>Para fornecer nossos serviços, coletamos:</p>
           <ul>
             <li>
@@ -66,7 +58,9 @@ const PrivacyPolicyPage = () => {
             </li>
           </ul>
 
-          <h2 className="section-title">2. Como Usamos Suas Informações</h2>
+          <h2 className={styles["section-title"]}>
+            2. Como Usamos Suas Informações
+          </h2>
           <p>Utilizamos seus dados para:</p>
           <ul>
             <li>Fornecer e melhorar nossos serviços</li>
@@ -76,7 +70,9 @@ const PrivacyPolicyPage = () => {
             <li>Cumprir obrigações legais e regulatórias</li>
           </ul>
 
-          <h2 className="section-title">3. Compartilhamento de Dados</h2>
+          <h2 className={styles["section-title"]}>
+            3. Compartilhamento de Dados
+          </h2>
           <p>Seus dados podem ser compartilhados com:</p>
           <ul>
             <li>
@@ -95,7 +91,7 @@ const PrivacyPolicyPage = () => {
             <strong>Não vendemos</strong> seus dados pessoais a terceiros.
           </p>
 
-          <h2 className="section-title">4. Segurança de Dados</h2>
+          <h2 className={styles["section-title"]}>4. Segurança de Dados</h2>
           <p>Implementamos medidas robustas para proteger suas informações:</p>
           <ul>
             <li>Criptografia SSL em todas as comunicações</li>
@@ -104,7 +100,7 @@ const PrivacyPolicyPage = () => {
             <li>Monitoramento contínuo contra ameaças</li>
           </ul>
 
-          <h2 className="section-title">5. Seus Direitos</h2>
+          <h2 className={styles["section-title"]}>5. Seus Direitos</h2>
           <p>Você tem direito a:</p>
           <ul>
             <li>Acessar e corrigir seus dados pessoais</li>
@@ -117,7 +113,9 @@ const PrivacyPolicyPage = () => {
             <strong>protecaodedados@redaiinvestimentos.ao</strong>.
           </p>
 
-          <h2 className="section-title">6. Cookies e Tecnologias Similares</h2>
+          <h2 className={styles["section-title"]}>
+            6. Cookies e Tecnologias Similares
+          </h2>
           <p>Utilizamos cookies para:</p>
           <ul>
             <li>Melhorar a experiência de navegação</li>
@@ -129,14 +127,16 @@ const PrivacyPolicyPage = () => {
             seu navegador.
           </p>
 
-          <h2 className="section-title">7. Alterações nesta Política</h2>
+          <h2 className={styles["section-title"]}>
+            7. Alterações nesta Política
+          </h2>
           <p>
             Podemos atualizar esta política periodicamente. Alterações
             significativas serão comunicadas por email ou através de aviso em
             nossa plataforma.
           </p>
 
-          <h2 className="section-title">8. Contato</h2>
+          <h2 className={styles["section-title"]}>8. Contato</h2>
           <p>Dúvidas sobre esta política podem ser direcionadas a:</p>
           <p>
             <strong>Encarregado de Proteção de Dados</strong>
@@ -146,7 +146,7 @@ const PrivacyPolicyPage = () => {
             Endereço: Av. 24 de Janeiro, nº 1549-007, Benfica, Lisboa, Portugal.
           </p>
 
-          <div className="highlight-box">
+          <div className={styles["highlight-box"]}>
             <p>
               <strong>Versão:</strong> 1.0
               <br />
@@ -157,11 +157,11 @@ const PrivacyPolicyPage = () => {
       </div>
 
       {/* <!-- Menu de navegação inferior --> */}
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

@@ -4,6 +4,7 @@ import banner2 from "./assets/imgs/banner2.png";
 import banner3 from "./assets/imgs/banner3.png";
 import logoc from "./assets/imgs/logoc.png";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/Home.module.css";
 
 interface Slide {
   src: string;
@@ -48,23 +49,12 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/HomePage.css";
-    link.id = "home-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById("home-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -74,28 +64,28 @@ const HomePage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="header">
-          <img src={logoc} alt="RED Ai" className="logo" />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <img src={logoc} alt="RED Ai" className={styles.logo} />
           <h1 style={{ color: "var(--secondary-color)" }}>BENVINDO A RED Ai</h1>
         </div>
 
         {/* <!-- Slideshow de Imagens --> */}
-        <div className="slideshow-container">
+        <div className={`${styles["slideshow-container"]}`}>
           {slidesData.map((slide, index) => (
             <img
               key={index}
               src={slide.src}
               alt={slide.alt}
-              className="slide"
+              className={`${styles.slide}`}
               style={{ display: index === slideIndex ? "block" : "none" }}
             />
           ))}
         </div>
 
         {/* <!-- Texto Dinâmico --> */}
-        <div className="news-ticker">
-          <div className="ticker-content">
+        <div className={`${styles["news-ticker"]}`}>
+          <div className={`${styles["ticker-content"]}`}>
             🚀 Últimas notícias: Sistema de indicações com bônus de até 30% •
             Novo produto VIP disponível • Horário de retiradas: Seg-Sáb das 9h
             às 21h
@@ -103,27 +93,36 @@ const HomePage = () => {
         </div>
 
         {/* <!-- Botões de Ação --> */}
-        <div className="action-buttons">
-          <button className="action-btn" onClick={() => handleActionClick("/")}>
+        <div className={`${styles["action-buttons"]}`}>
+          <button
+            className={`${styles["action-btn"]}`}
+            onClick={() => handleActionClick("/")}
+          >
             <i className="fas fa-money-bill-wave"></i>
-            <span className="action-label">DEPÓSITO</span>
+            <span className={`${styles["action-label"]}`}>DEPÓSITO</span>
           </button>
-          <button className="action-btn" onClick={() => handleActionClick("/")}>
+          <button
+            className={`${styles["action-btn"]}`}
+            onClick={() => handleActionClick("/")}
+          >
             <i className="fas fa-wallet"></i>
-            <span className="action-label">RETIRADA</span>
+            <span className={`${styles["action-label"]}`}>RETIRADA</span>
           </button>
-          <button className="action-btn" onClick={() => handleActionClick("/")}>
+          <button
+            className={`${styles["action-btn"]}`}
+            onClick={() => handleActionClick("/")}
+          >
             <i className="fas fa-headset"></i>
-            <span className="action-label">SUPORTE</span>
+            <span className={`${styles["action-label"]}`}>SUPORTE</span>
           </button>
         </div>
 
         {/* <!-- Últimos Investidores --> */}
-        <div className="recent-users">
-          <h2 className="section-title">ÚLTIMOS INVESTIDORES</h2>
-          <div className="user-list">
+        <div className={`${styles["recent-users"]}`}>
+          <h2 className={`${styles["section-title"]}`}>ÚLTIMOS INVESTIDORES</h2>
+          <div className={`${styles["user-list"]}`}>
             {usersData.map((user, index) => (
-              <div className="user-item" key={index}>
+              <div className={`${styles["user-item"]}`} key={index}>
                 <span>{user.phoneMasked}</span>
                 <span>{user.amount}</span>
               </div>
@@ -133,11 +132,11 @@ const HomePage = () => {
       </div>
 
       {/* Menu de navegação inferior */}
-      <div className="footer-nav">
+      <div className={`${styles["footer-nav"]}`}>
         <a
           onClick={() => handleActionClick("/")}
           style={{ cursor: "pointer" }}
-          className="nav-item active"
+          className={`${styles["nav-item"]} ${styles.active}`}
         >
           <i className="fas fa-home"></i>
           <span>Home</span>
@@ -145,7 +144,7 @@ const HomePage = () => {
         <a
           onClick={() => handleActionClick("/products")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={`${styles["nav-item"]}`}
         >
           <i className="fas fa-box"></i>
           <span>Produtos</span>
@@ -153,7 +152,7 @@ const HomePage = () => {
         <a
           onClick={() => handleActionClick("/teams")}
           style={{ cursor: "pointer" }}
-          className="nav-item "
+          className={`${styles["nav-item"]}`}
         >
           <i className="fas fa-network-wired"></i>
           <span>Equipe</span>
@@ -161,7 +160,7 @@ const HomePage = () => {
         <a
           onClick={() => handleActionClick("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={`${styles["nav-item"]}`}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

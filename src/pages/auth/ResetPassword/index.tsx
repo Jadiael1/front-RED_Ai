@@ -1,7 +1,8 @@
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logob from "../../../assets/logob.png";
 import { passwordReset } from "../../../api/endpoints/passwordReset";
+import styles from "./assets/css/ResetPassword.module.css";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -14,21 +15,6 @@ const ResetPasswordPage = () => {
   const token = queryParams.get("token");
   const email = queryParams.get("email");
   const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/resetPassword.css";
-    link.id = "resetpassword-page-style";
-    document.head.appendChild(link);
-
-    return () => {
-      const existingLink = document.getElementById("resetpassword-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
-    };
-  }, []);
 
   const handleResetPassword = async (
     event: React.FormEvent<HTMLFormElement>
@@ -70,27 +56,27 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="recover-container">
-      <img src={logob} alt="RED Ai" className="logo" />
+    <div className={styles["recover-container"]}>
+      <img src={logob} alt="RED Ai" className={styles.logo} />
       <h1>Criar Nova Senha</h1>
 
-      <div className="steps">
-        <div className="step">
-          <div className="step-number">1</div>
-          <div className="step-text">Identificação</div>
+      <div className={styles.steps}>
+        <div className={styles.step}>
+          <div className={styles["step-number"]}>1</div>
+          <div className={styles["step-text"]}>Identificação</div>
         </div>
-        <div className="step">
-          <div className="step-number">2</div>
-          <div className="step-text">Código</div>
+        <div className={styles.step}>
+          <div className={styles["step-number"]}>2</div>
+          <div className={styles["step-text"]}>Código</div>
         </div>
-        <div className="step active">
-          <div className="step-number">3</div>
-          <div className="step-text">Nova Senha</div>
+        <div className={`${styles.step} ${styles.active}`}>
+          <div className={styles["step-number"]}>3</div>
+          <div className={styles["step-text"]}>Nova Senha</div>
         </div>
       </div>
 
       <form id="newPasswordForm" onSubmit={handleResetPassword}>
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="password">Nova Senha</label>
           <input
             type="password"
@@ -100,10 +86,10 @@ const ResetPasswordPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div id="passwordError" className="error-message"></div>
+          <div id="passwordError" className={styles["error-message"]}></div>
         </div>
 
-        <div className="form-group">
+        <div className={styles["form-group"]}>
           <label htmlFor="confirmPassword">Confirmar Nova Senha</label>
           <input
             type="password"
@@ -114,7 +100,7 @@ const ResetPasswordPage = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           {error && (
-            <div id="confirmError" className="error-message">
+            <div id="confirmError" className={styles["error-message"]}>
               {error}
             </div>
           )}
@@ -122,14 +108,14 @@ const ResetPasswordPage = () => {
 
         <button
           type="submit"
-          className={`btn ${isPending ? "loading" : ""}`}
+          className={`${styles.btn} ${isPending ? styles.loading : ""}`}
           disabled={isPending}
         >
           Atualizar Senha
         </button>
 
         {message && (
-          <div id="successMessage" className="success-message">
+          <div id="successMessage" className={styles["success-message"]}>
             Senha atualizada com sucesso!{" "}
             <b>
               <a

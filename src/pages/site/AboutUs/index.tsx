@@ -1,16 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/AboutUs.module.css";
 
 const AboutUsPage = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/aboutUs.css";
-    link.id = "aboutus-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
@@ -18,10 +12,6 @@ const AboutUsPage = () => {
     document.head.appendChild(link2);
 
     return () => {
-      const existingLink = document.getElementById("aboutus-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -31,15 +21,19 @@ const AboutUsPage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="header">
-          <img src="/assets/images/logoc.png" alt="RED Ai" className="logo" />
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <img
+            src="/assets/images/logoc.png"
+            alt="RED Ai"
+            className={styles.logo}
+          />
           <h1>RED Ai</h1>
           <p>Sua ponte para o crescimento financeiro inteligente.</p>
         </div>
 
-        <div className="content-section">
-          <h2 className="section-title">Nossa História</h2>
+        <div className={styles["content-section"]}>
+          <h2 className={styles["section-title"]}>Nossa História</h2>
           <p>
             A RED Ai nasceu em 2024 com a missão de democratizar o acesso a
             investimentos de capital no mercado angolano. Fundada por uma equipe
@@ -55,8 +49,8 @@ const AboutUsPage = () => {
           </p>
         </div>
 
-        <div className="content-section">
-          <h2 className="section-title">Nossa Missão</h2>
+        <div className={styles["content-section"]}>
+          <h2 className={styles["section-title"]}>Nossa Missão</h2>
           <p>Transformar a relação das pessoas com o dinheiro, oferecendo:</p>
           <ul>
             <li>Produtos de investimento transparentes</li>
@@ -66,8 +60,8 @@ const AboutUsPage = () => {
           </ul>
         </div>
 
-        <div className="content-section">
-          <h2 className="section-title">Nossos Valores</h2>
+        <div className={styles["content-section"]}>
+          <h2 className={styles["section-title"]}>Nossos Valores</h2>
           <div style={{ display: "flex", flexWrap: "wrap", gap: "15px" }}>
             <div
               style={{
@@ -119,8 +113,8 @@ const AboutUsPage = () => {
           </div>
         </div>
 
-        <div className="content-section">
-          <h2 className="section-title">Como Funciona</h2>
+        <div className={styles["content-section"]}>
+          <h2 className={styles["section-title"]}>Como Funciona</h2>
           <p>
             Na RED Ai, você investe em nossos Planos VIP que oferecem rendimento
             diário. Cada produto tem:
@@ -137,8 +131,8 @@ const AboutUsPage = () => {
           </p>
         </div>
 
-        <div className="content-section">
-          <h2 className="section-title">Fale Conosco</h2>
+        <div className={styles["content-section"]}>
+          <h2 className={styles["section-title"]}>Fale Conosco</h2>
           <p>Estamos sempre disponíveis para ajudar:</p>
           <p>
             <i
@@ -165,11 +159,11 @@ const AboutUsPage = () => {
       </div>
 
       {/* <!-- Menu de navegação inferior --> */}
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

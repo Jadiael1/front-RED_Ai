@@ -1,7 +1,8 @@
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import logob from "../../../assets/logob.png";
 import { useNavigate } from "react-router-dom";
 import { forgotPassword } from "../../../api/endpoints/forgotPassword";
+import styles from "./assets/css/ForgotPassword.module.css";
 
 const ForgotPasswordPage = () => {
   const navigate = useNavigate();
@@ -9,23 +10,6 @@ const ForgotPasswordPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "/assets/css/forgotPassword.css";
-      link.id = "forgotpassword-page-style";
-      document.head.appendChild(link);
-  
-      return () => {
-        const existingLink = document.getElementById(
-          "forgotpassword-page-style"
-        );
-        if (existingLink) {
-          existingLink.remove();
-        }
-      };
-    }, []);
 
   const handleForgotPassword = async (
     event: React.FormEvent<HTMLFormElement>
@@ -54,27 +38,27 @@ const ForgotPasswordPage = () => {
 
   return (
     <>
-      <div className="recover-container">
-        <img src={logob} alt="RED Ai" className="logo" />
+      <div className={styles["recover-container"]}>
+        <img src={logob} alt="RED Ai" className={styles.logo} />
         <h1>Recuperação de Senha</h1>
 
-        <div className="steps">
-          <div className="step active">
-            <div className="step-number">1</div>
-            <div className="step-text">Identificação</div>
+        <div className={styles.steps}>
+          <div className={`${styles.step} ${styles.active}`}>
+            <div className={styles["step-number"]}>1</div>
+            <div className={styles["step-text"]}>Identificação</div>
           </div>
-          <div className="step">
-            <div className="step-number">2</div>
-            <div className="step-text">Código</div>
+          <div className={styles.step}>
+            <div className={styles["step-number"]}>2</div>
+            <div className={styles["step-text"]}>Código</div>
           </div>
-          <div className="step">
-            <div className="step-number">3</div>
-            <div className="step-text">Nova Senha</div>
+          <div className={styles.step}>
+            <div className={styles["step-number"]}>3</div>
+            <div className={styles["step-text"]}>Nova Senha</div>
           </div>
         </div>
 
         <form id="recoverForm" onSubmit={handleForgotPassword} method="POST">
-          <div className="form-group">
+          <div className={styles["form-group"]}>
             <label htmlFor="email">Email ou Telefone Cadastrado</label>
             <input
               type="email"
@@ -85,7 +69,7 @@ const ForgotPasswordPage = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
             {error && (
-              <div id="emailError" className="error-message">
+              <div id="emailError" className={styles["error-message"]}>
                 {error}
               </div>
             )}
@@ -93,19 +77,20 @@ const ForgotPasswordPage = () => {
 
           <button
             type="submit"
-            className={`btn ${isPending ? "loading" : ""}`}
+            className={`${styles.btn} ${isPending ? styles.loading : ""}`}
             disabled={isPending}
           >
             Continuar
           </button>
+
           {message && (
-            <div id="successMessage" className="success-message">
+            <div id="successMessage" className={styles["success-message"]}>
               Enviamos um código de verificação para seu email/telefone.
               Verifuqie seu e-mail/telefone
             </div>
           )}
 
-          <div className="login-link">
+          <div className={styles["login-link"]}>
             Lembrou sua senha?{" "}
             <a
               onClick={() => navigate("/auth/signin")}

@@ -1,29 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/TermsAndConditions.module.css";
 
 const TermsAndConditionsPage = () => {
   const navigate = useNavigate();
-
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/termsandconditions.css";
-    link.id = "termsandconditions-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById(
-        "termsandconditions-page-style"
-      );
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -33,14 +20,14 @@ const TermsAndConditionsPage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="header">
+      <div className={styles.container}>
+        <div className={styles.header}>
           <h1>Termos e Condições de Uso</h1>
           <p>RED Ai - Última atualização: 15/03/2023</p>
         </div>
 
-        <div className="content-section">
-          <div className="highlight-box">
+        <div className={styles["content-section"]}>
+          <div className={styles["highlight-box"]}>
             <p>
               <strong>Importante:</strong> Ao utilizar nossa plataforma, você
               concorda com estes Termos e Condições. Leia atentamente antes de
@@ -48,9 +35,9 @@ const TermsAndConditionsPage = () => {
             </p>
           </div>
 
-          <ol className="terms-list">
+          <ol className={styles["terms-list"]}>
             <li>
-              <h2 className="section-title">Aceitação dos Termos</h2>
+              <h2 className={styles["section-title"]}>Aceitação dos Termos</h2>
               <p>
                 Os presentes Termos e Condições ("Termos") regulam o uso dos
                 serviços oferecidos pela RED Ai.
@@ -58,7 +45,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Definições</h2>
+              <h2 className={styles["section-title"]}>Definições</h2>
               <ol>
                 <li>
                   "Plataforma" refere-se ao website e aplicativo da RED Ai.
@@ -73,7 +60,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Cadastro</h2>
+              <h2 className={styles["section-title"]}>Cadastro</h2>
               <ol>
                 <li>O cadastro é pessoal e intransferível.</li>
                 <li>
@@ -84,7 +71,9 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Produtos de Investimento</h2>
+              <h2 className={styles["section-title"]}>
+                Produtos de Investimento
+              </h2>
               <ol>
                 <li>
                   Cada Produto VIP possui características específicas de valor
@@ -101,7 +90,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Depósitos e Retiradas</h2>
+              <h2 className={styles["section-title"]}>Depósitos e Retiradas</h2>
               <ol>
                 <li>
                   Depósitos:
@@ -128,7 +117,9 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Programa de Indicações</h2>
+              <h2 className={styles["section-title"]}>
+                Programa de Indicações
+              </h2>
               <ol>
                 <li>O Usuário recebe um link único para indicações.</li>
                 <li>Bônus são pagos conforme o nível do indicado (1 a 3).</li>
@@ -139,7 +130,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Responsabilidades</h2>
+              <h2 className={styles["section-title"]}>Responsabilidades</h2>
               <ol>
                 <li>
                   A RED Ai não se responsabiliza por:
@@ -157,7 +148,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Privacidade</h2>
+              <h2 className={styles["section-title"]}>Privacidade</h2>
               <p>
                 Os dados pessoais são protegidos conforme nossa Política de
                 Privacidade. Não compartilhamos informações com terceiros sem
@@ -166,7 +157,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Alterações nos Termos</h2>
+              <h2 className={styles["section-title"]}>Alterações nos Termos</h2>
               <p>
                 A RED Ai pode atualizar estes Termos periodicamente. Alterações
                 serão comunicadas por email e no site.
@@ -174,7 +165,7 @@ const TermsAndConditionsPage = () => {
             </li>
 
             <li>
-              <h2 className="section-title">Legislação Aplicável</h2>
+              <h2 className={styles["section-title"]}>Legislação Aplicável</h2>
               <p>
                 Estes Termos são regidos pelas leis da República de Portugal.
                 Eventuais disputas serão resolvidas em Lisboa.
@@ -182,7 +173,7 @@ const TermsAndConditionsPage = () => {
             </li>
           </ol>
 
-          <div className="highlight-box">
+          <div className={styles["highlight-box"]}>
             <p>
               <strong>Dúvidas?</strong> Entre em contato pelo email{" "}
               <strong>juridico@redai.pt</strong> ou telefone{" "}
@@ -193,11 +184,11 @@ const TermsAndConditionsPage = () => {
       </div>
 
       {/* <!-- Menu de navegação inferior --> */}
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

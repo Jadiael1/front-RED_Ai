@@ -1,28 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/SupportCenter.module.css";
 
 const SupportCenterPage = () => {
   const navigate = useNavigate();
   const [openIndex, setOpenIndex] = useState<number | null>(null); // já abre o primeiro
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/supportcenter.css";
-    link.id = "supportcenter-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
     link2.id = "fontawesome-page-style";
     document.head.appendChild(link2);
-
     return () => {
-      const existingLink = document.getElementById("supportcenter-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -60,63 +50,72 @@ const SupportCenterPage = () => {
 
   return (
     <>
-      <div className="container">
-        <div className="header">
+      <div className={styles.container}>
+        <div className={styles.header}>
           <h1>Central de Suporte</h1>
           <p>Como podemos ajudar você hoje?</p>
         </div>
 
-        <div className="support-options">
-          <div className="support-card">
-            <div className="support-icon">
+        <div className={styles["support-options"]}>
+          <div className={styles["support-card"]}>
+            <div className={styles["support-icon"]}>
               <i className="fab fa-whatsapp"></i>
             </div>
             <h2>WhatsApp</h2>
             <p>Atendimento rápido e direto pelo WhatsApp</p>
-            <a href="https://wa.me/244923456789" className="btn-support">
+            <a
+              href="https://wa.me/244923456789"
+              className={styles["btn-support"]}
+            >
               <i className="fab fa-whatsapp"></i> Chamar no WhatsApp
             </a>
           </div>
 
-          <div className="support-card">
-            <div className="support-icon">
+          <div className={styles["support-card"]}>
+            <div className={styles["support-icon"]}>
               <i className="fab fa-telegram"></i>
             </div>
             <h2>Telegram</h2>
             <p>Canal oficial de comunicação</p>
-            <a href="https://t.me/REDAi_Canal" className="btn-support">
+            <a
+              href="https://t.me/REDAi_Canal"
+              className={styles["btn-support"]}
+            >
               <i className="fab fa-telegram"></i> Entrar no Telegram
             </a>
           </div>
 
-          <div className="support-card">
-            <div className="support-icon">
+          <div className={styles["support-card"]}>
+            <div className={styles["support-icon"]}>
               <i className="fas fa-users"></i>
             </div>
             <h2>Grupo de Investidores</h2>
             <p>Comunidade de investidores da RED Ai</p>
-            <a href="https://t.me/REDAi_Canal" className="btn-support">
+            <a
+              href="https://t.me/REDAi_Canal"
+              className={styles["btn-support"]}
+            >
               <i className="fas fa-users"></i> Acessar Grupo
             </a>
           </div>
         </div>
 
-        <div className="faq-section">
+        <div className={styles["faq-section"]}>
           <h2 style={{ color: "var(--secondary-color)", marginTop: 0 }}>
             Perguntas Frequentes
           </h2>
           {faqs.map((faq, index) => (
-            <div className="faq-item" key={index}>
+            <div className={styles["faq-item"]} key={index}>
               <div
-                className={`faq-question ${
-                  openIndex === index ? "active" : ""
+                className={`${styles["faq-question"]} ${
+                  openIndex === index ? styles.active : ""
                 }`}
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
               >
                 {faq.question}
               </div>
               <div
-                className="faq-answer"
+                className={styles["faq-answer"]}
                 style={{ display: openIndex === index ? "block" : "none" }}
               >
                 <p>{faq.answer}</p>
@@ -125,7 +124,7 @@ const SupportCenterPage = () => {
           ))}
         </div>
 
-        <div className="contact-info">
+        <div className={styles["contact-info"]}>
           <h2 style={{ color: "var(--secondary-color)", marginTop: 0 }}>
             Outros Contatos
           </h2>
@@ -155,11 +154,11 @@ const SupportCenterPage = () => {
       </div>
 
       {/* <!-- Menu de navegação inferior --> */}
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>

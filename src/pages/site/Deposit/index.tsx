@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./assets/css/Deposit.module.css";
 
 const DepositPage = () => {
   const navigate = useNavigate();
@@ -8,12 +9,6 @@ const DepositPage = () => {
   );
 
   useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "/assets/css/deposit.css";
-    link.id = "deposit-page-style";
-    document.head.appendChild(link);
-
     const link2 = document.createElement("link");
     link2.rel = "stylesheet";
     link2.href = "/assets/fontawesome/css/all.min.css";
@@ -21,10 +16,6 @@ const DepositPage = () => {
     document.head.appendChild(link2);
 
     return () => {
-      const existingLink = document.getElementById("deposit-page-style");
-      if (existingLink) {
-        existingLink.remove();
-      }
       const existingLink2 = document.getElementById("fontawesome-page-style");
       if (existingLink2) {
         existingLink2.remove();
@@ -47,22 +38,22 @@ const DepositPage = () => {
   const packages = [5000, 15000, 30000, 75000, 150000, "custom"];
   return (
     <>
-      <div className="container">
+      <div className={styles.container}>
         <h1 style={{ textAlign: "center", color: "var(--secondary-color)" }}>
           Selecione o Valor do Depósito
         </h1>
 
-        <div className="package-grid">
+        <div className={styles["package-grid"]}>
           {/* <!-- Pacotes de depósito (valores do manifesto) --> */}
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`package-card ${
-                selectedAmount === pkg ? "active" : ""
+              className={`${styles["package-card"]} ${
+                selectedAmount === pkg ? styles.active : ""
               }`}
               onClick={() => selectPackage(pkg)}
             >
-              <div className="package-value">
+              <div className={styles["package-value"]}>
                 {pkg === "custom"
                   ? "Outro valor"
                   : `${pkg.toLocaleString()} Kz`}
@@ -72,7 +63,7 @@ const DepositPage = () => {
         </div>
 
         <button
-          className="next-btn"
+          className={styles["next-btn"]}
           id="nextBtn"
           onClick={() => goToPayment()}
         >
@@ -81,11 +72,11 @@ const DepositPage = () => {
       </div>
 
       {/* <!-- Menu inferior --> */}
-      <div className="footer-nav">
+      <div className={styles["footer-nav"]}>
         <a
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-home"></i>
           <span>Home</span>
@@ -93,7 +84,7 @@ const DepositPage = () => {
         <a
           onClick={() => navigate("/products")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-box"></i>
           <span>Produtos</span>
@@ -101,7 +92,7 @@ const DepositPage = () => {
         <a
           onClick={() => navigate("/teams")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-network-wired"></i>
           <span>Equipe</span>
@@ -109,7 +100,7 @@ const DepositPage = () => {
         <a
           onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
-          className="nav-item"
+          className={styles["nav-item"]}
         >
           <i className="fas fa-user"></i>
           <span>Perfil</span>
