@@ -44,10 +44,6 @@ const HomePage = () => {
     return () => clearInterval(intervalId);
   }, [nextSlide]);
 
-  const handleActionClick = (path: string) => {
-    navigate(path);
-  };
-
   useEffect(() => {
     document.body.style.fontFamily =
       "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -71,9 +67,9 @@ const HomePage = () => {
 
   return (
     <>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <img src={logoc} alt="RED Ai" className={styles.logo} />
+      <div className={`${styles.container}`}>
+        <div className={`${styles.header}`}>
+          <img src={logoc} alt="RED Ai" className={`${styles.logo}`} />
           <h1 style={{ color: "var(--secondary-color)" }}>BENVINDO A RED Ai</h1>
         </div>
 
@@ -100,24 +96,33 @@ const HomePage = () => {
         </div>
 
         {/* <!-- Botões de Ação --> */}
-        <div className={`${styles["action-buttons"]}`}>
+        <div className={`${styles["primary-actions"]}`}>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/deposit")}
+            onClick={() => {
+              navigate("/deposit");
+              /* window.location.href='../secundarias/deposito.html' */
+            }}
           >
             <i className={`fas fa-money-bill-wave ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>DEPÓSITO</span>
           </button>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/remove")}
+            onClick={() => {
+              navigate("/remove");
+              /* window.location.href='../secundarias/retirada.html' */
+            }}
           >
             <i className={`fas fa-wallet ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>RETIRADA</span>
           </button>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/support-center")}
+            onClick={() => {
+              navigate("/support-center");
+              /* window.location.href='../secundarias/suporte.html' */
+            }}
           >
             <i className={`fas fa-headset ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>SUPORTE</span>
@@ -125,10 +130,10 @@ const HomePage = () => {
         </div>
 
         {/* <!-- Últimos Investidores --> */}
-        <div className={`${styles["recent-users"]}`}>
+        <div className={`${styles.recent}`}>
           <h2 className={`${styles["section-title"]}`}>ÚLTIMOS INVESTIDORES</h2>
           <div className={`${styles["user-list"]}`}>
-            {usersData.map((user, index) => (
+            {usersData && usersData.map((user, index) => (
               <div className={`${styles["user-item"]}`} key={index}>
                 <span>{user.phoneMasked}</span>
                 <span>{user.amount}</span>
@@ -136,12 +141,55 @@ const HomePage = () => {
             ))}
           </div>
         </div>
+
+        {/* <!-- Seção de Comunicados --> */}
+        <div className={`${styles.recent}`}>
+          <h2 className={`${styles["section-title"]}`}>COMUNICADOS</h2>
+          <div className={`${styles["announcement-list"]}`}>
+            <div className={`${styles["announcement-item"]}`}>
+              <h3 className={`${styles.h3s}`}>Manutenção Periódica</h3>
+              <p className={`${styles["announcement-date"]}`}>15/05/2025</p>
+              <p>
+                Em certos momentos havendo a necessidade de manutenção regular
+                no funcionamento do sistema, o site poderá estar <i>off-line</i>
+                , mas sem interrupção no processamento normal do seus
+                investimentos, e toda e qualquer manutenção haverá um aviso
+                prévio.
+                <b />
+              </p>
+            </div>
+            <div className={`${styles["announcement-item"]}`}>
+              <h3 className={`${styles.h3s}`}>Transações</h3>
+              <p className={`${styles["announcement-date"]}`}>01/05/2025</p>
+              <p> Você precisa saber isso, os termos ~do nosso</p>
+              <li>
+                Depósitos:
+                <ol>
+                  <li>Horário de processamento: 6h às 21h, diariamente.</li>
+                  <li>Comprovante (pdf) deve ser enviado para análise.</li>
+                </ol>
+              </li>
+              <li>
+                Retiradas:
+                <ol>
+                  <li>Horário: 9h às 21h, de segunda a sábado.</li>
+                  <li>Taxa administrativa de 10% sobre o valor sacado.</li>
+                  <li>Limite mínimo: 2.500 kz; máximo: 500.000 kz por dia.</li>
+                  <li>
+                    Tanto o depósito e a retirada são processados dentro de 24h
+                    no máximo.
+                  </li>
+                </ol>
+              </li>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Menu de navegação inferior */}
+      {/* <!-- Menu de navegação inferior --> */}
       <div className={`${styles["footer-nav"]}`}>
         <a
-          onClick={() => handleActionClick("/")}
+          onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]} ${styles.active}`}
         >
@@ -149,7 +197,7 @@ const HomePage = () => {
           <span>Home</span>
         </a>
         <a
-          onClick={() => handleActionClick("/products")}
+          onClick={() => navigate("/products")}
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]}`}
         >
@@ -157,7 +205,7 @@ const HomePage = () => {
           <span>Produtos</span>
         </a>
         <a
-          onClick={() => handleActionClick("/teams")}
+          onClick={() => navigate("/teams")}
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]}`}
         >
@@ -165,7 +213,7 @@ const HomePage = () => {
           <span>Equipe</span>
         </a>
         <a
-          onClick={() => handleActionClick("/profile")}
+          onClick={() => navigate("/profile")}
           style={{ cursor: "pointer" }}
           className={`${styles["nav-item"]}`}
         >
