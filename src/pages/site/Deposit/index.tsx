@@ -29,7 +29,7 @@ const DepositPage = () => {
 
   const goToPayment = () => {
     if (selectedAmount !== null) {
-      navigate("/payment", {
+      navigate(`/payment?amount=${selectedAmount}`, {
         state: { amount: selectedAmount },
       });
     }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./assets/css/Payment.module.css";
 
 interface Reference {
@@ -64,7 +64,8 @@ const referenceList: Reference[] = [
 const PaymentPage = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const amount = state?.amount ?? "5.000";
+  const [searchParams] = useSearchParams();
+  const amount = state?.amount ?? searchParams.get("amount") ?? "5.000";
 
   const [selectedMethod, setSelectedMethod] = useState("transferencia");
   const [file, setFile] = useState<File | null>(null);
