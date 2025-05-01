@@ -13,6 +13,9 @@ import TransactionHistoryPage from "../pages/site/TransactionHistory";
 import AccountManagementPage from "../pages/site/AccountManagement";
 import DepositPage from "../pages/site/Deposit";
 import PaymentPage from "../pages/site/Payment";
+import DepositSuccessPage from "../pages/site/DepositSuccess";
+import ToRemovePage from "../pages/site/ToRemove";
+import ToRemoveSuccessPage from "../pages/site/ToRemoveSuccess";
 
 const routesSite: IRoutes[] = [
   {
@@ -130,8 +133,32 @@ const routesSite: IRoutes[] = [
   {
     path: "/payment",
     component: PaymentPage,
-    visibleInDisplay: true,
+    visibleInDisplay: false,
     displayName: "Pagamento",
+    protected: true,
+    adminOnly: false,
+  },
+  {
+    path: "/deposit-success",
+    component: DepositSuccessPage,
+    visibleInDisplay: false,
+    displayName: "Depósito Efetuado",
+    protected: true,
+    adminOnly: false,
+  },
+  {
+    path: "/remove",
+    component: ToRemovePage,
+    visibleInDisplay: false,
+    displayName: "Retirada",
+    protected: true,
+    adminOnly: false,
+  },
+  {
+    path: "/removed-success",
+    component: ToRemoveSuccessPage,
+    visibleInDisplay: false,
+    displayName: "Retirada Solicitada",
     protected: true,
     adminOnly: false,
   },

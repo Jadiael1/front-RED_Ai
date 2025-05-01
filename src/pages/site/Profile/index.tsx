@@ -64,7 +64,7 @@ const ProfilePage = () => {
           <button
             className={styles["action-btn"]}
             onClick={() => {
-              /* ../secundarias/retirada.html */
+              navigate("/remove");
             }}
           >
             <i className={`fas fa-wallet ${styles.is}`}></i>
@@ -73,7 +73,7 @@ const ProfilePage = () => {
           <button
             className={styles["action-btn"]}
             onClick={() => {
-              /* ../secundarias/suporte.html */
+              navigate("/support-center");
             }}
           >
             <i className={`fas fa-headset ${styles.is}`}></i>

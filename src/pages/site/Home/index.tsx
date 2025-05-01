@@ -110,14 +110,14 @@ const HomePage = () => {
           </button>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/")}
+            onClick={() => handleActionClick("/remove")}
           >
             <i className={`fas fa-wallet ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>RETIRADA</span>
           </button>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/")}
+            onClick={() => handleActionClick("/support-center")}
           >
             <i className={`fas fa-headset ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>SUPORTE</span>
