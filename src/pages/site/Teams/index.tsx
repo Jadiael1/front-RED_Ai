@@ -215,77 +215,95 @@ const TeamsPage = () => {
           </h2>
           <table className={styles["earnings-table"]}>
             <thead>
-              <tr>
-                <th>Produto</th>
-                <th>Investimento</th>
-                <th>Renda Diária</th>
-                <th>Duração</th>
-                <th>Renda Total</th>
+              <tr className={styles.trs}>
+                <th className={styles.ths}>Produto</th>
+                <th className={styles.ths}>Investimento</th>
+                <th className={styles.ths}>Renda Diária</th>
+                <th className={styles.ths}>Duração</th>
+                <th className={styles.ths}>Renda Total</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Básico 1</td>
-                <td>5.000 kz</td>
-                <td>500 kz (10%)</td>
-                <td>30 Dias</td>
-                <td>15.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Básico 1
+                </td>
+                <td className={styles.tds}>5.000 kz</td>
+                <td className={styles.tds}>500 kz (10%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>15.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Básico 2</td>
-                <td>15.000 kz</td>
-                <td>1.500 kz (10%)</td>
-                <td>30 Dias</td>
-                <td>45.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Básico 2
+                </td>
+                <td className={styles.tds}>15.000 kz</td>
+                <td className={styles.tds}>1.500 kz (10%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>45.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Básico 3</td>
-                <td>30.000 kz</td>
-                <td>3.000 kz (10%)</td>
-                <td>30 Dias</td>
-                <td>90.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Básico 3
+                </td>
+                <td className={styles.tds}>30.000 kz</td>
+                <td className={styles.tds}>3.000 kz (10%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>90.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>P. Intermédio 1</td>
-                <td>75.000 Kz</td>
-                <td>6.750 kz (9%)</td>
-                <td>30 Dias</td>
-                <td>202.500 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  P. Intermédio 1
+                </td>
+                <td className={styles.tds}>75.000 Kz</td>
+                <td className={styles.tds}>6.750 kz (9%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>202.500 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>P. Intermédio 2</td>
-                <td>150.000 kz</td>
-                <td>13.500 kz(9%)</td>
-                <td>30 Dias</td>
-                <td>405.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  P. Intermédio 2
+                </td>
+                <td className={styles.tds}>150.000 kz</td>
+                <td className={styles.tds}>13.500 kz(9%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>405.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>P. Intermédio 3</td>
-                <td>500.000 Kz</td>
-                <td>45.000 kz (9%)</td>
-                <td>30 Dias</td>
-                <td>1.350.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  P. Intermédio 3
+                </td>
+                <td className={styles.tds}>500.000 Kz</td>
+                <td className={styles.tds}>45.000 kz (9%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>1.350.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Avançado 1</td>
-                <td>1.000.000 kz</td>
-                <td>80.000 kz (8%)</td>
-                <td>30 Dias</td>
-                <td>2.400.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Avançado 1
+                </td>
+                <td className={styles.tds}>1.000.000 kz</td>
+                <td className={styles.tds}>80.000 kz (8%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>2.400.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Avançado 2</td>
-                <td>2.500.000 Kz</td>
-                <td>175.000 kz (8%)</td>
-                <td>30 Dias</td>
-                <td>5.250.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Avançado 2
+                </td>
+                <td className={styles.tds}>2.500.000 Kz</td>
+                <td className={styles.tds}>175.000 kz (8%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>5.250.000 Kz</td>
               </tr>
-              <tr>
-                <td style={{ fontWeight: "bold" }}>Plano Avançado 3</td>
-                <td>3.500.000 kz</td>
-                <td>245.000 kz (8%)</td>
-                <td>30 Dias</td>
-                <td>7.350.000 Kz</td>
+              <tr className={styles.trs}>
+                <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                  Plano Avançado 3
+                </td>
+                <td className={styles.tds}>3.500.000 kz</td>
+                <td className={styles.tds}>245.000 kz (8%)</td>
+                <td className={styles.tds}>30 Dias</td>
+                <td className={styles.tds}>7.350.000 Kz</td>
               </tr>
             </tbody>
           </table>
