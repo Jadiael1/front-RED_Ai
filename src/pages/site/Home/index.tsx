@@ -103,7 +103,7 @@ const HomePage = () => {
         <div className={`${styles["action-buttons"]}`}>
           <button
             className={`${styles["action-btn"]}`}
-            onClick={() => handleActionClick("/")}
+            onClick={() => handleActionClick("/deposit")}
           >
             <i className={`fas fa-money-bill-wave ${styles.is}`}></i>
             <span className={`${styles["action-label"]}`}>DEPÓSITO</span>
