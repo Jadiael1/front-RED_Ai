@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/Users.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 const UsersDashPage = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     document.body.style.fontFamily =
       "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -15,6 +17,16 @@ const UsersDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -22,6 +34,15 @@ const UsersDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -36,24 +57,30 @@ const UsersDashPage = () => {
         </div>
         <nav className={`${styles["admin-nav"]}`}>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/notification")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-bell"></i> <span>Notificações</span>
+            <i className={`fas fa-bell ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Notificações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/settings")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-cog"></i> <span>Configurações</span>
+            <i className={`fas fa-cog ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Configurações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => {
               /* logout() */
             }}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-sign-out-alt"></i> <span>Sair</span>
+            <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Sair</span>
           </a>
         </nav>
       </header>
@@ -65,45 +92,50 @@ const UsersDashPage = () => {
         ></div>
         <aside className={`${styles.sidebar}`} id="sidebar">
           <ul className={`${styles["sidebar-menu"]}`}>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
                 <i className="fas fa-tachometer-alt"></i> Dashboard
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as} ${styles.active}`}
                 onClick={() => navigate("/dashboard/users")}
                 style={{ cursor: "pointer" }}
-                className={`${styles.active}`}
               >
-                <i className="fas fa-users"></i> Usuários
+                <i className={`fas fa-users ${styles.is}`}></i> Usuários
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/deposit")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-money-bill-wave"></i> Depósitos
+                <i className={`fas fa-money-bill-wave ${styles.is}`}></i>{" "}
+                Depósitos
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/to-remove")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-wallet"></i> Retiradas
+                <i className={`fas fa-wallet ${styles.is}`}></i> Retiradas
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/settings")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-cog"></i> Configurações
+                <i className={`fas fa-cog ${styles.is}`}></i> Configurações
               </a>
             </li>
           </ul>
@@ -141,20 +173,20 @@ const UsersDashPage = () => {
           <div style={{ overflowX: "auto" }}>
             <table className={`${styles["data-table"]}`}>
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Usuário</th>
-                  <th>Email</th>
-                  <th>Telefone</th>
-                  <th>Registro</th>
-                  <th>Status</th>
-                  <th>Ações</th>
+                <tr className={`${styles.trs}`}>
+                  <th className={`${styles.ths}`}>ID</th>
+                  <th className={`${styles.ths}`}>Usuário</th>
+                  <th className={`${styles.ths}`}>Email</th>
+                  <th className={`${styles.ths}`}>Telefone</th>
+                  <th className={`${styles.ths}`}>Registro</th>
+                  <th className={`${styles.ths}`}>Status</th>
+                  <th className={`${styles.ths}`}>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#1056</td>
-                  <td>
+                <tr className={`${styles.trs}`}>
+                  <td className={`${styles.tds}`}>#1056</td>
+                  <td className={`${styles.tds}`}>
                     <img
                       src={avatarPlaceHolder}
                       alt="João Silva"
@@ -162,17 +194,17 @@ const UsersDashPage = () => {
                     />
                     João Silva
                   </td>
-                  <td>joao@email.com</td>
-                  <td>923456789</td>
-                  <td>15/03/2023</td>
-                  <td>
+                  <td className={`${styles.tds}`}>joao@email.com</td>
+                  <td className={`${styles.tds}`}>923456789</td>
+                  <td className={`${styles.tds}`}>15/03/2023</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-approved"]}`}
                     >
                       Ativo
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
                     >
@@ -185,9 +217,9 @@ const UsersDashPage = () => {
                     </button>
                   </td>
                 </tr>
-                <tr>
-                  <td>#1055</td>
-                  <td>
+                <tr className={`${styles.trs}`}>
+                  <td className={`${styles.tds}`}>#1055</td>
+                  <td className={`${styles.tds}`}>
                     <img
                       src={avatarPlaceHolder}
                       alt="Maria Santos"
@@ -195,17 +227,17 @@ const UsersDashPage = () => {
                     />
                     Maria Santos
                   </td>
-                  <td>maria@email.com</td>
-                  <td>912345678</td>
-                  <td>15/03/2023</td>
-                  <td>
+                  <td className={`${styles.tds}`}>maria@email.com</td>
+                  <td className={`${styles.tds}`}>912345678</td>
+                  <td className={`${styles.tds}`}>15/03/2023</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-approved"]}`}
                     >
                       Ativo
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
                     >
@@ -218,9 +250,9 @@ const UsersDashPage = () => {
                     </button>
                   </td>
                 </tr>
-                <tr>
-                  <td>#1054</td>
-                  <td>
+                <tr className={`${styles.trs}`}>
+                  <td className={`${styles.tds}`}>#1054</td>
+                  <td className={`${styles.tds}`}>
                     <img
                       src={avatarPlaceHolder}
                       alt="Carlos Oliveira"
@@ -228,17 +260,17 @@ const UsersDashPage = () => {
                     />
                     Carlos Oliveira
                   </td>
-                  <td>carlos@email.com</td>
-                  <td>934567890</td>
-                  <td>14/03/2023</td>
-                  <td>
+                  <td className={`${styles.tds}`}>carlos@email.com</td>
+                  <td className={`${styles.tds}`}>934567890</td>
+                  <td className={`${styles.tds}`}>14/03/2023</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-rejected"]}`}
                     >
                       Banido
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
                     >
