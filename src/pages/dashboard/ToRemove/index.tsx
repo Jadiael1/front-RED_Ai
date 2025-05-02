@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/ToRemove.module.css";
 import { useNavigate } from "react-router-dom";
 import redai2 from "../../../assets/images/redai2.png";
 
 const ToRemoveDashPage = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     document.body.style.fontFamily =
       "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -14,6 +16,16 @@ const ToRemoveDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -21,6 +33,15 @@ const ToRemoveDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -35,24 +56,30 @@ const ToRemoveDashPage = () => {
         </div>
         <nav className={`${styles["admin-nav"]}`}>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/notification")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-bell"></i> <span>Notificações</span>
+            <i className={`fas fa-bell ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Notificações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/settings")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-cog"></i> <span>Configurações</span>
+            <i className={`fas fa-cog ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Configurações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => {
               /* logout() */
             }}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-sign-out-alt"></i> <span>Sair</span>
+            <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Sair</span>
           </a>
         </nav>
       </header>
@@ -64,45 +91,51 @@ const ToRemoveDashPage = () => {
         ></div>
         <aside className={`${styles.sidebar}`} id="sidebar">
           <ul className={`${styles["sidebar-menu"]}`}>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-tachometer-alt"></i> Dashboard
+                <i className={`fas fa-tachometer-alt ${styles.is}`}></i>{" "}
+                Dashboard
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/users")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-users"></i> Usuários
+                <i className={`fas fa-users ${styles.is}`}></i> Usuários
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/deposit")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-money-bill-wave"></i> Depósitos
+                <i className={`fas fa-money-bill-wave ${styles.is}`}></i>{" "}
+                Depósitos
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
                 onClick={() => navigate("/dashboard/to-remove")}
                 style={{ cursor: "pointer" }}
-                className={`${styles.active}`}
+                className={`${styles.active} ${styles.as}`}
               >
-                <i className="fas fa-wallet"></i> Retiradas
+                <i className={`fas fa-wallet ${styles.is}`}></i> Retiradas
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/settings")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-cog"></i> Configurações
+                <i className={`fas fa-cog ${styles.is}`}></i> Configurações
               </a>
             </li>
           </ul>
@@ -193,16 +226,16 @@ const ToRemoveDashPage = () => {
           <div style={{ overflowX: "auto", marginTop: "20px" }}>
             <table className={`${styles["data-table"]}`}>
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Usuário</th>
-                  <th>Valor</th>
-                  <th>Taxa</th>
-                  <th>Líquido</th>
-                  <th>Data</th>
-                  <th>Método</th>
-                  <th>Status</th>
-                  <th>Ações</th>
+                <tr className={`${styles.trs}`}>
+                  <th className={`${styles.ths}`}>ID</th>
+                  <th className={`${styles.ths}`}>Usuário</th>
+                  <th className={`${styles.ths}`}>Valor</th>
+                  <th className={`${styles.ths}`}>Taxa</th>
+                  <th className={`${styles.ths}`}>Líquido</th>
+                  <th className={`${styles.ths}`}>Data</th>
+                  <th className={`${styles.ths}`}>Método</th>
+                  <th className={`${styles.ths}`}>Status</th>
+                  <th className={`${styles.ths}`}>Ações</th>
                 </tr>
               </thead>
               <tbody id="withdrawalsTable">
