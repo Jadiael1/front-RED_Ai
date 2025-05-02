@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styles from "./assets/css/Products.module.css";
 import productPlaceHolder from "../../../assets/images/product_placeholder.png";
 
 const ProductsDashPage = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -14,7 +13,7 @@ const ProductsDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
-    const el = containerRef.current;
+    const el = document.body;
     if (el) {
       el.style.setProperty("--primary-color", "#3498db");
       el.style.setProperty("--secondary-color", "#2c3e50");

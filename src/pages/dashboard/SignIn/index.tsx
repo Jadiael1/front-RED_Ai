@@ -1,9 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styles from "./assets/css/SignIn.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 
 const SignInDashPage = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -18,7 +17,7 @@ const SignInDashPage = () => {
     document.body.style.backgroundImage =
       "linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%)";
 
-    const el = containerRef.current;
+    const el = document.body;
     if (el) {
       el.style.setProperty("--primary-color", "#3498db");
       el.style.setProperty("--secondary-color", "#2c3e50");

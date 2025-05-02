@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styles from "./assets/css/Deposit.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import receiptPlaceHolder from "../../../assets/images/receipt_placeholder.png";
@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const DepositDashPage = () => {
   const navigate = useNavigate();
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -17,7 +16,7 @@ const DepositDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
-    const el = containerRef.current;
+    const el = document.body;
     if (el) {
       el.style.setProperty("--primary-color", "#3498db");
       el.style.setProperty("--secondary-color", "#2c3e50");

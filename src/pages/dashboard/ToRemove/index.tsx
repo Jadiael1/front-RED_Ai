@@ -1,11 +1,10 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styles from "./assets/css/ToRemove.module.css";
 import { useNavigate } from "react-router-dom";
 import redai2 from "../../../assets/images/redai2.png";
 
 const ToRemoveDashPage = () => {
   const navigate = useNavigate();
-  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -16,7 +15,7 @@ const ToRemoveDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
-    const el = containerRef.current;
+    const el = document.body;
     if (el) {
       el.style.setProperty("--primary-color", "#3498db");
       el.style.setProperty("--secondary-color", "#2c3e50");
