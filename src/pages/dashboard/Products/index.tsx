@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/Products.module.css";
 import productPlaceHolder from "../../../assets/images/product_placeholder.png";
 
 const ProductsDashPage = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -13,6 +14,16 @@ const ProductsDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -20,6 +31,15 @@ const ProductsDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -84,7 +104,9 @@ const ProductsDashPage = () => {
         <div className={`${styles["form-grid"]}`}>
           <div>
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-name">Nome do Produto</label>
+              <label className={`${styles.labels}`} htmlFor="product-name">
+                Nome do Produto
+              </label>
               <input
                 type="text"
                 id="product-name"
@@ -93,7 +115,9 @@ const ProductsDashPage = () => {
             </div>
 
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-price">Preço (kz)</label>
+              <label className={`${styles.labels}`} htmlFor="product-price">
+                Preço (kz)
+              </label>
               <input
                 type="number"
                 id="product-price"
@@ -102,7 +126,9 @@ const ProductsDashPage = () => {
             </div>
 
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-stock">Estoque</label>
+              <label className={`${styles.labels}`} htmlFor="product-stock">
+                Estoque
+              </label>
               <input
                 type="number"
                 id="product-stock"
@@ -113,7 +139,9 @@ const ProductsDashPage = () => {
 
           <div>
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-category">Categoria</label>
+              <label className={`${styles.labels}`} htmlFor="product-category">
+                Categoria
+              </label>
               <select
                 id="product-category"
                 className={`${styles["form-control"]}`}
@@ -125,7 +153,9 @@ const ProductsDashPage = () => {
             </div>
 
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-image">Imagem do Produto</label>
+              <label className={`${styles.labels}`} htmlFor="product-image">
+                Imagem do Produto
+              </label>
               <input
                 type="file"
                 id="product-image"
@@ -138,7 +168,12 @@ const ProductsDashPage = () => {
             </div>
 
             <div className={`${styles["form-group"]}`}>
-              <label htmlFor="product-description">Descrição</label>
+              <label
+                className={`${styles.labels}`}
+                htmlFor="product-description"
+              >
+                Descrição
+              </label>
               <textarea
                 id="product-description"
                 className={`${styles["form-control"]}`}
