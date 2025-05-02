@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/Deposit.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import receiptPlaceHolder from "../../../assets/images/receipt_placeholder.png";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const DepositDashPage = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -16,6 +17,16 @@ const DepositDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c123");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -23,6 +34,14 @@ const DepositDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -37,24 +56,30 @@ const DepositDashPage = () => {
         </div>
         <nav className={`${styles["admin-nav"]}`}>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/notification")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-bell"></i> <span>Notificações</span>
+            <i className={`fas fa-bell ${styles.is}`}></i>{" "}
+            <span>Notificações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/settings")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-cog"></i> <span>Configurações</span>
+            <i className={`fas fa-cog ${styles.is}`}></i>{" "}
+            <span>Configurações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => {
               /* logout() */
             }}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-sign-out-alt"></i> <span>Sair</span>
+            <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}
+            <span>Sair</span>
           </a>
         </nav>
       </header>
@@ -66,45 +91,51 @@ const DepositDashPage = () => {
         ></div>
         <aside className={`${styles.sidebar}`} id="sidebar">
           <ul className={`${styles["sidebar-menu"]}`}>
-            <li>
+            <li className={styles.lis}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-tachometer-alt"></i> Dashboard
+                <i className={`fas fa-tachometer-alt ${styles.is}`}></i>{" "}
+                Dashboard
               </a>
             </li>
-            <li>
+            <li className={styles.lis}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/users")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-users"></i> Usuários
+                <i className={`fas fa-users ${styles.is}`}></i> Usuários
               </a>
             </li>
-            <li>
+            <li className={styles.lis}>
               <a
                 onClick={() => navigate("/dashboard/deposit")}
                 style={{ cursor: "pointer" }}
-                className={`${styles.active}`}
+                className={`${styles.as} ${styles.active}`}
               >
-                <i className="fas fa-money-bill-wave"></i> Depósitos
+                <i className={`fas fa-money-bill-wave ${styles.is}`}></i>{" "}
+                Depósitos
               </a>
             </li>
-            <li>
+            <li className={styles.lis}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/to-remove")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-wallet"></i> Retiradas
+                <i className={`fas fa-wallet ${styles.is}`}></i> Retiradas
               </a>
             </li>
-            <li>
+            <li className={styles.lis}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/settings")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-cog"></i> Configurações
+                <i className={`fas fa-cog ${styles.is}`}></i> Configurações
               </a>
             </li>
           </ul>
@@ -151,31 +182,31 @@ const DepositDashPage = () => {
           <div style={{ overflowX: "auto" }}>
             <table className={`${styles["data-table"]}`}>
               <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Usuário</th>
-                  <th>Valor</th>
-                  <th>Data</th>
-                  <th>Método</th>
-                  <th>Status</th>
-                  <th>Ações</th>
+                <tr className={styles.trs}>
+                  <th className={`${styles.ths}`}>ID</th>
+                  <th className={`${styles.ths}`}>Usuário</th>
+                  <th className={`${styles.ths}`}>Valor</th>
+                  <th className={`${styles.ths}`}>Data</th>
+                  <th className={`${styles.ths}`}>Método</th>
+                  <th className={`${styles.ths}`}>Status</th>
+                  <th className={`${styles.ths}`}>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>#4587</td>
-                  <td>joao@email.com</td>
-                  <td>500,000 kz</td>
-                  <td>15/03/2023 14:30</td>
-                  <td>Transferência Bancária</td>
-                  <td>
+                <tr className={styles.trs}>
+                  <td className={`${styles.tds}`}>#4587</td>
+                  <td className={`${styles.tds}`}>joao@email.com</td>
+                  <td className={`${styles.tds}`}>500,000 kz</td>
+                  <td className={`${styles.tds}`}>15/03/2023 14:30</td>
+                  <td className={`${styles.tds}`}>Transferência Bancária</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-pending"]}`}
                     >
                       Pendente
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
                     >
@@ -193,20 +224,20 @@ const DepositDashPage = () => {
                     </button>
                   </td>
                 </tr>
-                <tr>
-                  <td>#4586</td>
-                  <td>maria@email.com</td>
-                  <td>1,000,000 kz</td>
-                  <td>15/03/2023 12:15</td>
-                  <td>Cartão de Crédito</td>
-                  <td>
+                <tr className={styles.trs}>
+                  <td className={`${styles.tds}`}>#4586</td>
+                  <td className={`${styles.tds}`}>maria@email.com</td>
+                  <td className={`${styles.tds}`}>1,000,000 kz</td>
+                  <td className={`${styles.tds}`}>15/03/2023 12:15</td>
+                  <td className={`${styles.tds}`}>Cartão de Crédito</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-approved"]}`}
                     >
                       Aprovado
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-view"]} ${styles["view-deposit"]}`}
                     >
@@ -214,20 +245,20 @@ const DepositDashPage = () => {
                     </button>
                   </td>
                 </tr>
-                <tr>
-                  <td>#4585</td>
-                  <td>carlos@email.com</td>
-                  <td>750,000 kz</td>
-                  <td>14/03/2023 18:20</td>
-                  <td>Transferência Bancária</td>
-                  <td>
+                <tr className={styles.trs}>
+                  <td className={`${styles.tds}`}>#4585</td>
+                  <td className={`${styles.tds}`}>carlos@email.com</td>
+                  <td className={`${styles.tds}`}>750,000 kz</td>
+                  <td className={`${styles.tds}`}>14/03/2023 18:20</td>
+                  <td className={`${styles.tds}`}>Transferência Bancária</td>
+                  <td className={`${styles.tds}`}>
                     <span
                       className={`${styles["status-badge"]} ${styles["status-rejected"]}`}
                     >
                       Rejeitado
                     </span>
                   </td>
-                  <td>
+                  <td className={`${styles.tds}`}>
                     <button
                       className={`${styles["action-btn"]} ${styles["btn-view"]} ${styles["view-deposit"]}`}
                     >
