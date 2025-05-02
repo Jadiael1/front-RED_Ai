@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/Settings.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import { useNavigate } from "react-router-dom";
 
 const SettingsDashPage = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     document.body.style.fontFamily =
       "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -14,6 +16,16 @@ const SettingsDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -21,6 +33,15 @@ const SettingsDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -35,24 +56,30 @@ const SettingsDashPage = () => {
         </div>
         <nav className={styles["admin-nav"]}>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/notification")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-bell"></i> <span>Notificações</span>
+            <i className={`fas fa-bell ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Notificações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/settings")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-cog"></i> <span>Configurações</span>
+            <i className={`fas fa-cog ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Configurações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => {
               /*logout() */
             }}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-sign-out-alt"></i> <span>Sair</span>
+            <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}
+            <span className={`${styles.spans}`}>Sair</span>
           </a>
         </nav>
       </header>
@@ -64,45 +91,51 @@ const SettingsDashPage = () => {
         ></div>
         <aside className={styles.sidebar} id="sidebar">
           <ul className={styles["sidebar-menu"]}>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-tachometer-alt"></i> Dashboard
+                <i className={`fas fa-tachometer-alt ${styles.is}`}></i>{" "}
+                Dashboard
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/users")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-users"></i> Usuários
+                <i className={`fas fa-users ${styles.is}`}></i> Usuários
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/deposit")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-money-bill-wave"></i> Depósitos
+                <i className={`fas fa-money-bill-wave ${styles.is}`}></i>{" "}
+                Depósitos
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/to-remove")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-wallet"></i> Retiradas
+                <i className={`fas fa-wallet ${styles.is}`}></i> Retiradas
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as} ${styles.active}`}
                 onClick={() => navigate("/dashboard/settings")}
                 style={{ cursor: "pointer" }}
-                className={styles.active}
               >
-                <i className="fas fa-cog"></i> Configurações
+                <i className={`fas fa-cog ${styles.is}`}></i> Configurações
               </a>
             </li>
           </ul>
@@ -117,7 +150,9 @@ const SettingsDashPage = () => {
             </h2>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="current-email">Email atual</label>
+              <label className={`${styles.labels}`} htmlFor="current-email">
+                Email atual
+              </label>
               <input
                 type="email"
                 id="current-email"
@@ -128,7 +163,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="current-password">Senha Atual</label>
+              <label className={`${styles.labels}`} htmlFor="current-password">
+                Senha Atual
+              </label>
               <input
                 type="password"
                 id="current-password"
@@ -138,7 +175,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="new-password">Nova Senha</label>
+              <label className={`${styles.labels}`} htmlFor="new-password">
+                Nova Senha
+              </label>
               <input
                 type="password"
                 id="new-password"
@@ -157,7 +196,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="confirm-password">Confirmar Nova Senha</label>
+              <label className={`${styles.labels}`} htmlFor="confirm-password">
+                Confirmar Nova Senha
+              </label>
               <input
                 type="password"
                 id="confirm-password"
@@ -175,7 +216,9 @@ const SettingsDashPage = () => {
             <h2 className={styles["section-title"]}>Configurações Gerais</h2>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="site-name">Nome do Site</label>
+              <label className={`${styles.labels}`} htmlFor="site-name">
+                Nome do Site
+              </label>
               <input
                 type="text"
                 id="site-name"
@@ -185,7 +228,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="site-url">URL do Site</label>
+              <label className={`${styles.labels}`} htmlFor="site-url">
+                URL do Site
+              </label>
               <input
                 type="url"
                 id="site-url"
@@ -195,7 +240,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="maintenance-mode">Modo Manutenção</label>
+              <label className={`${styles.labels}`} htmlFor="maintenance-mode">
+                Modo Manutenção
+              </label>
               <select id="maintenance-mode" className={styles["form-control"]}>
                 <option value="0">Desativado</option>
                 <option value="1">Ativado</option>
@@ -203,7 +250,9 @@ const SettingsDashPage = () => {
             </div>
 
             <div className={styles["form-group"]}>
-              <label htmlFor="currency">Moeda Padrão</label>
+              <label className={`${styles.labels}`} htmlFor="currency">
+                Moeda Padrão
+              </label>
               <select id="currency" className={styles["form-control"]}>
                 <option value="kz" selected>
                   Kwanza Angolano (kz)
