@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/SignIn.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 
 const SignInDashPage = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     document.body.style.fontFamily =
       "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
@@ -16,6 +18,15 @@ const SignInDashPage = () => {
     document.body.style.backgroundImage =
       "linear-gradient(135deg, var(--secondary-color) 0%, #34495e 100%)";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.backgroundColor = "";
@@ -26,6 +37,14 @@ const SignInDashPage = () => {
       document.body.style.alignItems = "";
       document.body.style.minHeight = "";
       document.body.style.backgroundImage = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+      }
     };
   }, []);
 
