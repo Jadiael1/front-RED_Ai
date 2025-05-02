@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import styles from "./assets/css/Notification.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import { useNavigate } from "react-router-dom";
 
 const NotificationDashPage = () => {
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -15,6 +16,16 @@ const NotificationDashPage = () => {
     document.body.style.color = "#333";
     document.body.style.overflowX = "hidden";
 
+    const el = containerRef.current;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -22,6 +33,15 @@ const NotificationDashPage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.overflowX = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 
@@ -36,24 +56,30 @@ const NotificationDashPage = () => {
         </div>
         <nav className={`${styles["admin-nav"]}`}>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/notification")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-bell"></i> <span>Notificações</span>
+            <i className="fas fa-bell"></i>{" "}
+            <span className={`${styles.spans}`}>Notificações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => navigate("/dashboard/settings")}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-cog"></i> <span>Configurações</span>
+            <i className="fas fa-cog"></i>{" "}
+            <span className={`${styles.spans}`}>Configurações</span>
           </a>
           <a
+            className={`${styles.as}`}
             onClick={() => {
               /* logout()*/
             }}
             style={{ cursor: "pointer" }}
           >
-            <i className="fas fa-sign-out-alt"></i> <span>Sair</span>
+            <i className="fas fa-sign-out-alt"></i>{" "}
+            <span className={`${styles.spans}`}>Sair</span>
           </a>
         </nav>
       </header>
@@ -65,44 +91,51 @@ const NotificationDashPage = () => {
         ></div>
         <aside className={`${styles.sidebar}`} id="sidebar">
           <ul className={`${styles["sidebar-menu"]}`}>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-tachometer-alt"></i> Dashboard
+                <i className={`fas fa-tachometer-alt ${styles.is}`}></i>{" "}
+                Dashboard
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/users")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-users"></i> Usuários
+                <i className={`fas fa-users ${styles.is}`}></i> Usuários
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/deposit")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-money-bill-wave"></i> Depósitos
+                <i className={`fas fa-money-bill-wave ${styles.is}`}></i>{" "}
+                Depósitos
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/to-remove")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-wallet"></i> Retiradas
+                <i className={`fas fa-wallet ${styles.is}`}></i> Retiradas
               </a>
             </li>
-            <li>
+            <li className={`${styles.lis}`}>
               <a
+                className={`${styles.as}`}
                 onClick={() => navigate("/dashboard/settings")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-cog"></i> Configurações
+                <i className={`fas fa-cog ${styles.is}`}></i> Configurações
               </a>
             </li>
           </ul>
