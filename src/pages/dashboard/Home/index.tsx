@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import redai2 from "../../../assets/images/redai2.png";
 import styles from "./assets/css/Home.module.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const HomeDashPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -50,7 +52,13 @@ const HomeDashPage = () => {
           <button className={styles["menu-toggle"]} id="menuToggle">
             <i className="fas fa-bars"></i>
           </button>
-          <img src={redai2} alt="RED Ai logo" className={styles.logo} />
+          <img
+            src={redai2}
+            alt="RED Ai logo"
+            className={styles.logo}
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          />
         </div>
         <nav className={styles["admin-nav"]}>
           <a
@@ -71,9 +79,7 @@ const HomeDashPage = () => {
           </a>
           <a
             className={`${styles.as}`}
-            onClick={() => {
-              /* logout() */
-            }}
+            onClick={() => logout()}
             style={{ cursor: "pointer" }}
           >
             <i className="fas fa-sign-out-alt"></i>{" "}

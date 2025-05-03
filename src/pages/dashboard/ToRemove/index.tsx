@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import styles from "./assets/css/ToRemove.module.css";
 import { useNavigate } from "react-router-dom";
 import redai2 from "../../../assets/images/redai2.png";
+import { useAuth } from "../../../hooks/useAuth";
 
 const ToRemoveDashPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -72,9 +74,7 @@ const ToRemoveDashPage = () => {
           </a>
           <a
             className={`${styles.as}`}
-            onClick={() => {
-              /* logout() */
-            }}
+            onClick={() => logout()}
             style={{ cursor: "pointer" }}
           >
             <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}

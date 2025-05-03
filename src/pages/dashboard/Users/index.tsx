@@ -3,9 +3,11 @@ import styles from "./assets/css/Users.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
 
 const UsersDashPage = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -73,9 +75,7 @@ const UsersDashPage = () => {
           </a>
           <a
             className={`${styles.as}`}
-            onClick={() => {
-              /* logout() */
-            }}
+            onClick={() => logout()}
             style={{ cursor: "pointer" }}
           >
             <i className={`fas fa-sign-out-alt ${styles.is}`}></i>{" "}

@@ -6,7 +6,7 @@ import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -164,6 +164,22 @@ const ProfilePage = () => {
               </p>
             </div>
           </div>
+          {user?.is_admin && (
+            <div
+              className={styles["tool-card"]}
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+            >
+              <div className={styles["tool-icon"]}>
+                <i className={`fas fa-tools ${styles.is}`}></i>
+              </div>
+              <div className={styles["tool-info"]}>
+                <h3 className={styles.h3s}>DASHBOARD</h3>
+                <p className={styles.ps}>Gerencie o sistema</p>
+              </div>
+            </div>
+          )}
         </div>
 
         <h2 className={styles["section-title"]}>CONFIGURAÇÕES</h2>
