@@ -1,12 +1,3 @@
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-    --accent-color: #e74c3c;
-    --light-color: #ecf0f1;
-    --dark-color: #34495e;
-    --success-color: #2ecc71;
-}
-
 .login-container {
     width: 100%;
     max-width: 400px;

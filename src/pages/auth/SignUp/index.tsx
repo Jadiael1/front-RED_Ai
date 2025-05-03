@@ -62,6 +62,15 @@ const SignUpPage = () => {
     document.body.style.alignItems = "center";
     document.body.style.minHeight = "100vh";
 
+    const el = document.body;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--success-color", "#2ecc71");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -73,6 +82,14 @@ const SignUpPage = () => {
       document.body.style.justifyContent = "";
       document.body.style.alignItems = "";
       document.body.style.minHeight = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--success-color");
+      }
     };
   }, []);
 

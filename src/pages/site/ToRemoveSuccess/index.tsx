@@ -13,12 +13,29 @@ const ToRemoveSuccessPage = () => {
     document.body.style.backgroundColor = "#f5f7fa";
     document.body.style.textAlign = "center";
 
+    const el = document.body;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+      el.style.setProperty("--light-color", "#ecf0f1");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
       document.body.style.padding = "";
       document.body.style.backgroundColor = "";
       document.body.style.textAlign = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+        el.style.removeProperty("--light-color");
+      }
     };
   }, []);
 

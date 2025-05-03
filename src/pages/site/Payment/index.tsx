@@ -87,11 +87,28 @@ const PaymentPage = () => {
     document.body.style.padding = "0 0 80px 0";
     document.body.style.backgroundColor = "#f5f7fa";
 
+    const el = document.body;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--light-color", "#ecf0f1");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
       document.body.style.padding = "";
       document.body.style.backgroundColor = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--light-color");
+      }
     };
   }, []);
 

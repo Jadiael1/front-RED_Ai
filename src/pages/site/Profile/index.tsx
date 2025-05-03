@@ -17,6 +17,17 @@ const ProfilePage = () => {
     document.body.style.color = "#333";
     document.body.style.lineHeight = "1.6";
 
+    const el = document.body;
+    if (el) {
+      el.style.setProperty("--primary-color", "#3498db");
+      el.style.setProperty("--secondary-color", "#2c3e50");
+      el.style.setProperty("--accent-color", "#e74c3c");
+      el.style.setProperty("--light-color", "#ecf0f1");
+      el.style.setProperty("--dark-color", "#34495e");
+      el.style.setProperty("--success-color", "#2ecc71");
+      el.style.setProperty("--warning-color", "#f39c12");
+    }
+
     return () => {
       document.body.style.fontFamily = "";
       document.body.style.margin = "";
@@ -24,6 +35,16 @@ const ProfilePage = () => {
       document.body.style.backgroundColor = "";
       document.body.style.color = "";
       document.body.style.lineHeight = "";
+
+      if (el) {
+        el.style.removeProperty("--primary-color");
+        el.style.removeProperty("--secondary-color");
+        el.style.removeProperty("--accent-color");
+        el.style.removeProperty("--light-color");
+        el.style.removeProperty("--dark-color");
+        el.style.removeProperty("--success-color");
+        el.style.removeProperty("--warning-color");
+      }
     };
   }, []);
 

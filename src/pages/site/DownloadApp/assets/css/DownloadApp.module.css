@@ -1,9 +1,3 @@
-:root {
-    --primary-color: #3498db;
-    --secondary-color: #2c3e50;
-    --light-color: #ecf0f1;
-}
-
 .container {
     max-width: 1200px;
     margin: 0 auto;
