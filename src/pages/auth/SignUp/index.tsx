@@ -15,7 +15,6 @@ type TError = {
   submit: string;
   phone?: string | null;
   invite_code: string;
-  iban: string;
 };
 
 const SignUpPage = () => {
@@ -28,7 +27,6 @@ const SignUpPage = () => {
     password: "",
     password_confirmation: "",
     phone: "",
-    iban: "",
     invite_code: "",
   });
   const [error, setError] = useState<TError>({} as TError);
@@ -201,13 +199,21 @@ const SignUpPage = () => {
             submit: data.message,
           }));
         }
+        setShouldRefresh((prev) => !prev);
       } catch {
         setError((prev) => ({
           ...prev,
           submit: "Falha ao registrar",
         }));
       } finally {
-        setShouldRefresh((prev) => !prev);
+        setFormData({
+          name: "",
+          email: "",
+          password: "",
+          password_confirmation: "",
+          phone: "",
+          invite_code: "",
+        });
       }
     });
   };
