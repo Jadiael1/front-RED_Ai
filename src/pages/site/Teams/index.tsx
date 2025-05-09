@@ -1,11 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Teams.module.css";
 import { useAuth } from "../../../hooks/useAuth";
+import {
+  getNetworkBonus,
+  TNetworkBonus,
+} from "../../../api/endpoints/networkBonus";
+import {
+  getProductsSummary,
+  TProductsSummary,
+} from "../../../api/endpoints/productsSummary";
 
 const TeamsPage = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const [netWorkBonus, setNetWorkBonus] = useState<TNetworkBonus[] | null>(
+    null
+  );
+  const [productSummary, setProductSummary] = useState<
+    TProductsSummary[] | null
+  >(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -46,6 +60,24 @@ const TeamsPage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      // get network bonus
+      const resp = await getNetworkBonus();
+      setNetWorkBonus(resp.data);
+      // get product summary
+      const response = await getProductsSummary();
+      setProductSummary(response.data);
+    })();
+  }, []);
+
+  const formatLocalDateTime = (utcString: string) => {
+    const date = new Date(utcString);
+    const localDate = date.toLocaleDateString();
+    const localTime = date.toLocaleTimeString();
+    return `${localDate} ${localTime}`;
+  };
 
   return (
     <>
@@ -191,42 +223,43 @@ const TeamsPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className={styles.trs}>
-                <td className={styles.tds}>15/05/2023</td>
-                <td className={styles.tds}>1</td>
-                <td className={styles.tds}>João Silva</td>
-                <td className={styles.tds}>50.000 Kz</td>
-                <td
-                  className={styles.tds}
-                  style={{ color: "var(--success-color)", fontWeight: "bold" }}
-                >
-                  5.000 Kz
-                </td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds}>10/05/2023</td>
-                <td className={styles.tds}>2</td>
-                <td className={styles.tds}>Maria Souza</td>
-                <td className={styles.tds}>30.000 Kz</td>
-                <td
-                  className={styles.tds}
-                  style={{ color: "var(--success-color)", fontWeight: "bold" }}
-                >
-                  1.500 Kz
-                </td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds}>05/05/2023</td>
-                <td className={styles.tds}>1</td>
-                <td className={styles.tds}>Carlos Oliveira</td>
-                <td className={styles.tds}>100.000 Kz</td>
-                <td
-                  className={styles.tds}
-                  style={{ color: "var(--success-color)", fontWeight: "bold" }}
-                >
-                  10.000 Kz
-                </td>
-              </tr>
+              {netWorkBonus ? (
+                netWorkBonus.map((networkBonu, index) => (
+                  <tr className={styles.trs} key={index}>
+                    <td className={styles.tds}>
+                      {formatLocalDateTime(networkBonu.date)}
+                    </td>
+                    <td className={styles.tds}>{networkBonu.level}</td>
+                    <td className={styles.tds}>{networkBonu.invitee_name}</td>
+                    <td className={styles.tds}>{networkBonu.investment} Kz</td>
+                    <td
+                      className={styles.tds}
+                      style={{
+                        color: "var(--success-color)",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {networkBonu.bonus_generated} Kz
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr className={styles.trs}>
+                  <td className={styles.tds}>Loading...</td>
+                  <td className={styles.tds}>Loading...</td>
+                  <td className={styles.tds}>Loading...</td>
+                  <td className={styles.tds}>Loading... Kz</td>
+                  <td
+                    className={styles.tds}
+                    style={{
+                      color: "var(--success-color)",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Loading... Kz
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
@@ -251,87 +284,33 @@ const TeamsPage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Básico 1
-                </td>
-                <td className={styles.tds}>5.000 kz</td>
-                <td className={styles.tds}>500 kz (10%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>15.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Básico 2
-                </td>
-                <td className={styles.tds}>15.000 kz</td>
-                <td className={styles.tds}>1.500 kz (10%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>45.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Básico 3
-                </td>
-                <td className={styles.tds}>30.000 kz</td>
-                <td className={styles.tds}>3.000 kz (10%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>90.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  P. Intermédio 1
-                </td>
-                <td className={styles.tds}>75.000 Kz</td>
-                <td className={styles.tds}>6.750 kz (9%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>202.500 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  P. Intermédio 2
-                </td>
-                <td className={styles.tds}>150.000 kz</td>
-                <td className={styles.tds}>13.500 kz(9%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>405.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  P. Intermédio 3
-                </td>
-                <td className={styles.tds}>500.000 Kz</td>
-                <td className={styles.tds}>45.000 kz (9%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>1.350.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Avançado 1
-                </td>
-                <td className={styles.tds}>1.000.000 kz</td>
-                <td className={styles.tds}>80.000 kz (8%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>2.400.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Avançado 2
-                </td>
-                <td className={styles.tds}>2.500.000 Kz</td>
-                <td className={styles.tds}>175.000 kz (8%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>5.250.000 Kz</td>
-              </tr>
-              <tr className={styles.trs}>
-                <td className={styles.tds} style={{ fontWeight: "bold" }}>
-                  Plano Avançado 3
-                </td>
-                <td className={styles.tds}>3.500.000 kz</td>
-                <td className={styles.tds}>245.000 kz (8%)</td>
-                <td className={styles.tds}>30 Dias</td>
-                <td className={styles.tds}>7.350.000 Kz</td>
-              </tr>
+              {productSummary ? (
+                productSummary.map((productSum, index) => (
+                  <tr className={styles.trs} key={index}>
+                    <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                      {productSum.product_name}
+                    </td>
+                    <td className={styles.tds}>{productSum.investment} kz</td>
+                    <td className={styles.tds}>
+                      {productSum.daily_income} kz (10%)
+                    </td>
+                    <td className={styles.tds}>
+                      {Math.trunc(productSum.remaining_days)} Dias
+                    </td>
+                    <td className={styles.tds}>{productSum.total_earned} Kz</td>
+                  </tr>
+                ))
+              ) : (
+                <tr className={styles.trs}>
+                  <td className={styles.tds} style={{ fontWeight: "bold" }}>
+                    Loading...
+                  </td>
+                  <td className={styles.tds}>Loading... kz</td>
+                  <td className={styles.tds}>Loading... kz (10%)</td>
+                  <td className={styles.tds}>Loading... Dias</td>
+                  <td className={styles.tds}>Loading... Kz</td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
