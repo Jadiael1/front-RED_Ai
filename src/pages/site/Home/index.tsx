@@ -5,15 +5,14 @@ import banner3 from "../../../assets/images/banner3.png";
 import logoc from "../../../assets/images/logoc.png";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Home.module.css";
+import {
+  getLatestInvestors,
+  TTLatestInvestorsData,
+} from "../../../api/endpoints/latestInvestors";
 
 interface Slide {
   src: string;
   alt: string;
-}
-
-interface User {
-  phoneMasked: string;
-  amount: string;
 }
 
 const slidesData: Slide[] = [
@@ -22,21 +21,22 @@ const slidesData: Slide[] = [
   { src: banner3, alt: "Banner 3" },
 ];
 
-const usersData: User[] = [
-  { phoneMasked: "92*****09", amount: "100.000 kz" },
-  { phoneMasked: "91*****34", amount: "75.000 kz" },
-  { phoneMasked: "93*****21", amount: "150.000 kz" },
-  { phoneMasked: "92*****45", amount: "50.000 kz" },
-  { phoneMasked: "91*****67", amount: "200.000 kz" },
-  { phoneMasked: "91*****89", amount: "350.000 kz" },
-];
-
 const HomePage = () => {
   const [slideIndex, setSlideIndex] = useState<number>(0);
+  const [latestInvestors, setLatestInvestors] = useState<
+    TTLatestInvestorsData[] | null
+  >(null);
   const navigate = useNavigate();
 
   const nextSlide = useCallback(() => {
     setSlideIndex((prevIndex) => (prevIndex + 1) % slidesData.length);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const response = await getLatestInvestors();
+      setLatestInvestors(response.data);
+    })();
   }, []);
 
   useEffect(() => {
@@ -154,12 +154,13 @@ const HomePage = () => {
         <div className={`${styles.recent}`}>
           <h2 className={`${styles["section-title"]}`}>ÚLTIMOS INVESTIDORES</h2>
           <div className={`${styles["user-list"]}`}>
-            {usersData && usersData.map((user, index) => (
-              <div className={`${styles["user-item"]}`} key={index}>
-                <span>{user.phoneMasked}</span>
-                <span>{user.amount}</span>
-              </div>
-            ))}
+            {latestInvestors &&
+              latestInvestors.map((latestInvestor, index) => (
+                <div className={`${styles["user-item"]}`} key={index}>
+                  <span>{latestInvestor.phone}</span>
+                  <span>{latestInvestor.total_invested} kz</span>
+                </div>
+              ))}
           </div>
         </div>
 
