@@ -8,6 +8,7 @@ export type AuthContextType = {
   logout: () => void;
   updateUser: (updatedUser: IUser) => void;
   isLoading: boolean;
+  last_login?: string | null;
 };
 
 export const AuthContext = createContext<AuthContextType>(
