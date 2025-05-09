@@ -67,9 +67,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(updatedUser);
   };
 
+  function gerarHoraLocalFormatada() {
+    const data = new Date();
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0"); // Meses em JS são de 0 a 11
+    const ano = data.getFullYear();
+    const hora = String(data.getHours()).padStart(2, "0");
+    const minuto = String(data.getMinutes()).padStart(2, "0");
+    return `${dia}/${mes}/${ano} ${hora}:${minuto}`;
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, updateUser, isLoading: isPending }}
+      value={{
+        user,
+        token,
+        login,
+        logout,
+        updateUser,
+        isLoading: isPending,
+        last_login: gerarHoraLocalFormatada(),
+      }}
     >
       {children}
     </AuthContext.Provider>
