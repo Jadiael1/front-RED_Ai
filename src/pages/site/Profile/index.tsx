@@ -1,12 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import styles from "./assets/css/Profile.module.css";
 import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
+import {
+  getTransactions,
+  TTransactionData,
+} from "../../../api/endpoints/transactions";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const [totalWithdrawal, setTotalWithdrawal] = useState<number>(0);
+  // const [transactions, setTransactions] = useState<TTransactionData[] | null>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -48,6 +54,50 @@ const ProfilePage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const response = await getTransactions({
+        perPage: 99999,
+        sortBy: "created_at",
+        sortOrder: "desc",
+        status: "approved",
+        type: "withdrawal",
+      });
+      const totalAmount = response.data.data
+        .map((transaction: TTransactionData) => {
+          const amount = Number(transaction.amount);
+          const originalAmount = amount / 0.9;
+          return parseFloat(originalAmount.toFixed(2));
+        })
+        .reduce(
+          (accumulator: number, currentValue: number) =>
+            accumulator + currentValue,
+          0
+        );
+      setTotalWithdrawal(totalAmount);
+    })();
+  }, []);
+
+  function extractInviteCode(url: string) {
+    // Encontra a última ocorrência de '/' na URL
+    const lastSlashIndex = url.lastIndexOf("/");
+
+    // Se uma barra for encontrada, extrai a substring após ela
+    if (lastSlashIndex !== -1) {
+      return url.substring(lastSlashIndex + 1);
+    } else {
+      // Se não houver barra, retorna a URL original (ou você pode tratar de outra forma)
+      return url;
+    }
+  }
+
+  function formatNumber(number: number) {
+    return new Intl.NumberFormat("pt", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -57,18 +107,27 @@ const ProfilePage = () => {
             alt="Foto do Perfil"
             className={styles["profile-avatar"]}
           />
-          <h1 className={styles["profile-name"]}>Nelo Designer</h1>
-          <div className={styles["profile-id"]}>ID: REDAI123456</div>
+          <h1 className={styles["profile-name"]}>{user?.name}</h1>
+          <div className={styles["profile-id"]}>
+            ID:{" "}
+            {user?.invite_code
+              ? extractInviteCode(user?.invite_code as string)
+              : 0}
+          </div>
         </div>
 
         <div className={styles["balance-cards"]}>
           <div className={styles["balance-card"]}>
             <div className={styles["balance-label"]}>SALDO PRINCIPAL</div>
-            <div className={styles["balance-value"]}>AOA 0</div>
+            <div className={styles["balance-value"]}>
+              AOA {formatNumber(Number(user?.wallet?.balance as string))}
+            </div>
           </div>
           <div className={styles["balance-card"]}>
             <div className={styles["balance-label"]}>RETIRADA TOTAL</div>
-            <div className={styles["balance-value"]}>AOA 0</div>
+            <div className={styles["balance-value"]}>
+              AOA {formatNumber(totalWithdrawal)}
+            </div>
           </div>
         </div>
 
