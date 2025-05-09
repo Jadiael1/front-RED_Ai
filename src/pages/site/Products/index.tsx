@@ -2,10 +2,36 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Products.module.css";
 import { getProducts, TProduct } from "../../../api/endpoints/product";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import { purchaseProduct } from "../../../api/endpoints/purchaseProduct";
+import AlertDiv from "../../../components/Alert";
 
 const ProductPage = () => {
   const [products, setProducts] = useState<TProduct[] | null>(null);
   const navigate = useNavigate();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<TProduct | null>(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertLink, setAlertLink] = useState<string | undefined>();
+  const [alertLinkMessage, setAlertLinkMessage] = useState<
+    string | undefined
+  >();
+  const [alertType, setAlertType] = useState<
+    "success" | "warning" | "error" | null
+  >(null);
+
+  const showAlert = (
+    type: "success" | "warning" | "error",
+    message: string
+  ) => {
+    setAlertType(type);
+    setAlertMessage(message);
+
+    setTimeout(() => {
+      setAlertMessage("");
+      setAlertType(null);
+    }, 5000);
+  };
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -48,6 +74,8 @@ const ProductPage = () => {
   }, []);
 
   useEffect(() => {
+    setAlertLink(undefined);
+    setAlertLinkMessage(undefined);
     (async () => {
       const response = await getProducts();
       setProducts(response.data.data);
@@ -61,6 +89,59 @@ const ProductPage = () => {
     }).format(number);
   }
 
+  const handleBuyClick = (product: TProduct) => {
+    setSelectedProduct(product);
+    setIsDialogOpen(true);
+  };
+
+  const updateRemainingLimit = (id: number | null) => {
+    setProducts((prevProducts) =>
+      prevProducts
+        ? prevProducts.map((product) =>
+            product.id === id
+              ? {
+                  ...product,
+                  remaining_limit: product.remaining_limit
+                    ? product.remaining_limit - 1
+                    : null,
+                }
+              : product
+          )
+        : prevProducts
+    );
+  };
+
+  const confirmPurchase = async () => {
+    setIsDialogOpen(false);
+    if (selectedProduct) {
+      const response = await purchaseProduct({
+        product_id: selectedProduct.id,
+      });
+      if (response.status === "success") {
+        showAlert("success", "produto comprado com sucesso");
+        updateRemainingLimit(selectedProduct.id);
+      } else if (
+        response.status === "error" &&
+        response.message === "Insufficient balance."
+      ) {
+        showAlert("error", "Saldo insuficiente");
+      } else if (
+        response.status === "error" &&
+        response.message === "Purchase limit reached for this product."
+      ) {
+        showAlert("error", "Limite de compra atingido para este produto.");
+      } else if (response.status === "error") {
+        showAlert("error", "Erro interno, tente novamente mais tarde.");
+      }
+    }
+    setSelectedProduct(null);
+  };
+
+  const cancelPurchase = () => {
+    setIsDialogOpen(false);
+    setSelectedProduct(null);
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -73,6 +154,15 @@ const ProductPage = () => {
         >
           Nossos Planos de Investimento
         </h1>
+
+        {alertType && alertMessage && (
+          <AlertDiv
+            type={alertType}
+            message={alertMessage}
+            link={alertLink}
+            linkMessage={alertLinkMessage}
+          />
+        )}
 
         <div className={styles["product-grid"]}>
           {products ? (
@@ -116,7 +206,12 @@ const ProductPage = () => {
                   </span>
                 </div>
 
-                <button className={styles["buy-btn"]}>COMPRAR</button>
+                <button
+                  className={styles["buy-btn"]}
+                  onClick={() => handleBuyClick(product)}
+                >
+                  COMPRAR
+                </button>
               </div>
             ))
           ) : (
@@ -160,6 +255,13 @@ const ProductPage = () => {
           <span>Perfil</span>
         </a>
       </div>
+      <ConfirmationDialog
+        title="Confirmar Compra"
+        message={`Tem certeza que deseja comprar o produto ${selectedProduct?.name}?`}
+        onConfirm={confirmPurchase}
+        onCancel={cancelPurchase}
+        isOpen={isDialogOpen}
+      />
     </>
   );
 };
