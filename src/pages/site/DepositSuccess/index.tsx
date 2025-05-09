@@ -1,9 +1,33 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./assets/css/DepositSuccess.module.css";
+import { useAuth } from "../../../hooks/useAuth";
+import {
+  getTransaction,
+  TTransactionData as TTransaction,
+} from "../../../api/endpoints/transactions";
 
 const DepositSuccessPage = () => {
   const navigate = useNavigate();
+  const [transaction, setTransaction] = useState<TTransaction | null>(null);
+  const { user } = useAuth();
+
+  const { state } = useLocation();
+  const [searchParams] = useSearchParams();
+  const transactionId = state?.id ?? searchParams.get("id") ?? 0;
+  const transactionData = state?.data ?? null;
+
+  useEffect(() => {
+    if (transactionData) {
+      setTransaction(transactionData);
+    } else {
+      (async () => {
+        const response = await getTransaction({ id: transactionId });
+        const { data } = response;
+        setTransaction(data);
+      })();
+    }
+  }, [transactionData, transactionId]);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -37,6 +61,29 @@ const DepositSuccessPage = () => {
     };
   }, []);
 
+  function convertTimestampToLocal(timestampWithUnknownZone: string) {
+    const timestampSeconds = parseInt(timestampWithUnknownZone.slice(0, -2));
+    if (isNaN(timestampSeconds)) {
+      return "Formato de timestamp inválido.";
+    }
+    const date = new Date(timestampSeconds * 1000);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleDateString(undefined, options).replace(",", "");
+  }
+
+  function formatNumber(number: number) {
+    return new Intl.NumberFormat("pt", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -55,25 +102,31 @@ const DepositSuccessPage = () => {
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Valor:</span>
               <span className={styles["detail-value"]} id="displayAmount">
-                15.000 Kz
+                {formatNumber(Number(transaction?.amount))} Kz
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Método:</span>
               <span className={styles["detail-value"]} id="displayMethod">
-                Transferência Bancária
+                {transaction?.method == "transfer"
+                  ? "Transferência Bancária"
+                  : transaction?.method == "reference"
+                  ? "Pagamento Via Referência"
+                  : "Depósito em Dinheiro"}
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>IBAN Depositante:</span>
               <span className={styles["detail-value"]} id="displayIban">
-                AO06 0045 0000 1234 5678 9019 2
+                {user?.iban}
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Data/Hora:</span>
               <span className={styles["detail-value"]} id="displayDate">
-                25/05/2023 14:30
+                {transaction?.created_at
+                  ? convertTimestampToLocal(transaction?.created_at)
+                  : null}
               </span>
             </div>
             <div className={styles["detail-row"]}>
@@ -81,7 +134,7 @@ const DepositSuccessPage = () => {
               <span
                 className={`${styles["detail-value"]} ${styles["status-pending"]}`}
               >
-                Pendente
+                {transaction?.status}
               </span>
             </div>
           </div>
