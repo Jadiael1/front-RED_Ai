@@ -1,9 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/ToRemove.module.css";
+import AlertDiv from "../../../components/Alert";
+import { useAuth } from "../../../hooks/useAuth";
+import { withdrawal } from "../../../api/endpoints/withdrawal";
 
 const ToRemovePage = () => {
   const navigate = useNavigate();
+  const [amountToBeWithdrawn, setAmountToBeWithdrawn] = useState<number>(0);
+  const [netAmountToBeWithdrawn, setNetAmountToBeWithdrawn] =
+    useState<number>(0);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertLink, setAlertLink] = useState<string | undefined>();
+  const [alertLinkMessage, setAlertLinkMessage] = useState<
+    string | undefined
+  >();
+  const [alertType, setAlertType] = useState<
+    "success" | "warning" | "error" | null
+  >(null);
+  const [submitButtonStatus, setSubmitButtonStatus] = useState<boolean>(false);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (!user?.iban) {
+      setSubmitButtonStatus(true);
+      setAlertType("warning");
+      setAlertMessage(
+        "Antes de solicitar retirada, defina seu iban valido em seu"
+      );
+      setAlertLink("/account-management");
+      setAlertLinkMessage("perfil.");
+    }
+  }, [user?.iban]);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -37,11 +65,113 @@ const ToRemovePage = () => {
     };
   }, []);
 
+  const showAlert = (
+    type: "success" | "warning" | "error",
+    message: string
+  ) => {
+    setAlertType(type);
+    setAlertMessage(message);
+
+    setTimeout(() => {
+      setAlertMessage("");
+      setAlertType(null);
+    }, 5000);
+  };
+
+  const handleChangeAmount = async (
+    evt: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = Number(evt.currentTarget.value);
+    setAmountToBeWithdrawn(Number(value));
+    const netValue = value - value * 0.1;
+    setNetAmountToBeWithdrawn(netValue);
+  };
+
+  const submitPayment = async () => {
+    const response = await withdrawal({ amount: amountToBeWithdrawn });
+    if (response.status === "success") {
+      showAlert("success", "Solicitação para saque realizada com sucesso.");
+      setTimeout(() => {
+        navigate(
+          `/removed-success?amount=${amountToBeWithdrawn}&netAmount=${netAmountToBeWithdrawn}`,
+          {
+            state: {
+              amount: amountToBeWithdrawn,
+              netAmount: netAmountToBeWithdrawn,
+              data: response.data,
+            },
+          }
+        );
+      }, 900);
+      return;
+    }
+
+    if (
+      response.status === "error" &&
+      response.message ===
+        "Withdrawal requests are allowed only between 9:00 and 21:00."
+    ) {
+      showAlert(
+        "warning",
+        "Solicitações de retirada são permitidas somente entre 9:00 e 21:00."
+      );
+      return;
+    }
+
+    if (
+      response.status === "error" &&
+      response.message === "You have already requested a withdrawal today."
+    ) {
+      showAlert(
+        "warning",
+        "Você já solicitou um saque hoje. Apenas uma solicitação por dia é permitida."
+      );
+      return;
+    }
+
+    if (
+      response.status === "error" &&
+      response.message === "Validation error." &&
+      response.errors &&
+      response.errors["amount"][0] === "validation.min.numeric"
+    ) {
+      showAlert("warning", "Você deve sacar um valor minimo de 2.500 Kz");
+      return;
+    }
+
+    if (
+      response.status === "error" &&
+      response.message === "Validation error." &&
+      response.errors &&
+      response.errors["amount"][0] === "validation.max.numeric"
+    ) {
+      showAlert("warning", "Valor maximo para saque é de 500.000 Kz");
+      return;
+    }
+
+    if (response.status === "error") {
+      showAlert(
+        "error",
+        "Erro interno, tente realizar saque novamente outra hora."
+      );
+      return;
+    }
+  };
+
   return (
     <>
       <div className={styles.container}>
         <div className={styles["withdrawal-card"]}>
           <h1 className={styles["section-title"]}>Solicitar Retirada</h1>
+
+          {alertType && alertMessage && (
+            <AlertDiv
+              type={alertType}
+              message={alertMessage}
+              link={alertLink}
+              linkMessage={alertLinkMessage}
+            />
+          )}
 
           <div className={styles["form-group"]}>
             <label className={styles["form-label"]}>Valor a Retirar (Kz)</label>
@@ -52,13 +182,15 @@ const ToRemovePage = () => {
               placeholder="Entre 2.500 e 500.000"
               min="2500"
               max="500000"
+              value={amountToBeWithdrawn}
+              onChange={handleChangeAmount}
             />
             <div className={styles["form-note"]}>
               Valor mínimo: 2.500 Kz | Valor máximo: 500.000 Kz | Taxa: 10%
             </div>
           </div>
 
-          <div className={styles["form-group"]}>
+          {/* <div className={styles["form-group"]}>
             <label className={styles["form-label"]}>
               Método de Recebimento
             </label>
@@ -66,9 +198,9 @@ const ToRemovePage = () => {
               <option value="iban">Transferência Bancária (IBAN)</option>
               <option value="mbway">Transfência Express</option>
             </select>
-          </div>
+          </div> */}
 
-          <div className={styles["form-group"]} id="ibanField">
+          {/* <div className={styles["form-group"]} id="ibanField">
             <label className={styles["form-label"]}>IBAN da Conta</label>
             <input
               type="text"
@@ -80,9 +212,9 @@ const ToRemovePage = () => {
             <div className={styles["form-note"]}>
               Deve conter exatamente 21 dígitos
             </div>
-          </div>
+          </div> */}
 
-          <div
+          {/* <div
             className={styles["form-group"]}
             id="mbwayField"
             style={{ display: "none" }}
@@ -95,7 +227,7 @@ const ToRemovePage = () => {
               placeholder="923 456 789"
               maxLength={9}
             />
-          </div>
+          </div> */}
 
           <div className={styles["form-group"]}>
             <label className={styles["form-label"]}>
@@ -110,15 +242,17 @@ const ToRemovePage = () => {
                 backgroundColor: "var(--light-color)",
                 fontWeight: "bold",
               }}
+              value={netAmountToBeWithdrawn}
+              disabled={submitButtonStatus}
             />
           </div>
 
           <button
             className={styles["submit-btn"]}
             id="submitBtn"
-            disabled
+            disabled={submitButtonStatus}
             onClick={() => {
-              /* submitPayment() */
+              submitPayment();
             }}
           >
             SOLICITAR RETIRADA
