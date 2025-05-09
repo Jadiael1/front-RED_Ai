@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Teams.module.css";
+import { useAuth } from "../../../hooks/useAuth";
 
 const TeamsPage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -59,11 +61,15 @@ const TeamsPage = () => {
           </p>
 
           <div className={styles["invite-code"]}>
-            <span id="inviteLink">https://redai.com/invite/RED123456</span>
+            <span id="inviteLink">{user?.invite_code ?? ""}</span>
             <button
               className={styles["copy-btn"]}
-              onClick={() => {
-                /*copy invite*/
+              onClick={async () => {
+                try {
+                  await navigator.clipboard.writeText(user?.invite_code ?? "");
+                } catch (err) {
+                  console.error("Falha ao copiar texto: ", err);
+                }
               }}
             >
               <i className="fas fa-copy"></i> Copiar
