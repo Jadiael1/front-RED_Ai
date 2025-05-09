@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./assets/css/Payment.module.css";
+import { deposit } from "../../../api/endpoints/deposit";
 
 interface Reference {
   ref: string;
   account: string;
   validUntil: string;
 }
+
+const paymentMethods = {
+  transfer: "transfer",
+  reference: "reference",
+  deposit: "deposit",
+};
 
 const referenceList: Reference[] = [
   {
@@ -67,7 +74,7 @@ const PaymentPage = () => {
   const [searchParams] = useSearchParams();
   const amount = state?.amount ?? searchParams.get("amount") ?? "5.000";
 
-  const [selectedMethod, setSelectedMethod] = useState("transferencia");
+  const [selectedMethod, setSelectedMethod] = useState<string>("transfer");
   const [file, setFile] = useState<File | null>(null);
   const [isWorkingHours, setIsWorkingHours] = useState(true);
   const [currentRef, setCurrentRef] = useState<Reference>(referenceList[0]);
@@ -129,11 +136,32 @@ const PaymentPage = () => {
     else setFile(null);
   };
 
-  const submitPayment = () => {
-    alert(
-      `Pagamento de ${amount} Kz via ${selectedMethod} enviado!\nReferência: ${currentRef.ref}`
-    );
-    navigate("/deposito-sucesso", { state: { amount, ref: currentRef.ref } });
+  const submitPayment = async () => {
+    if (!file) return;
+    try {
+      const data = await deposit({
+        amount,
+        method: selectedMethod,
+        receipt: file,
+        description: `Pagamento via ${selectedMethod.toUpperCase()} | Ref: ${
+          currentRef.ref
+        }`,
+      });
+      navigate(
+        `/deposit-success?amount=${data.data.amount}`,
+        {
+          state: {
+            amount: data.data.amount,
+            ref: currentRef.ref,
+            id: data.data.id,
+            data: data.data,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Erro ao enviar pagamento:", error);
+      alert("Erro ao enviar pagamento. Verifique os dados e tente novamente.");
+    }
   };
 
   const isSubmitEnabled = file && isWorkingHours;
@@ -142,7 +170,7 @@ const PaymentPage = () => {
     if (!currentRef) return null;
     const infoStyle = { fontSize: "12px", color: "#7f8c8d", marginTop: "10px" };
     switch (selectedMethod) {
-      case "transferencia":
+      case "transfer":
         return (
           <>
             <div className={styles["reference-box"]}>
@@ -168,7 +196,7 @@ const PaymentPage = () => {
             </p>
           </>
         );
-      case "mbway":
+      case "reference":
         return (
           <>
             <div className={styles["reference-box"]}>
@@ -193,7 +221,7 @@ const PaymentPage = () => {
             </p>
           </>
         );
-      case "dinheiro":
+      case "deposit":
         return (
           <>
             <div className={styles["reference-box"]}>
@@ -235,29 +263,29 @@ const PaymentPage = () => {
         <div className={styles["payment-card"]}>
           <h2 className={styles["section-title"]}>Método de Pagamento</h2>
           <div className={styles["method-grid"]}>
-            {["transferencia", "mbway", "dinheiro"].map((method) => (
+            {Object.values(paymentMethods).map((paymentMethod) => (
               <div
-                key={method}
+                key={paymentMethod}
                 className={`${styles["method-card"]} ${
-                  selectedMethod === method ? styles.active : ""
+                  selectedMethod === paymentMethod ? styles.active : ""
                 }`}
-                onClick={() => setSelectedMethod(method)}
+                onClick={() => setSelectedMethod(paymentMethod)}
               >
                 <div className={styles["method-icon"]}>
                   <i
                     className={`fas ${
-                      method === "transferencia"
+                      paymentMethod === "transfer"
                         ? "fa-exchange-alt"
-                        : method === "mbway"
+                        : paymentMethod === "reference"
                         ? "fa-mobile-alt"
                         : "fa-money-bill-wave"
                     }`}
                   ></i>
                 </div>
                 <div>
-                  {method === "transferencia"
+                  {paymentMethod === "transfer"
                     ? "Transferência Bancária"
-                    : method === "mbway"
+                    : paymentMethod === "reference"
                     ? "Pagamento Via Referência"
                     : "Depósito em Dinheiro"}
                 </div>
