@@ -1,9 +1,29 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import styles from "./assets/css/ToRemoveSuccess.module.css";
+import { getTransaction, TTransactionData } from "../../../api/endpoints/transactions";
+import { useAuth } from "../../../hooks/useAuth";
 
 const ToRemoveSuccessPage = () => {
+  const [transaction, setTransaction] = useState<TTransactionData | null>(null);
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const [searchParams] = useSearchParams();
+  const transactionId = state?.data.id ?? searchParams.get("id") ?? 0;
+  const transactionData: TTransactionData | null = state?.data ?? null;
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (transactionData) {
+      setTransaction(transactionData);
+    } else {
+      (async () => {
+        const response = await getTransaction({ id: transactionId });
+        const { data } = response;
+        setTransaction(data as TTransactionData);
+      })();
+    }
+  }, [transactionData, transactionId]);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -39,6 +59,29 @@ const ToRemoveSuccessPage = () => {
     };
   }, []);
 
+  function convertTimestampToLocal(timestampWithUnknownZone: string) {
+    const timestampSeconds = parseInt(timestampWithUnknownZone.slice(0, -2));
+    if (isNaN(timestampSeconds)) {
+      return "Formato de timestamp inválido.";
+    }
+    const date = new Date(timestampSeconds * 1000);
+    const options: Intl.DateTimeFormatOptions = {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return date.toLocaleDateString(undefined, options).replace(",", "");
+  }
+
+  function formatNumber(number: number) {
+    return new Intl.NumberFormat("pt", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -57,25 +100,28 @@ const ToRemoveSuccessPage = () => {
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Nº da Solicitação:</span>
               <span className={styles["detail-value"]} id="requestId">
-                RT2023-0542
+                RT2025-0{transaction?.id}0
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Valor Bruto:</span>
               <span className={styles["detail-value"]} id="grossAmount">
-                50.000 Kz
+                {formatNumber(Number(transaction?.gross_value))} kz
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Taxa (10%):</span>
               <span className={styles["detail-value"]} id="feeAmount">
-                5.000 Kz
+                {formatNumber(
+                  Number(transaction?.gross_value) - Number(transaction?.amount)
+                )}{" "}
+                Kz
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Valor Líquido:</span>
               <span className={styles["detail-value"]} id="netAmount">
-                45.000 Kz
+                {formatNumber(Number(transaction?.amount))} Kz
               </span>
             </div>
             <div className={styles["detail-row"]}>
@@ -87,13 +133,15 @@ const ToRemoveSuccessPage = () => {
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Conta Destino:</span>
               <span className={styles["detail-value"]} id="accountDetails">
-                AO06 0045 0000 9876 5432 1012 3
+                {user?.iban}
               </span>
             </div>
             <div className={styles["detail-row"]}>
               <span className={styles["detail-label"]}>Data/Hora:</span>
               <span className={styles["detail-value"]} id="requestDate">
-                25/05/2023 15:42
+                {transaction?.created_at
+                  ? convertTimestampToLocal(transaction?.created_at)
+                  : null}
               </span>
             </div>
             <div className={styles["detail-row"]}>
@@ -101,7 +149,7 @@ const ToRemoveSuccessPage = () => {
               <span
                 className={`${styles["detail-value"]} ${styles["status-pending"]}`}
               >
-                Pendente
+                {transaction?.status}
               </span>
             </div>
           </div>
