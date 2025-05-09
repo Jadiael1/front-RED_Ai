@@ -7,7 +7,6 @@ export interface SignUpCredentials {
   password: string;
   password_confirmation: string;
   phone: string;
-  iban: string;
   invite_code: string;
 }
 
