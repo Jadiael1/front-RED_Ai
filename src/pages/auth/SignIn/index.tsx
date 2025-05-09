@@ -92,7 +92,6 @@ const SignInPage = () => {
     try {
       await login(email, password);
     } catch (error) {
-      console.log(error);
       if (
         error ==
         "Error: Your account is not verified yet, please verify your account before logging in."
