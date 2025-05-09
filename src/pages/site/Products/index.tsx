@@ -1,8 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./assets/css/Products.module.css";
+import { getProducts, TProduct } from "../../../api/endpoints/product";
 
 const ProductPage = () => {
+  const [products, setProducts] = useState<TProduct[] | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -45,6 +47,20 @@ const ProductPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const response = await getProducts();
+      setProducts(response.data.data);
+    })();
+  }, []);
+
+  function formatNumber(number: number) {
+    return new Intl.NumberFormat("pt", {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  }
+
   return (
     <>
       <div className={styles.container}>
@@ -59,302 +75,53 @@ const ProductPage = () => {
         </h1>
 
         <div className={styles["product-grid"]}>
-          {/* <!-- Produto VIP 1 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 1</span>
-            <h3 className={styles["product-title"]}>Plano Básico 1</h3>
+          {products ? (
+            products.map((product, index) => (
+              <div className={styles["product-card"]} key={index}>
+                <span className={styles["product-badge"]}>VIP {index + 1}</span>
+                <h3 className={styles["product-title"]}>{product.name}</h3>
 
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>5.000 Kz</span>
-            </div>
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>
+                    {formatNumber(Number(product.price))} Kz
+                  </span>
+                </div>
 
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>500 Kz (10%)</span>
-            </div>
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>
+                    {formatNumber(Number(product.daily_income))} Kz (10%)
+                  </span>
+                </div>
 
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>
+                    {product.duration_days} dias
+                  </span>
+                </div>
 
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>15.000 Kz</span>
-            </div>
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>
+                    {formatNumber(Number(product.total_income))} Kz
+                  </span>
+                </div>
 
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>
+                    {product.remaining_limit}/{product.limit}
+                  </span>
+                </div>
 
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 2 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 2</span>
-            <h3 className={styles["product-title"]}>Plano Básico 2</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>15.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>1.500 Kz (10%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>45.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 3 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 3</span>
-            <h3 className={styles["product-title"]}>Plano Básico 3</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>30.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>3.000 Kz (10%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>90.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 4 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 4</span>
-            <h3 className={styles["product-title"]}>Plano Intermédio 1</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>75.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>6.750 Kz (9%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>202.500 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 5 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 5</span>
-            <h3 className={styles["product-title"]}>Plano Intermédio 2</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>150.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>13.500 Kz (9%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>405.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 6 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 6</span>
-            <h3 className={styles["product-title"]}>Plano Intermédio 3</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>500.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>45.000 Kz (9%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>1.350.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 7 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 7</span>
-            <h3 className={styles["product-title"]}>Plano Avançado 1</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>1.000.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>80.000 Kz (8%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>2.400.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 8 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 8</span>
-            <h3 className={styles["product-title"]}>Plano Avançado 2</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>2.500.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>175.000 Kz (8%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>5.250.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
-
-          {/* <!-- Produto VIP 9 --> */}
-          <div className={styles["product-card"]}>
-            <span className={styles["product-badge"]}>VIP 9</span>
-            <h3 className={styles["product-title"]}>Plano Avançado 3</h3>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Investimento:</span>
-              <span className={styles.value}>3.500.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Renda Diária:</span>
-              <span className={styles.value}>245.000 Kz (8%)</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Duração:</span>
-              <span className={styles.value}>30 dias</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Rendimento Total:</span>
-              <span className={styles.value}>7.350.000 Kz</span>
-            </div>
-
-            <div className={styles["product-detail"]}>
-              <span className={styles.label}>Disponíveis:</span>
-              <span className={styles.value}>5/5</span>
-            </div>
-
-            <button className={styles["buy-btn"]}>COMPRAR</button>
-          </div>
+                <button className={styles["buy-btn"]}>COMPRAR</button>
+              </div>
+            ))
+          ) : (
+            <div>Loading...</div>
+          )}
         </div>
       </div>
 
