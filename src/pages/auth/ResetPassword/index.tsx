@@ -85,7 +85,6 @@ const ResetPasswordPage = () => {
         });
 
         if (data.status_code === 200 && data.status === "success") {
-          console.log(data);
           setMessage(data.message);
           setTimeout(() => navigate("/auth/signin"), 3000);
         } else {
