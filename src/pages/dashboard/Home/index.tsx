@@ -1,12 +1,49 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import redai2 from "../../../assets/images/redai2.png";
 import styles from "./assets/css/Home.module.css";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { getUsers } from "../../../api/endpoints/users";
+import {
+  getTransactionsAdm,
+  TTransactionData,
+} from "../../../api/endpoints/transactions";
+import { getTotalInvitedUsers } from "../../../api/endpoints/totalInvitedUsers";
+import { ApproveOrRejectWithdrawal } from "../../../api/endpoints/ApproveOrRejectWithdrawal";
+import { approveOrRejectDeposit } from "../../../api/endpoints/approveOrRejectDeposit";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import AlertDiv from "../../../components/Alert";
+import { IUser } from "../../../types";
 
 const HomeDashPage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [totalUsers, setTotalUsers] = useState<number>(0);
+  const [totalActiveUsers, setTotalActiveUsers] = useState<number>(0);
+  const [totalDeposited, setTotalDeposited] = useState<number>(0);
+  const [totalWithdrawn, setTotalWithdrawn] = useState<number>(0);
+  const [totalInvitedUsers, setTotalInvitedUsers] = useState<number>(0);
+  const [totalProductsSold, setTotalProductsSold] = useState<number>(0);
+  const [pendingTransactions, setPendingTransactions] = useState<
+    TTransactionData[] | null
+  >(null);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TTransactionData | null>(null);
+  const [approveOrReject, setApproveOrReject] = useState<
+    "approve" | "reject" | null
+  >(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [alertType, setAlertType] = useState<
+    "success" | "warning" | "error" | null
+  >(null);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertLink, setAlertLink] = useState<string | undefined>(undefined);
+  const [alertLinkMessage, setAlertLinkMessage] = useState<string | undefined>(
+    undefined
+  );
+  const [latestRegisteredUsers, setLatestRegisteredUsers] = useState<
+    (IUser & { createdAtDate: string })[] | null
+  >(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -44,6 +81,176 @@ const HomeDashPage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    setAlertLink(undefined);
+    setAlertLinkMessage(undefined);
+    (async () => {
+      const resp = await getUsers();
+      setTotalUsers(resp.data.total);
+      const activeUsers = resp.data.data.map((user) => user.email_verified_at);
+      setTotalActiveUsers(activeUsers.length);
+
+      //
+      const latestRegisteredUsers1 = resp.data.data
+        .map((user) => {
+          const cleanedTimestamp = parseInt(
+            user.created_at.replace(/\D/g, ""),
+            10
+          );
+          const date = new Date(cleanedTimestamp * 1000);
+          const localDate = date.toLocaleDateString();
+          const localTime = date.toLocaleTimeString();
+
+          return {
+            ...user,
+            createdAtDate: `${localDate} ${localTime}`, // Convertendo de segundos para milissegundos
+          };
+        })
+        .sort((a, b) => b.id - a.id)
+        .slice(0, 5);
+      console.log(latestRegisteredUsers1);
+      setLatestRegisteredUsers(latestRegisteredUsers1);
+      //
+
+      // transactions?type=deposit&status=approved&sort_by=created_at&sort_order=desc&per_page=99
+      const transactions = await getTransactionsAdm({
+        status: "approved",
+        sortBy: "created_at",
+        sortOrder: "desc",
+        perPage: 99999,
+      });
+      const totalDeposited1 = transactions.data.data
+        .filter((transaction) => transaction.type === "deposit")
+        .map((transaction) => Number(transaction.amount))
+        .reduce(
+          (accumulator: number, currentValue: number) =>
+            accumulator + currentValue,
+          0
+        );
+      const totalWithdrawn1 = transactions.data.data
+        .filter((transaction) => transaction.type === "withdrawal")
+        .map((transaction) => {
+          const amount = Number(transaction.amount);
+          const originalAmount = amount / 0.9;
+          // return Number(transaction.amount);
+          return parseFloat(originalAmount.toFixed(2));
+        })
+        .reduce(
+          (accumulator: number, currentValue: number) =>
+            accumulator + currentValue,
+          0
+        );
+      const totalProductsSold1 = transactions.data.data.filter(
+        (transaction) => transaction.type === "investment"
+      );
+      setTotalProductsSold(totalProductsSold1.length);
+
+      const totalInvitedUsersResp = await getTotalInvitedUsers();
+      setTotalInvitedUsers(totalInvitedUsersResp.data.total_invited);
+      setTotalDeposited(totalDeposited1);
+      setTotalWithdrawn(totalWithdrawn1);
+
+      const pendingTransactions1 = await getTransactionsAdm({
+        status: "pending",
+        sortBy: "created_at",
+        sortOrder: "desc",
+        perPage: 99999,
+      });
+      setPendingTransactions(pendingTransactions1.data.data);
+    })();
+  }, []);
+
+  const cancelApproveOrReject = () => {
+    setIsDialogOpen(false);
+    setSelectedTransaction(null);
+  };
+
+  const handleApproveOrRejectTransactionButton = (
+    transaction: TTransactionData,
+    action: "approve" | "reject"
+  ) => {
+    setIsDialogOpen(true);
+    setSelectedTransaction(transaction);
+    setApproveOrReject(action);
+  };
+
+  const updatePendingTransactions = (id: number) => {
+    setPendingTransactions((prevPendingTransactions) =>
+      prevPendingTransactions
+        ? prevPendingTransactions.filter((transaction) => transaction.id !== id)
+        : prevPendingTransactions
+    );
+  };
+
+  const approveOrRejectTransaction = async () => {
+    setIsDialogOpen(false);
+    type TApprovalStatus = "approve" | "reject";
+    const action: TApprovalStatus = approveOrReject as TApprovalStatus;
+    const transaction = selectedTransaction as TTransactionData;
+    const type = transaction.type;
+    const transaction_id = transaction.id;
+    const status = action === "approve" ? "approved" : "rejected";
+
+    if (type === "withdrawal") {
+      const resp = await ApproveOrRejectWithdrawal({
+        status: status,
+        transaction_id: transaction_id,
+      });
+      if (resp.status === "success") {
+        showAlert(
+          "success",
+          `Transação de retirada ${
+            status === "approved" ? "aprovada" : "rejeitada"
+          } com sucesso.`
+        );
+        updatePendingTransactions(transaction_id);
+      } else {
+        showAlert(
+          "error",
+          `Erro ao ${
+            status === "approved" ? "aprovar" : "rejeitar"
+          } transação de retirada.`
+        );
+      }
+    }
+    if (type === "deposit") {
+      const resp = await approveOrRejectDeposit({
+        status: status,
+        transaction_id: transaction_id,
+      });
+      if (resp.status === "success") {
+        showAlert(
+          "success",
+          `Transação de deposito ${
+            status === "approved" ? "aprovada" : "rejeitada"
+          } com sucesso.`
+        );
+        updatePendingTransactions(transaction_id);
+      } else {
+        showAlert(
+          "error",
+          `Erro ao ${
+            status === "approved" ? "aprovar" : "rejeitar"
+          } transação de deposito.`
+        );
+      }
+    }
+    setSelectedTransaction(null);
+  };
+
+  const showAlert = (
+    type: "success" | "warning" | "error",
+    message: string
+  ) => {
+    setAlertType(type);
+    setAlertMessage(message);
+
+    setTimeout(() => {
+      setAlertMessage("");
+      setAlertType(null);
+    }, 5000);
+  };
 
   return (
     <>
@@ -89,6 +296,14 @@ const HomeDashPage = () => {
       </header>
 
       <div className={styles["admin-container"]}>
+        {alertType && alertMessage && (
+          <AlertDiv
+            type={alertType}
+            message={alertMessage}
+            link={alertLink}
+            linkMessage={alertLinkMessage}
+          />
+        )}
         <div
           className={styles["mobile-menu-backdrop"]}
           id="mobileMenuBackdrop"
@@ -152,7 +367,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Usuários Registrados</h3>
               <div className={styles["metric-value"]} id="total-users">
-                0
+                {totalUsers}
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.positive}`}
@@ -163,7 +378,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Usuários Ativos</h3>
               <div className={styles["metric-value"]} id="active-users">
-                0
+                {totalActiveUsers}
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.positive}`}
@@ -174,7 +389,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Total Depositado</h3>
               <div className={styles["metric-value"]} id="total-deposits">
-                0 kz
+                {totalDeposited} kz
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.positive}`}
@@ -185,7 +400,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Total Retirado</h3>
               <div className={styles["metric-value"]} id="total-withdrawals">
-                0 kz
+                {totalWithdrawn} kz
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.negative}`}
@@ -196,7 +411,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Indicações Totais</h3>
               <div className={styles["metric-value"]} id="total-referrals">
-                0
+                {totalInvitedUsers}
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.positive}`}
@@ -207,7 +422,7 @@ const HomeDashPage = () => {
             <div className={styles["metric-card"]}>
               <h3 className={`${styles.h3s}`}>Produtos Vendidos</h3>
               <div className={styles["metric-value"]} id="total-products">
-                0
+                {totalProductsSold}
               </div>
               <div
                 className={`${styles["metric-difference"]} ${styles.positive}`}
@@ -232,68 +447,111 @@ const HomeDashPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#4587</td>
-                  <td className={`${styles.tds}`}>Depósito</td>
-                  <td className={`${styles.tds}`}>user@email.com</td>
-                  <td className={`${styles.tds}`}>500,000 kz</td>
-                  <td className={`${styles.tds}`}>15/03/2023 14:30</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-pending"]}`}
-                    >
-                      Pendente
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-                    >
-                      Aprovar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
-                    >
-                      Rejeitar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#4586</td>
-                  <td className={`${styles.tds}`}>Retirada</td>
-                  <td className={`${styles.tds}`}>user2@email.com</td>
-                  <td className={`${styles.tds}`}>250,000 kz</td>
-                  <td className={`${styles.tds}`}>15/03/2023 12:15</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-pending"]}`}
-                    >
-                      Pendente
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-                    >
-                      Aprovar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
-                    >
-                      Rejeitar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
+                {pendingTransactions ? (
+                  pendingTransactions.map((pendingTransaction) => (
+                    <tr className={`${styles.trs}`}>
+                      <td className={`${styles.tds}`}>
+                        #{pendingTransaction.id}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {pendingTransaction.type === "withdrawal"
+                          ? "Retirada"
+                          : ""}
+                        {pendingTransaction.type === "deposit"
+                          ? "Deposito"
+                          : ""}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {pendingTransaction.user_email}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {pendingTransaction.amount} kz
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {pendingTransaction.created_at}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        <span
+                          className={`${styles["status-badge"]} ${styles["status-pending"]}`}
+                        >
+                          {pendingTransaction.status === "pending"
+                            ? "Pendente"
+                            : ""}
+                        </span>
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        <button
+                          className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
+                          onClick={() => {
+                            handleApproveOrRejectTransactionButton(
+                              pendingTransaction,
+                              "approve"
+                            );
+                          }}
+                        >
+                          Aprovar
+                        </button>
+                        <button
+                          className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
+                          onClick={() => {
+                            handleApproveOrRejectTransactionButton(
+                              pendingTransaction,
+                              "reject"
+                            );
+                          }}
+                        >
+                          Rejeitar
+                        </button>
+                        {pendingTransaction.type === "deposit" &&
+                          pendingTransaction.receipt && (
+                            <button
+                              className={`${styles["action-btn"]} ${styles["btn-view"]}`}
+                              onClick={() => {
+                                window.open(
+                                  pendingTransaction.receipt as string,
+                                  "_blank"
+                                );
+                              }}
+                            >
+                              ver
+                            </button>
+                          )}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className={`${styles.trs}`}>
+                    <td className={`${styles.tds}`}>#loading...</td>
+                    <td className={`${styles.tds}`}>loading...</td>
+                    <td className={`${styles.tds}`}>loading...</td>
+                    <td className={`${styles.tds}`}>loading... kz</td>
+                    <td className={`${styles.tds}`}>loading...</td>
+                    <td className={`${styles.tds}`}>
+                      <span
+                        className={`${styles["status-badge"]} ${styles["status-pending"]}`}
+                      >
+                        loading...
+                      </span>
+                    </td>
+                    <td className={`${styles.tds}`}>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
+                      >
+                        loading...
+                      </button>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
+                      >
+                        loading...
+                      </button>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-view"]}`}
+                      >
+                        loading...
+                      </button>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -314,27 +572,59 @@ const HomeDashPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#1056</td>
-                  <td className={`${styles.tds}`}>João Silva</td>
-                  <td className={`${styles.tds}`}>joao@email.com</td>
-                  <td className={`${styles.tds}`}>923456789</td>
-                  <td className={`${styles.tds}`}>15/03/2023</td>
-                  <td className={`${styles.tds}`}>EQP123</td>
-                </tr>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#1055</td>
-                  <td className={`${styles.tds}`}>Maria Santos</td>
-                  <td className={`${styles.tds}`}>maria@email.com</td>
-                  <td className={`${styles.tds}`}>912345678</td>
-                  <td className={`${styles.tds}`}>15/03/2023</td>
-                  <td className={`${styles.tds}`}>EQP456</td>
-                </tr>
+                {latestRegisteredUsers ? (
+                  latestRegisteredUsers.map((latestRegisteredUser) => (
+                    <tr className={`${styles.trs}`}>
+                      <td className={`${styles.tds}`}>
+                        #{latestRegisteredUser.id}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {latestRegisteredUser.name}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {latestRegisteredUser.email}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {latestRegisteredUser.phone}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {latestRegisteredUser.createdAtDate}
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        {latestRegisteredUser.inviter_id ?? 0}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className={`${styles.trs}`}>
+                    <td className={`${styles.tds}`}>#1055</td>
+                    <td className={`${styles.tds}`}>Maria Santos</td>
+                    <td className={`${styles.tds}`}>maria@email.com</td>
+                    <td className={`${styles.tds}`}>912345678</td>
+                    <td className={`${styles.tds}`}>15/03/2023</td>
+                    <td className={`${styles.tds}`}>EQP456</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </main>
       </div>
+      <ConfirmationDialog
+        title="Confirmar"
+        message={`Tem certeza que deseja ${
+          approveOrReject && approveOrReject === "approve"
+            ? "aprovar"
+            : "rejeitar"
+        } ${
+          selectedTransaction?.type === "withdrawal"
+            ? "a Retirada"
+            : "o Deposito"
+        }?`}
+        onConfirm={approveOrRejectTransaction}
+        onCancel={cancelApproveOrReject}
+        isOpen={isDialogOpen}
+      />
     </>
   );
 };
