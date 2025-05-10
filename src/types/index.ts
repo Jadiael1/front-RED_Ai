@@ -11,6 +11,7 @@ export interface IUser {
   created_at: string;
   updated_at: string;
   wallet?: IWallet | null;
+  active: boolean;
 }
 
 export interface IApiResponseBasePaginate<T = unknown> {
