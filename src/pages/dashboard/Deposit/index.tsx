@@ -1,13 +1,23 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./assets/css/Deposit.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import receiptPlaceHolder from "../../../assets/images/receipt_placeholder.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import {
+  getTransactionsAdm,
+  TTransactionData,
+} from "../../../api/endpoints/transactions";
 
 const DepositDashPage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [transactions, setTransactions] = useState<TTransactionData[] | null>(
+    null
+  );
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TTransactionData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -45,6 +55,170 @@ const DepositDashPage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  const fetchTransactions = async () => {
+    try {
+      const response = await getTransactionsAdm({
+        type: "deposit",
+        perPage: 99999,
+      });
+      setTransactions(response.data.data);
+    } catch (error) {
+      console.error("Erro ao buscar transações:", error);
+    }
+  };
+
+  const handleApprove = (transactionId: number) => {
+    console.log(`Aprovar transação ${transactionId}`);
+    // Chamar API de aprovação aqui
+  };
+
+  const handleReject = (transactionId: number) => {
+    console.log(`Rejeitar transação ${transactionId}`);
+    // Chamar API de rejeição aqui
+  };
+
+  const handleViewReceipt = (transaction: TTransactionData) => {
+    setSelectedTransaction(transaction);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTransaction(null);
+  };
+
+  const renderTransactionsTable = () => {
+    if (!transactions) {
+      return <p>Carregando transações...</p>;
+    }
+
+    return (
+      <div style={{ overflowX: "auto" }}>
+        <table className={styles["data-table"]}>
+          <thead>
+            <tr className={styles.trs}>
+              <th className={styles.ths}>ID</th>
+              <th className={styles.ths}>Usuário</th>
+              <th className={styles.ths}>Valor</th>
+              <th className={styles.ths}>Data</th>
+              <th className={styles.ths}>Método</th>
+              <th className={styles.ths}>Status</th>
+              <th className={styles.ths}>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((transaction) => (
+              <tr key={transaction.id} className={styles.trs}>
+                <td className={styles.tds}>#{transaction.id}</td>
+                <td className={styles.tds}>{transaction.user_email}</td>
+                <td className={styles.tds}>{transaction.amount} kz</td>
+                <td className={styles.tds}>{transaction.created_at}</td>
+                <td className={styles.tds}>{transaction.method}</td>
+                <td className={styles.tds}>
+                  <span
+                    className={`${styles["status-badge"]} ${
+                      styles[`status-${transaction.status}`]
+                    }`}
+                  >
+                    {transaction.status === "pending"
+                      ? "Pendente"
+                      : transaction.status === "approved"
+                      ? "Aprovado"
+                      : "Rejeitado"}
+                  </span>
+                </td>
+                <td className={styles.tds}>
+                  {transaction.status === "pending" && (
+                    <>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
+                        onClick={() => handleApprove(transaction.id)}
+                      >
+                        Aprovar
+                      </button>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
+                        onClick={() => handleReject(transaction.id)}
+                      >
+                        Rejeitar
+                      </button>
+                    </>
+                  )}
+                  {transaction.type === "deposit" && transaction.receipt && (
+                    <button
+                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
+                      onClick={() => handleViewReceipt(transaction)}
+                    >
+                      Ver
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderModal = () => {
+    return (
+      <>
+        {isModalOpen && selectedTransaction && (
+          <div className={styles["modal-overlay"]}>
+            <div className={styles["modal-content"]}>
+              <h2>Detalhes da Transação</h2>
+              <div className={styles["modal-detail"]}>
+                <strong>ID da Transação:</strong> #{selectedTransaction.id}
+              </div>
+              <div className={styles["modal-detail"]}>
+                <strong>Usuário:</strong> {selectedTransaction.user_name}
+              </div>
+              <div className={styles["modal-detail"]}>
+                <strong>Valor:</strong> {selectedTransaction.amount} kz
+              </div>
+              <div className={styles["modal-detail"]}>
+                <strong>Data:</strong> {selectedTransaction.created_at}
+              </div>
+              <div className={styles["modal-detail"]}>
+                <strong>Método:</strong> {selectedTransaction.method}
+              </div>
+              <div className={styles["modal-detail"]}>
+                <strong>Status:</strong>{" "}
+                {selectedTransaction.status === "pending"
+                  ? "Pendente"
+                  : selectedTransaction.status === "approved"
+                  ? "Aprovado"
+                  : "Rejeitado"}
+              </div>
+
+              <h3>Comprovante</h3>
+              <a
+                href={selectedTransaction.receipt || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={selectedTransaction.receipt || receiptPlaceHolder}
+                  alt="Comprovante"
+                  className={styles["receipt-image"]}
+                />
+              </a>
+
+              <button className={styles["close-modal"]} onClick={closeModal}>
+                Fechar
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  };
 
   return (
     <>
@@ -177,98 +351,8 @@ const DepositDashPage = () => {
               </button>
             </div>
           </div>
-
-          <div style={{ overflowX: "auto" }}>
-            <table className={`${styles["data-table"]}`}>
-              <thead>
-                <tr className={styles.trs}>
-                  <th className={`${styles.ths}`}>ID</th>
-                  <th className={`${styles.ths}`}>Usuário</th>
-                  <th className={`${styles.ths}`}>Valor</th>
-                  <th className={`${styles.ths}`}>Data</th>
-                  <th className={`${styles.ths}`}>Método</th>
-                  <th className={`${styles.ths}`}>Status</th>
-                  <th className={`${styles.ths}`}>Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className={styles.trs}>
-                  <td className={`${styles.tds}`}>#4587</td>
-                  <td className={`${styles.tds}`}>joao@email.com</td>
-                  <td className={`${styles.tds}`}>500,000 kz</td>
-                  <td className={`${styles.tds}`}>15/03/2023 14:30</td>
-                  <td className={`${styles.tds}`}>Transferência Bancária</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-pending"]}`}
-                    >
-                      Pendente
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-                    >
-                      Aprovar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
-                    >
-                      Rejeitar
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]} ${styles["view-deposit"]}`}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-                <tr className={styles.trs}>
-                  <td className={`${styles.tds}`}>#4586</td>
-                  <td className={`${styles.tds}`}>maria@email.com</td>
-                  <td className={`${styles.tds}`}>1,000,000 kz</td>
-                  <td className={`${styles.tds}`}>15/03/2023 12:15</td>
-                  <td className={`${styles.tds}`}>Cartão de Crédito</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-approved"]}`}
-                    >
-                      Aprovado
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]} ${styles["view-deposit"]}`}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-                <tr className={styles.trs}>
-                  <td className={`${styles.tds}`}>#4585</td>
-                  <td className={`${styles.tds}`}>carlos@email.com</td>
-                  <td className={`${styles.tds}`}>750,000 kz</td>
-                  <td className={`${styles.tds}`}>14/03/2023 18:20</td>
-                  <td className={`${styles.tds}`}>Transferência Bancária</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-rejected"]}`}
-                    >
-                      Rejeitado
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]} ${styles["view-deposit"]}`}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
+          {renderTransactionsTable()}
+          {/*
           <div className={`${styles["deposit-details"]}`} id="depositDetails">
             <h2 className={`${styles["section-title"]}`}>
               Detalhes do Depósito
@@ -347,9 +431,10 @@ const DepositDashPage = () => {
                 Rejeitar Depósito
               </button>
             </div>
-          </div>
+          </div> */}
         </main>
       </div>
+      {renderModal()}
     </>
   );
 };
