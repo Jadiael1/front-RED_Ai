@@ -126,6 +126,7 @@ const DepositDashPage = () => {
     setFilterStatus("");
     setFilterStartDate("");
     setFilterEndDate("");
+    fetchTransactions(1);
     setCurrentPage(1);
   };
 
