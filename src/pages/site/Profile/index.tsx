@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import styles from "./assets/css/Profile.module.css";
-import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
+import avatarPlaceHolder from "../../../assets/images/avatar_placeholder_2.png";
 import {
   getTransactions,
   TTransactionData,
