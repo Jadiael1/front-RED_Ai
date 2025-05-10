@@ -1,13 +1,26 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./assets/css/Users.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import avatarPlaceHolder from "../../../assets/images/avatar_placeholder.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { getUsers, updateUserActiveStatus } from "../../../api/endpoints/users";
+import { IUser } from "../../../types";
+
+type UserStatus = "Todos os status" | "Ativo" | "Banido";
 
 const UsersDashPage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [users, setUsers] = useState<
+    (IUser & { createdAtDate?: string | null })[] | null
+  >(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusFilter, setStatusFilter] =
+    useState<UserStatus>("Todos os status");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [lastPage, setLastPage] = useState<number>(1);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -46,6 +59,119 @@ const UsersDashPage = () => {
       }
     };
   }, []);
+
+  const fetchUsers = useCallback(
+    async (page: number = 1): Promise<void> => {
+      setLoading(true);
+      try {
+        const params: Record<string, string> = {
+          per_page: "8",
+          page: page.toString(),
+        };
+
+        if (searchTerm) {
+          if (/^\d+$/.test(searchTerm)) {
+            params.id = searchTerm;
+          } else if (searchTerm.includes("@")) {
+            params.email = searchTerm;
+          } else {
+            params.name = searchTerm;
+          }
+        }
+
+        if (statusFilter !== "Todos os status") {
+          params.active = statusFilter === "Ativo" ? "1" : "0";
+        }
+
+        const usersResp = await getUsers(params);
+        const paginationData = usersResp.data;
+
+        const treatedUsers = paginationData.data
+          .map((user) => {
+            const cleanedTimestamp = parseInt(
+              user.created_at.replace(/\D/g, ""),
+              10
+            );
+            const date = new Date(cleanedTimestamp * 1000);
+            const localDate = date.toLocaleDateString();
+            const localTime = date.toLocaleTimeString();
+            return { ...user, createdAtDate: `${localDate} ${localTime}` };
+          })
+          .sort((a, b) => b.id - a.id);
+
+        setUsers(treatedUsers);
+        setCurrentPage(paginationData.current_page);
+        setLastPage(paginationData.last_page);
+      } catch {
+        alert("Erro ao buscar usuários.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [searchTerm, statusFilter]
+  );
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  const handleToggleUserStatus = async (
+    userId: number,
+    currentStatus: boolean
+  ) => {
+    const confirmAction = window.confirm(
+      `Deseja realmente ${currentStatus ? "banir" : "reativar"} este usuário?`
+    );
+    if (!confirmAction) return;
+
+    try {
+      await updateUserActiveStatus(userId, !currentStatus);
+      alert(`Usuário ${!currentStatus ? "reativado" : "banido"} com sucesso.`);
+      fetchUsers();
+    } catch {
+      alert("Erro ao atualizar status do usuário.");
+    }
+  };
+
+  const exportToCSV = () => {
+    if (!users) return;
+    const header = ["ID", "Nome", "Email", "Telefone", "Registro", "Status"];
+    const rows = users.map((u) => [
+      u.id,
+      u.name,
+      u.email,
+      u.phone,
+      u.createdAtDate,
+      u.active ? "Ativo" : "Banido",
+    ]);
+    const csvContent = [header, ...rows].map((e) => e.join(",")).join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "usuarios.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportToExcel = async () => {
+    if (!users) return;
+    const { utils, writeFile } = await import("xlsx");
+    const ws = utils.json_to_sheet(
+      users.map((u) => ({
+        ID: u.id,
+        Nome: u.name,
+        Email: u.email,
+        Telefone: u.phone,
+        Registro: u.createdAtDate,
+        Status: u.active ? "Ativo" : "Banido",
+      }))
+    );
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Usuários");
+    writeFile(wb, "usuarios.xlsx");
+  };
 
   return (
     <>
@@ -97,7 +223,8 @@ const UsersDashPage = () => {
                 onClick={() => navigate("/dashboard/")}
                 style={{ cursor: "pointer" }}
               >
-                <i className="fas fa-tachometer-alt"></i> Dashboard
+                <i className={`fas fa-tachometer-alt ${styles.is}`}></i>{" "}
+                Dashboard
               </a>
             </li>
             <li className={`${styles.lis}`}>
@@ -148,23 +275,34 @@ const UsersDashPage = () => {
               type="text"
               className={`${styles["search-input"]}`}
               placeholder="Pesquisar por ID, nome ou email"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <select className={`${styles["search-input"]}`}>
+            <select
+              className={`${styles["search-input"]}`}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as UserStatus)}
+            >
               <option>Todos os status</option>
               <option>Ativo</option>
               <option>Banido</option>
-              <option>Inativo</option>
             </select>
-            <button className={`${styles["search-btn"]}`}>
+            <button
+              className={`${styles["search-btn"]}`}
+              onClick={() => fetchUsers(1)}
+            >
               <i className="fas fa-search"></i> Pesquisar
             </button>
           </div>
 
           <div className={`${styles["user-actions"]}`}>
-            <button className={`${styles["export-btn"]}`}>
+            <button className={`${styles["export-btn"]}`} onClick={exportToCSV}>
               <i className="fas fa-file-export"></i> Exportar CSV
             </button>
-            <button className={`${styles["export-btn"]}`}>
+            <button
+              className={`${styles["export-btn"]}`}
+              onClick={exportToExcel}
+            >
               <i className="fas fa-file-export"></i> Exportar Excel
             </button>
           </div>
@@ -183,107 +321,101 @@ const UsersDashPage = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#1056</td>
-                  <td className={`${styles.tds}`}>
-                    <img
-                      src={avatarPlaceHolder}
-                      alt="João Silva"
-                      className={`${styles["user-avatar"]}`}
-                    />
-                    João Silva
-                  </td>
-                  <td className={`${styles.tds}`}>joao@email.com</td>
-                  <td className={`${styles.tds}`}>923456789</td>
-                  <td className={`${styles.tds}`}>15/03/2023</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-approved"]}`}
-                    >
-                      Ativo
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
-                    >
-                      <i className="fas fa-ban"></i> Banir
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
-                    >
-                      <i className="fas fa-eye"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#1055</td>
-                  <td className={`${styles.tds}`}>
-                    <img
-                      src={avatarPlaceHolder}
-                      alt="Maria Santos"
-                      className={`${styles["user-avatar"]}`}
-                    />
-                    Maria Santos
-                  </td>
-                  <td className={`${styles.tds}`}>maria@email.com</td>
-                  <td className={`${styles.tds}`}>912345678</td>
-                  <td className={`${styles.tds}`}>15/03/2023</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-approved"]}`}
-                    >
-                      Ativo
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
-                    >
-                      <i className="fas fa-ban"></i> Banir
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
-                    >
-                      <i className="fas fa-eye"></i>
-                    </button>
-                  </td>
-                </tr>
-                <tr className={`${styles.trs}`}>
-                  <td className={`${styles.tds}`}>#1054</td>
-                  <td className={`${styles.tds}`}>
-                    <img
-                      src={avatarPlaceHolder}
-                      alt="Carlos Oliveira"
-                      className={`${styles["user-avatar"]}`}
-                    />
-                    Carlos Oliveira
-                  </td>
-                  <td className={`${styles.tds}`}>carlos@email.com</td>
-                  <td className={`${styles.tds}`}>934567890</td>
-                  <td className={`${styles.tds}`}>14/03/2023</td>
-                  <td className={`${styles.tds}`}>
-                    <span
-                      className={`${styles["status-badge"]} ${styles["status-rejected"]}`}
-                    >
-                      Banido
-                    </span>
-                  </td>
-                  <td className={`${styles.tds}`}>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-                    >
-                      <i className="fas fa-check"></i> Desbanir
-                    </button>
-                    <button
-                      className={`${styles["action-btn"]} ${styles["btn-view"]}`}
-                    >
-                      <i className="fas fa-eye"></i>
-                    </button>
-                  </td>
-                </tr>
+                {users ? (
+                  users.map((user, index) => (
+                    <tr className={`${styles.trs}`} key={index}>
+                      <td className={`${styles.tds}`}>#{user.id}</td>
+                      <td className={`${styles.tds}`}>
+                        <div className={styles["user-info"]}>
+                          <img
+                            src={avatarPlaceHolder}
+                            alt={user.name}
+                            className={`${styles["user-avatar"]}`}
+                          />
+                          <span>{user.name}</span>
+                        </div>
+                      </td>
+                      <td className={`${styles.tds}`}>{user.email}</td>
+                      <td className={`${styles.tds}`}>{user.phone}</td>
+                      <td className={`${styles.tds}`}>{user.createdAtDate}</td>
+                      <td className={`${styles.tds}`}>
+                        <span
+                          className={`${styles["status-badge"]} ${
+                            user.active
+                              ? styles["status-approved"]
+                              : styles["status-rejected"]
+                          }`}
+                        >
+                          {user.active ? "Ativo" : "Banido"}
+                        </span>
+                      </td>
+                      <td className={`${styles.tds}`}>
+                        <button
+                          className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
+                          onClick={() =>
+                            handleToggleUserStatus(user.id, user.active)
+                          }
+                          disabled={loading}
+                        >
+                          <i className="fas fa-ban"></i>{" "}
+                          {user.active ? "Banir" : "Reativar"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className={`${styles.trs}`}>
+                    <td className={`${styles.tds}`}>#Loading...</td>
+                    <td className={`${styles.tds}`}>
+                      <img
+                        src={avatarPlaceHolder}
+                        alt="Loading..."
+                        className={`${styles["user-avatar"]}`}
+                      />
+                      Loading...
+                    </td>
+                    <td className={`${styles.tds}`}>Loading...</td>
+                    <td className={`${styles.tds}`}>Loading...</td>
+                    <td className={`${styles.tds}`}>Loading...</td>
+                    <td className={`${styles.tds}`}>
+                      <span
+                        className={`${styles["status-badge"]} ${styles["status-approved"]}`}
+                      >
+                        Loading...
+                      </span>
+                    </td>
+                    <td className={`${styles.tds}`}>
+                      <button
+                        className={`${styles["action-btn"]} ${styles["btn-ban"]}`}
+                      >
+                        <i className="fas fa-ban"></i> Loading...
+                      </button>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
+            <div className={`${styles["pagination-controls"]}`}>
+              <button
+                className={`${styles["pagination-btn"]}`}
+                disabled={currentPage === 1 || loading}
+                onClick={() => fetchUsers(currentPage - 1)}
+              >
+                Anterior
+              </button>
+
+              <span className={`${styles["pagination-info"]}`}>
+                Página {currentPage} de {lastPage}
+              </span>
+
+              <button
+                className={`${styles["pagination-btn"]}`}
+                disabled={currentPage === lastPage || loading}
+                onClick={() => fetchUsers(currentPage + 1)}
+              >
+                Próximo
+              </button>
+            </div>
           </div>
         </main>
       </div>
