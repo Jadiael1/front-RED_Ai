@@ -15,6 +15,9 @@ type TTransaction = {
     | "investment"
     | "refund"
     | "";
+  start_date?: string;
+  end_date?: string;
+  page?: string;
 };
 
 export type TTransactionData = {
@@ -43,17 +46,20 @@ export type TTransactionData = {
 export const getTransactionsAdm = async (
   param: Partial<TTransaction>
 ): Promise<IApiResponseBase<IApiResponseBasePaginate<TTransactionData[]>>> => {
-  param.id = param.id ?? 0;
-  param.status = param.status ?? "pending";
-  param.sortBy = param.sortBy ?? "created_at";
-  param.sortOrder = param.sortOrder ?? "desc";
-  param.perPage = param.perPage ?? 1;
-  param.type = param.type ?? "";
+  const queryParams = new URLSearchParams();
+  if (param.type) queryParams.append("type", param.type);
+  if (param.status) queryParams.append("status", param.status);
+  if (param.sortBy) queryParams.append("sort_by", param.sortBy);
+  if (param.sortOrder) queryParams.append("sort_order", param.sortOrder);
+  if (param.perPage) queryParams.append("per_page", String(param.perPage));
+  if (param.start_date) queryParams.append("start_date", param.start_date);
+  if (param.end_date) queryParams.append("end_date", param.end_date);
+  if (param.page) queryParams.append("page", param.page);
+  if (param.id) queryParams.append("id", String(param.id));
+
   const response = await api.get<
     IApiResponseBase<IApiResponseBasePaginate<TTransactionData[]>>
-  >(
-    `/wallet/transactions?type=${param.type}&status=${param.status}&sort_by=${param.sortBy}&sort_order=${param.sortOrder}&per_page=${param.perPage}`
-  );
+  >(`/wallet/transactions?${queryParams.toString()}`);
   return response.data;
 };
 
