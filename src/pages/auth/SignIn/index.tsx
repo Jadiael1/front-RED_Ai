@@ -28,10 +28,10 @@ const SignInPage = () => {
     document.body.style.backgroundColor = "#f5f7fa";
     document.body.style.color = "#333";
     document.body.style.lineHeight = "1.6";
-    document.body.style.display = "flex";
-    document.body.style.justifyContent = "center";
-    document.body.style.alignItems = "center";
-    document.body.style.minHeight = "100vh";
+    // document.body.style.display = "flex";
+    // document.body.style.justifyContent = "center";
+    // document.body.style.alignItems = "center";
+    // document.body.style.minHeight = "100vh";
 
     const el = document.body;
     if (el) {
@@ -110,82 +110,84 @@ const SignInPage = () => {
   };
 
   return (
-    <div className={styles["login-container"]}>
-      <img src={logob} alt="RED Ai" className={styles.logo} />
-      <h1 className={styles.h1s}>
-        Benvindo a RED Ai
-        <br /> Acesse sua conta
-      </h1>
-      <form id="loginForm" onSubmit={handleSignIn}>
-        <div className={styles["form-group"]}>
-          <label className={styles.labels} htmlFor="email">
-            Email ou Telefone
-          </label>
-          <input
-            className={styles.inputs}
-            type="text"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          {errorCredential && (
-            <div id="emailError" className={styles["error-message"]}>
-              {errorCredential}
-            </div>
-          )}
-        </div>
-
-        <div className={styles["form-group"]}>
-          <label className={styles.labels} htmlFor="password">
-            Senha
-          </label>
-          <div className={styles["password-container"]}>
+    <div className={`${styles["wrapper"]}`}>
+      <div className={styles["login-container"]}>
+        <img src={logob} alt="RED Ai" className={styles.logo} />
+        <h1 className={styles.h1s}>
+          Benvindo a RED Ai
+          <br /> Acesse sua conta
+        </h1>
+        <form id="loginForm" onSubmit={handleSignIn}>
+          <div className={styles["form-group"]}>
+            <label className={styles.labels} htmlFor="email">
+              Email ou Telefone
+            </label>
             <input
               className={styles.inputs}
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              type="text"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <i
-              className={`fas fa-eye ${styles["toggle-password"]}`}
-              id="togglePassword"
-              onClick={toggleShowPassword}
-            ></i>
+            {errorCredential && (
+              <div id="emailError" className={styles["error-message"]}>
+                {errorCredential}
+              </div>
+            )}
           </div>
-          {errorPassword && (
-            <div id="passwordError" className={styles["error-message"]}>
-              {errorPassword}
+
+          <div className={styles["form-group"]}>
+            <label className={styles.labels} htmlFor="password">
+              Senha
+            </label>
+            <div className={styles["password-container"]}>
+              <input
+                className={styles.inputs}
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <i
+                className={`fas fa-eye ${styles["toggle-password"]}`}
+                id="togglePassword"
+                onClick={toggleShowPassword}
+              ></i>
             </div>
-          )}
-        </div>
-        {error && <div>{error}</div>}
+            {errorPassword && (
+              <div id="passwordError" className={styles["error-message"]}>
+                {errorPassword}
+              </div>
+            )}
+          </div>
+          {error && <div>{error}</div>}
 
-        <button type="submit" className={styles.btn}>
-          Entrar
-        </button>
+          <button type="submit" className={styles.btn}>
+            Entrar
+          </button>
 
-        <div className={styles.links}>
-          <a
-            className={styles.as}
-            onClick={() => navigate("/auth/forgot-password")}
-            style={{ cursor: "pointer" }}
-          >
-            Esqueceu a senha?
-          </a>
-          <a
-            className={styles.as}
-            onClick={handleClickSignUp}
-            style={{ cursor: "pointer" }}
-          >
-            Criar nova conta
-          </a>
-        </div>
-      </form>
+          <div className={styles.links}>
+            <a
+              className={styles.as}
+              onClick={() => navigate("/auth/forgot-password")}
+              style={{ cursor: "pointer" }}
+            >
+              Esqueceu a senha?
+            </a>
+            <a
+              className={styles.as}
+              onClick={handleClickSignUp}
+              style={{ cursor: "pointer" }}
+            >
+              Criar nova conta
+            </a>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
