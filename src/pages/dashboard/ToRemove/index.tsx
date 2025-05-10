@@ -382,7 +382,7 @@ const ToRemoveDashPage = () => {
                 </tr>
               </thead>
               <tbody id="withdrawalsTable">
-                {transactions?.map((tx) => (
+                {transactions && transactions?.map((tx) => (
                   <tr className={`${styles.trs}`} key={tx.id}>
                     <td className={`${styles.tds}`}>#{tx.id}</td>
                     <td className={`${styles.tds}`}>{tx.user_name}</td>
