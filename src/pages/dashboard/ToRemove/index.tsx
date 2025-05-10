@@ -1,12 +1,39 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./assets/css/ToRemove.module.css";
 import { useNavigate } from "react-router-dom";
 import redai2 from "../../../assets/images/redai2.png";
 import { useAuth } from "../../../hooks/useAuth";
+import {
+  getTransactionsAdm,
+  TTransactionData,
+} from "../../../api/endpoints/transactions";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
+import AlertDiv from "../../../components/Alert";
+import { ApproveOrRejectWithdrawal } from "../../../api/endpoints/ApproveOrRejectWithdrawal";
 
 const ToRemoveDashPage = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+
+  const [transactions, setTransactions] = useState<TTransactionData[] | null>(
+    null
+  );
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
+  const [filterByUserId, setFilterByUserId] = useState<string>("");
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<TTransactionData | null>(null);
+  const [actionType, setActionType] = useState<"approve" | "reject" | null>(
+    null
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [alertType, setAlertType] = useState<
+    "success" | "error" | "warning" | null
+  >(null);
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -45,6 +72,111 @@ const ToRemoveDashPage = () => {
       }
     };
   }, []);
+
+  const formatDate = (date: string) => {
+    if (!date) return "";
+    const [y, m, d] = date.split("-");
+    return `${y}-${m}-${d}`;
+  };
+
+  const fetchTransactions = useCallback(
+    async (page = 1) => {
+      try {
+        const params: Record<string, string | number> = {
+          type: "withdrawal",
+          page,
+          perPage: 10,
+          sortBy: "created_at",
+          sortOrder: "desc",
+        };
+        if (filterStatus) params.status = filterStatus;
+        if (filterStartDate) params.start_date = formatDate(filterStartDate);
+        if (filterEndDate) params.end_date = formatDate(filterEndDate);
+        if (filterByUserId) params.id = filterByUserId;
+
+        const resp = await getTransactionsAdm(params);
+        setTransactions(resp.data.data);
+        setTotalPages(resp.data.last_page);
+      } catch (err) {
+        console.error("Erro ao buscar saques:", err);
+      }
+    },
+    [filterStatus, filterStartDate, filterEndDate, filterByUserId]
+  );
+
+  useEffect(() => {
+    fetchTransactions(currentPage);
+  }, [fetchTransactions, currentPage]);
+
+  const applyFilters = () => {
+    setCurrentPage(1);
+    fetchTransactions(1);
+  };
+
+  const clearFilters = () => {
+    setFilterStatus("");
+    setFilterStartDate("");
+    setFilterEndDate("");
+    setCurrentPage(1);
+    fetchTransactions(1);
+  };
+
+  const handleAction = (tx: TTransactionData, type: "approve" | "reject") => {
+    setSelectedTransaction(tx);
+    setActionType(type);
+    setIsDialogOpen(true);
+  };
+
+  const showAlert = (
+    type: "success" | "error" | "warning",
+    message: string
+  ) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertType(null);
+      setAlertMessage("");
+    }, 5000);
+  };
+
+  const confirmAction = async () => {
+    if (!selectedTransaction || !actionType) return;
+    setIsDialogOpen(false);
+    try {
+      const status = actionType === "approve" ? "approved" : "rejected";
+      const resp = await ApproveOrRejectWithdrawal({
+        status,
+        transaction_id: selectedTransaction.id,
+      });
+
+      if (resp.status === "success") {
+        showAlert(
+          "success",
+          `Solicitação ${
+            status === "approved" ? "aprovada" : "rejeitada"
+          } com sucesso.`
+        );
+        fetchTransactions(currentPage);
+      } else {
+        showAlert(
+          "error",
+          `Erro ao ${
+            status === "approved" ? "aprovar" : "rejeitar"
+          } solicitação.`
+        );
+      }
+    } catch {
+      showAlert("error", "Erro ao processar a ação.");
+    } finally {
+      setSelectedTransaction(null);
+      setActionType(null);
+    }
+  };
+
+  function calcularValorOriginal(valorComDesconto: number) {
+    const valorOriginal = valorComDesconto / 0.9;
+    return valorOriginal;
+  }
 
   return (
     <>
@@ -88,6 +220,7 @@ const ToRemoveDashPage = () => {
           className={`${styles["mobile-menu-backdrop"]}`}
           id="mobileMenuBackdrop"
         ></div>
+        {alertType && <AlertDiv type={alertType} message={alertMessage} />}
         <aside className={`${styles.sidebar}`} id="sidebar">
           <ul className={`${styles["sidebar-menu"]}`}>
             <li className={`${styles.lis}`}>
@@ -150,22 +283,13 @@ const ToRemoveDashPage = () => {
                 <select
                   className={`${styles["filter-select"]}`}
                   id="statusFilter"
+                  value={filterStatus}
+                  onChange={(e) => setFilterStatus(e.target.value)}
                 >
                   <option value="">Todos</option>
                   <option value="pending">Pendentes</option>
                   <option value="approved">Aprovadas</option>
                   <option value="rejected">Rejeitadas</option>
-                </select>
-              </div>
-
-              <div className={`${styles["filter-group"]}`}>
-                <label className={`${styles["filter-label"]}`}>Método</label>
-                <select
-                  className={`${styles["filter-select"]}`}
-                  id="methodFilter"
-                >
-                  <option value="">Todos</option>
-                  <option value="transfer">Transferência</option>
                 </select>
               </div>
 
@@ -177,6 +301,8 @@ const ToRemoveDashPage = () => {
                   type="date"
                   className={`${styles["filter-date"]}`}
                   id="startDate"
+                  value={filterStartDate}
+                  onChange={(e) => setFilterStartDate(e.target.value)}
                 />
               </div>
 
@@ -188,6 +314,8 @@ const ToRemoveDashPage = () => {
                   type="date"
                   className={`${styles["filter-date"]}`}
                   id="endDate"
+                  value={filterEndDate}
+                  onChange={(e) => setFilterEndDate(e.target.value)}
                 />
               </div>
             </div>
@@ -198,13 +326,24 @@ const ToRemoveDashPage = () => {
             >
               <div className={`${styles["filter-group"]}`}>
                 <label className={`${styles["filter-label"]}`}>
-                  Buscar por ID ou Usuário
+                  Buscar por ID
                 </label>
                 <input
                   type="text"
                   className={`${styles["filter-input"]}`}
                   id="searchInput"
-                  placeholder="Digite para pesquisar..."
+                  placeholder="Digite um id (Apenas numero) valido para pesquisar..."
+                  value={filterByUserId}
+                  onChange={(e) => {
+                    if (!isNaN(Number(e.target.value))) {
+                      setFilterByUserId(e.target.value);
+                    } else {
+                      showAlert(
+                        "warning",
+                        "Deves buscar pelo id do usuario. (Apenas numero)"
+                      );
+                    }
+                  }}
                 />
               </div>
 
@@ -212,10 +351,15 @@ const ToRemoveDashPage = () => {
                 <button
                   className={`${styles["filter-btn"]} ${styles["reset-btn"]}`}
                   id="resetFilters"
+                  onClick={clearFilters}
                 >
                   <i className="fas fa-undo"></i> Limpar
                 </button>
-                <button className={`${styles["filter-btn"]}`} id="applyFilters">
+                <button
+                  className={`${styles["filter-btn"]}`}
+                  id="applyFilters"
+                  onClick={applyFilters}
+                >
                   <i className="fas fa-filter"></i> Filtrar
                 </button>
               </div>
@@ -238,123 +382,87 @@ const ToRemoveDashPage = () => {
                 </tr>
               </thead>
               <tbody id="withdrawalsTable">
-                {/* Dados serão carregados via JavaScript */}
+                {transactions?.map((tx) => (
+                  <tr className={`${styles.trs}`} key={tx.id}>
+                    <td className={`${styles.tds}`}>#{tx.id}</td>
+                    <td className={`${styles.tds}`}>{tx.user_name}</td>
+                    <td className={`${styles.tds}`}>
+                      {calcularValorOriginal(Number(tx.amount))} kz
+                    </td>
+                    <td className={`${styles.tds}`}>10%</td>
+                    <td className={`${styles.tds}`}>{tx.amount}</td>
+                    <td className={`${styles.tds}`}>{tx.created_at}</td>
+                    <td className={`${styles.tds}`}>{tx.method}</td>
+                    <td className={`${styles.tds}`}>
+                      <span
+                        className={`${styles["status-badge"]} ${
+                          styles[`status-${tx.status}`]
+                        }`}
+                      >
+                        {tx.status === "pending"
+                          ? "Pendente"
+                          : tx.status === "approved"
+                          ? "Aprovado"
+                          : "Rejeitado"}
+                      </span>
+                    </td>
+                    <td>
+                      {tx.status === "pending" && (
+                        <>
+                          <button
+                            onClick={() => handleAction(tx, "approve")}
+                            className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
+                          >
+                            Aprovar
+                          </button>
+                          <button
+                            onClick={() => handleAction(tx, "reject")}
+                            className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
+                          >
+                            Rejeitar
+                          </button>
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
 
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <div className={styles.pagination}>
             <button
-              id="loadMore"
-              className={`${styles["action-btn"]}`}
-              style={{ background: "var(--secondary-color)", color: "white" }}
+              onClick={() => currentPage > 1 && setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className={`${styles["pagination-btn"]}`}
             >
-              <i className="fas fa-plus"></i> Carregar Mais
+              Anterior
+            </button>
+            <span className={`${styles["pagination-info"]}`}>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              onClick={() =>
+                currentPage < totalPages && setCurrentPage(currentPage + 1)
+              }
+              disabled={currentPage === totalPages}
+              className={`${styles["pagination-btn"]}`}
+            >
+              Próxima
             </button>
           </div>
         </main>
       </div>
 
-      {/* Modal de Detalhes */}
-      <div
-        id="withdrawalModal"
-        className={`${styles["withdrawal-details-modal"]}`}
-      >
-        <div className={`${styles["withdrawal-details-content"]}`}>
-          <div className={`${styles["detail-header"]}`}>
-            <h3 className={`${styles["detail-title"]}`}>
-              Detalhes da Retirada
-            </h3>
-            <button className={`${styles["close-modal"]}`} id="closeModal">
-              &times;
-            </button>
-          </div>
-
-          <div className={`${styles["detail-grid"]}`}>
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>
-                ID da Transação
-              </span>
-              <div className={`${styles["detail-value"]}`} id="detailId">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Usuário</span>
-              <div className={`${styles["detail-value"]}`} id="detailUser">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Valor</span>
-              <div className={`${styles["detail-value"]}`} id="detailAmount">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Taxa</span>
-              <div className={`${styles["detail-value"]}`} id="detailFee">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Valor Líquido</span>
-              <div className={`${styles["detail-value"]}`} id="detailNet">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Data</span>
-              <div className={`${styles["detail-value"]}`} id="detailDate">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Método</span>
-              <div className={`${styles["detail-value"]}`} id="detailMethod">
-                -
-              </div>
-            </div>
-
-            <div className={`${styles["detail-item"]}`}>
-              <span className={`${styles["detail-label"]}`}>Status</span>
-              <div className={`${styles["detail-value"]}`}>
-                <span id="detailStatus" className={`${styles["status-badge"]}`}>
-                  -
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <div className={`${styles["detail-item"]}`}>
-            <span className={`${styles["detail-label"]}`}>Dados Bancários</span>
-            <div className={`${styles["account-details"]}`}>
-              <div className={`${styles["account-detail"]}`}>
-                <strong>Banco:</strong> <span id="detailBank">-</span>
-              </div>
-              <div className={`${styles["account-detail"]}`}>
-                <strong>Agência:</strong> <span id="detailAgency">-</span>
-              </div>
-              <div className={`${styles["account-detail"]}`}>
-                <strong>Conta:</strong> <span id="detailAccount">-</span>
-              </div>
-              <div className={`${styles["account-detail"]}`}>
-                <strong>Titular:</strong> <span id="detailHolder">-</span>
-              </div>
-            </div>
-          </div>
-
-          <div className={`${styles["detail-actions"]}`} id="modalActions">
-            {/* Ações serão preenchidas dinamicamente */}
-          </div>
-        </div>
-      </div>
+      <ConfirmationDialog
+        title="Confirmação"
+        message={`Deseja realmente ${
+          actionType === "approve" ? "aprovar" : "rejeitar"
+        } este saque?`}
+        onConfirm={confirmAction}
+        onCancel={() => setIsDialogOpen(false)}
+        isOpen={isDialogOpen}
+      />
     </>
   );
 };
