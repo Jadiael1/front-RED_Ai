@@ -104,16 +104,14 @@ const HomeDashPage = () => {
 
           return {
             ...user,
-            createdAtDate: `${localDate} ${localTime}`, // Convertendo de segundos para milissegundos
+            createdAtDate: `${localDate} ${localTime}`,
           };
         })
         .sort((a, b) => b.id - a.id)
         .slice(0, 5);
-      console.log(latestRegisteredUsers1);
       setLatestRegisteredUsers(latestRegisteredUsers1);
       //
-
-      // transactions?type=deposit&status=approved&sort_by=created_at&sort_order=desc&per_page=99
+      
       const transactions = await getTransactionsAdm({
         status: "approved",
         sortBy: "created_at",
@@ -520,7 +518,7 @@ const HomeDashPage = () => {
                     </tr>
                   ))
                 ) : (
-                  <tr className={`${styles.trs}`}>
+                  <tr className={`${styles.trs}`} key='abcdefg9548756$'>
                     <td className={`${styles.tds}`}>#loading...</td>
                     <td className={`${styles.tds}`}>loading...</td>
                     <td className={`${styles.tds}`}>loading...</td>
