@@ -1,3 +1,14 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #f5f7fa;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
 .login-container {
     width: 100%;
     max-width: 400px;
@@ -6,6 +17,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     text-align: center;
+    margin: 0 auto;
 }
 
 .logo {
