@@ -7,7 +7,7 @@ export interface IUser {
   invite_code: string;
   phone: string;
   iban: string | null;
-  invited_by: number | null;
+  inviter_id: number | null;
   created_at: string;
   updated_at: string;
   wallet?: IWallet | null;
