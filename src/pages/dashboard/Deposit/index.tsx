@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styles from "./assets/css/Deposit.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import receiptPlaceHolder from "../../../assets/images/receipt_placeholder.png";
@@ -8,6 +8,9 @@ import {
   getTransactionsAdm,
   TTransactionData,
 } from "../../../api/endpoints/transactions";
+import { approveOrRejectDeposit } from "../../../api/endpoints/approveOrRejectDeposit";
+import AlertDiv from "../../../components/Alert";
+import ConfirmationDialog from "../../../components/ConfirmationDialog";
 
 const DepositDashPage = () => {
   const navigate = useNavigate();
@@ -18,6 +21,18 @@ const DepositDashPage = () => {
   const [selectedTransaction, setSelectedTransaction] =
     useState<TTransactionData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [filterStatus, setFilterStatus] = useState<string>("");
+  const [filterStartDate, setFilterStartDate] = useState<string>("");
+  const [filterEndDate, setFilterEndDate] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [approveOrReject, setApproveOrReject] = useState<
+    "approve" | "reject" | null
+  >(null);
+  const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string>("");
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -56,30 +71,62 @@ const DepositDashPage = () => {
     };
   }, []);
 
+  const formatDateForAPI = (date: string): string => {
+    if (!date) return "";
+    const [year, month, day] = date.split("-");
+    return `${year}-${month}-${day}`;
+  };
+
+  const fetchTransactions = useCallback(
+    async (
+      currentPage?: number,
+      filterStatus?: string,
+      filterStartDate?: string,
+      filterEndDate?: string
+    ): Promise<void> => {
+      try {
+        const params: Record<string, string | number> = {
+          type: "deposit",
+          perPage: 5, // Itens por página
+          page: currentPage ?? 1,
+          sortBy: "created_at",
+          sortOrder: "desc",
+        };
+
+        if (filterStatus) params.status = filterStatus;
+        if (filterStartDate)
+          params.start_date = formatDateForAPI(filterStartDate);
+        if (filterEndDate) params.end_date = formatDateForAPI(filterEndDate);
+
+        const response = await getTransactionsAdm(params);
+        setTransactions(response.data.data);
+        setTotalPages(response.data.last_page); // Adapte conforme o nome da propriedade de paginação no backend
+      } catch (error) {
+        console.error("Erro ao buscar transações:", error);
+      }
+    },
+    []
+  );
+
   useEffect(() => {
     fetchTransactions();
-  }, []);
+  }, [fetchTransactions]);
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await getTransactionsAdm({
-        type: "deposit",
-        perPage: 99999,
-      });
-      setTransactions(response.data.data);
-    } catch (error) {
-      console.error("Erro ao buscar transações:", error);
-    }
+  const applyFilters = () => {
+    setCurrentPage(1);
+    fetchTransactions(
+      1,
+      filterStatus,
+      filterStartDate,
+      filterEndDate
+    );
   };
 
-  const handleApprove = (transactionId: number) => {
-    console.log(`Aprovar transação ${transactionId}`);
-    // Chamar API de aprovação aqui
-  };
-
-  const handleReject = (transactionId: number) => {
-    console.log(`Rejeitar transação ${transactionId}`);
-    // Chamar API de rejeição aqui
+  const clearFilters = () => {
+    setFilterStatus("");
+    setFilterStartDate("");
+    setFilterEndDate("");
+    setCurrentPage(1);
   };
 
   const handleViewReceipt = (transaction: TTransactionData) => {
@@ -137,13 +184,25 @@ const DepositDashPage = () => {
                     <>
                       <button
                         className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-                        onClick={() => handleApprove(transaction.id)}
+                        // onClick={() => handleApprove(transaction.id)}
+                        onClick={() =>
+                          handleApproveOrRejectTransactionButton(
+                            transaction,
+                            "approve"
+                          )
+                        }
                       >
                         Aprovar
                       </button>
                       <button
                         className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
-                        onClick={() => handleReject(transaction.id)}
+                        // onClick={() => handleReject(transaction.id)}
+                        onClick={() =>
+                          handleApproveOrRejectTransactionButton(
+                            transaction,
+                            "reject"
+                          )
+                        }
                       >
                         Rejeitar
                       </button>
@@ -220,6 +279,95 @@ const DepositDashPage = () => {
     );
   };
 
+  const handleApproveOrRejectTransactionButton = (
+    transaction: TTransactionData,
+    action: "approve" | "reject"
+  ) => {
+    setSelectedTransaction(transaction);
+    setApproveOrReject(action);
+    setIsDialogOpen(true);
+  };
+
+  const updateDepositTransactions = (
+    id: number,
+    action: "approved" | "rejected"
+  ) => {
+    setTransactions((prevTransactions) =>
+      prevTransactions
+        ? prevTransactions.map((prevTransaction) =>
+            prevTransaction.id === id
+              ? {
+                  ...prevTransaction,
+                  status: action,
+                }
+              : prevTransaction
+          )
+        : prevTransactions
+    );
+  };
+
+  const approveOrRejectTransaction = async () => {
+    if (!selectedTransaction || !approveOrReject) return;
+    setIsDialogOpen(false);
+
+    const status = approveOrReject === "approve" ? "approved" : "rejected";
+    try {
+      const resp = await approveOrRejectDeposit({
+        status,
+        transaction_id: selectedTransaction.id,
+      });
+
+      if (resp.status === "success") {
+        showAlert(
+          "success",
+          `Transação ${
+            status === "approved" ? "aprovada" : "rejeitada"
+          } com sucesso.`
+        );
+        updateDepositTransactions(selectedTransaction.id, status);
+      } else {
+        showAlert(
+          "error",
+          `Erro ao ${status === "approved" ? "aprovar" : "rejeitar"} transação.`
+        );
+      }
+    } catch {
+      showAlert("error", "Erro ao processar a transação.");
+    } finally {
+      setSelectedTransaction(null);
+      setApproveOrReject(null);
+    }
+  };
+
+  const showAlert = (type: "success" | "error", message: string) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertMessage("");
+      setAlertType(null);
+    }, 5000);
+  };
+
+  const previousPage = () => {
+    fetchTransactions(
+      currentPage - 1,
+      filterStatus,
+      filterStartDate,
+      filterEndDate
+    );
+    setCurrentPage(currentPage - 1);
+  };
+
+  const nextPage = () => {
+    fetchTransactions(
+      currentPage + 1,
+      filterStatus,
+      filterStartDate,
+      filterEndDate
+    );
+    setCurrentPage(currentPage + 1);
+  };
+
   return (
     <>
       <header className={`${styles["admin-header"]}`}>
@@ -258,6 +406,9 @@ const DepositDashPage = () => {
       </header>
 
       <div className={`${styles["admin-container"]}`}>
+        {alertType && alertMessage && (
+          <AlertDiv type={alertType} message={alertMessage} />
+        )}
         <div
           className={`${styles["mobile-menu-backdrop"]}`}
           id="mobileMenuBackdrop"
@@ -320,7 +471,11 @@ const DepositDashPage = () => {
           <div className={`${styles["filter-bar"]}`}>
             <div className={`${styles["filter-group"]}`}>
               <label className={`${styles["filter-label"]}`}>Status</label>
-              <select className={`${styles["filter-select"]}`}>
+              <select
+                className={`${styles["filter-select"]}`}
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+              >
                 <option value="">Todos os status</option>
                 <option value="pending">Pendentes</option>
                 <option value="approved">Aprovados</option>
@@ -332,109 +487,71 @@ const DepositDashPage = () => {
               <label className={`${styles["filter-label"]}`}>
                 Data inicial
               </label>
-              <input type="date" className={`${styles["filter-input"]}`} />
+              <input
+                type="date"
+                className={`${styles["filter-input"]}`}
+                value={filterStartDate}
+                onChange={(e) => setFilterStartDate(e.target.value)}
+              />
             </div>
 
             <div className={`${styles["filter-group"]}`}>
               <label className={`${styles["filter-label"]}`}>Data final</label>
-              <input type="date" className={`${styles["filter-input"]}`} />
+              <input
+                type="date"
+                className={`${styles["filter-input"]}`}
+                value={filterEndDate}
+                onChange={(e) => setFilterEndDate(e.target.value)}
+              />
             </div>
 
             <div className={`${styles["filter-actions"]}`}>
               <button
                 className={`${styles["filter-btn"]} ${styles["reset-btn"]}`}
+                onClick={clearFilters}
               >
                 Limpar
               </button>
-              <button className={`${styles["filter-btn"]}`}>
+              <button
+                className={`${styles["filter-btn"]}`}
+                onClick={applyFilters}
+              >
                 <i className="fas fa-filter"></i> Filtrar
               </button>
             </div>
           </div>
           {renderTransactionsTable()}
-          {/*
-          <div className={`${styles["deposit-details"]}`} id="depositDetails">
-            <h2 className={`${styles["section-title"]}`}>
-              Detalhes do Depósito
-            </h2>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>
-                ID da Transação:
-              </div>
-              <div className={`${styles["detail-value"]}`} id="detail-id">
-                #4587
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Usuário:</div>
-              <div className={`${styles["detail-value"]}`} id="detail-user">
-                joao@email.com
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Valor:</div>
-              <div className={`${styles["detail-value"]}`} id="detail-amount">
-                500,000 kz
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Data:</div>
-              <div className={`${styles["detail-value"]}`} id="detail-date">
-                15/03/2023 14:30
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Método:</div>
-              <div className={`${styles["detail-value"]}`} id="detail-method">
-                Transferência Bancária
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Comprovante:</div>
-              <div className={`${styles["detail-value"]}`}>
-                <img
-                  src={receiptPlaceHolder}
-                  alt="Comprovante"
-                  className={`${styles["receipt-image"]}`}
-                  id="detail-receipt"
-                />
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`}>
-              <div className={`${styles["detail-label"]}`}>Status:</div>
-              <div className={`${styles["detail-value"]}`}>
-                <span
-                  className={`${styles["status-badge"]} ${styles["status-pending"]}`}
-                  id="detail-status"
-                >
-                  Pendente
-                </span>
-              </div>
-            </div>
-
-            <div className={`${styles["detail-row"]}`} id="detail-actions">
-              <button
-                className={`${styles["action-btn"]} ${styles["btn-approve"]}`}
-              >
-                Aprovar Depósito
-              </button>
-              <button
-                className={`${styles["action-btn"]} ${styles["btn-reject"]}`}
-              >
-                Rejeitar Depósito
-              </button>
-            </div>
-          </div> */}
+          <div className={styles["pagination"]}>
+            <button
+              onClick={() => currentPage > 1 && previousPage()}
+              disabled={currentPage === 1}
+              className={styles["pagination-btn"]}
+            >
+              Anterior
+            </button>
+            <span className={styles["pagination-info"]}>
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              onClick={() => currentPage < totalPages && nextPage()}
+              disabled={currentPage === totalPages}
+              className={styles["pagination-btn"]}
+            >
+              Próxima
+            </button>
+          </div>
         </main>
       </div>
       {renderModal()}
+      <ConfirmationDialog
+        title="Confirmação"
+        message={`Tem certeza que deseja ${
+          approveOrReject === "approve" ? "aprovar" : "rejeitar"
+        } este depósito?`}
+        onConfirm={approveOrRejectTransaction}
+        onCancel={() => setIsDialogOpen(false)}
+        isOpen={isDialogOpen}
+      />
     </>
   );
 };
