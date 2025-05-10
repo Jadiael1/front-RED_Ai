@@ -1,12 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styles from "./assets/css/Settings.module.css";
 import redai2 from "../../../assets/images/redai2.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
+import { updateUser as updateUserReq } from "../../../api/endpoints/updateUser";
+import AlertDiv from "../../../components/Alert";
 
 const SettingsDashPage = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, updateUser, user } = useAuth();
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | null>(null);
 
   useEffect(() => {
     document.body.style.fontFamily =
@@ -45,6 +53,47 @@ const SettingsDashPage = () => {
       }
     };
   }, []);
+
+  const showAlert = (type: "success" | "error", message: string) => {
+    setAlertType(type);
+    setAlertMessage(message);
+    setTimeout(() => {
+      setAlertType(null);
+      setAlertMessage("");
+    }, 5000);
+  };
+
+  const handlePasswordChange = async () => {
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      showAlert("error", "Preencha todos os campos.");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      showAlert("error", "As senhas não coincidem.");
+      return;
+    }
+
+    try {
+      const response = await updateUserReq({
+        current_password: currentPassword,
+        new_password: newPassword,
+        new_password_confirmation: confirmPassword,
+      });
+
+      if (response.status === "success") {
+        showAlert("success", "Senha alterada com sucesso.");
+        updateUser(response.data);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        showAlert("error", response.message || "Erro ao alterar senha.");
+      }
+    } catch {
+      showAlert("error", "Erro na requisição. Tente novamente.");
+    }
+  };
 
   return (
     <>
@@ -88,6 +137,7 @@ const SettingsDashPage = () => {
           className={styles["mobile-menu-backdrop"]}
           id="mobileMenuBackdrop"
         ></div>
+        {alertType && <AlertDiv type={alertType} message={alertMessage} />}
         <aside className={styles.sidebar} id="sidebar">
           <ul className={styles["sidebar-menu"]}>
             <li className={`${styles.lis}`}>
@@ -156,8 +206,9 @@ const SettingsDashPage = () => {
                 type="email"
                 id="current-email"
                 className={styles["form-control"]}
-                value="admin@redai.com"
+                value={user?.email ?? ""}
                 readOnly
+                disabled
               />
             </div>
 
@@ -170,6 +221,8 @@ const SettingsDashPage = () => {
                 id="current-password"
                 className={styles["form-control"]}
                 required
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
               />
             </div>
 
@@ -182,6 +235,8 @@ const SettingsDashPage = () => {
                 id="new-password"
                 className={styles["form-control"]}
                 required
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
               />
               <div className={styles["password-strength"]}>
                 <div
@@ -203,11 +258,18 @@ const SettingsDashPage = () => {
                 id="confirm-password"
                 className={styles["form-control"]}
                 required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
               />
             </div>
 
             <div className={styles["form-actions"]}>
-              <button className={styles["save-btn"]}>Salvar Alterações</button>
+              <button
+                className={styles["save-btn"]}
+                onClick={handlePasswordChange}
+              >
+                Salvar Alterações
+              </button>
             </div>
           </div>
 
@@ -222,7 +284,7 @@ const SettingsDashPage = () => {
                 type="text"
                 id="site-name"
                 className={styles["form-control"]}
-                value="RED Aí"
+                defaultValue="RED Aí"
               />
             </div>
 
@@ -234,7 +296,7 @@ const SettingsDashPage = () => {
                 type="url"
                 id="site-url"
                 className={styles["form-control"]}
-                value="https://www.redai.com"
+                defaultValue="https://www.redai.com"
               />
             </div>
 
@@ -242,7 +304,11 @@ const SettingsDashPage = () => {
               <label className={`${styles.labels}`} htmlFor="maintenance-mode">
                 Modo Manutenção
               </label>
-              <select id="maintenance-mode" className={styles["form-control"]}>
+              <select
+                id="maintenance-mode"
+                className={styles["form-control"]}
+                defaultValue={0}
+              >
                 <option value="0">Desativado</option>
                 <option value="1">Ativado</option>
               </select>
@@ -252,8 +318,12 @@ const SettingsDashPage = () => {
               <label className={`${styles.labels}`} htmlFor="currency">
                 Moeda Padrão
               </label>
-              <select id="currency" className={styles["form-control"]}>
-                <option value="kz" selected>
+              <select
+                id="currency"
+                className={styles["form-control"]}
+                defaultValue={`kz`}
+              >
+                <option value="kz">
                   Kwanza Angolano (kz)
                 </option>
                 <option value="usd">Dólar Americano ($)</option>
