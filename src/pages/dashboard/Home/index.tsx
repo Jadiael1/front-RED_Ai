@@ -447,7 +447,7 @@ const HomeDashPage = () => {
               <tbody>
                 {pendingTransactions ? (
                   pendingTransactions.map((pendingTransaction) => (
-                    <tr className={`${styles.trs}`}>
+                    <tr className={`${styles.trs}`} key={pendingTransaction.id}>
                       <td className={`${styles.tds}`}>
                         #{pendingTransaction.id}
                       </td>
@@ -518,7 +518,7 @@ const HomeDashPage = () => {
                     </tr>
                   ))
                 ) : (
-                  <tr className={`${styles.trs}`} key='abcdefg9548756$'>
+                  <tr className={`${styles.trs}`} key="abcdefg9548756$">
                     <td className={`${styles.tds}`}>#loading...</td>
                     <td className={`${styles.tds}`}>loading...</td>
                     <td className={`${styles.tds}`}>loading...</td>
@@ -572,7 +572,7 @@ const HomeDashPage = () => {
               <tbody>
                 {latestRegisteredUsers ? (
                   latestRegisteredUsers.map((latestRegisteredUser) => (
-                    <tr className={`${styles.trs}`}>
+                    <tr className={`${styles.trs}`} key={latestRegisteredUser.invite_code}>
                       <td className={`${styles.tds}`}>
                         #{latestRegisteredUser.id}
                       </td>
