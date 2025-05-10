@@ -336,7 +336,16 @@ const UsersDashPage = () => {
                         </div>
                       </td>
                       <td className={`${styles.tds}`}>{user.email}</td>
-                      <td className={`${styles.tds}`}>{user.phone}</td>
+                      <td className={`${styles.tds}`}>
+                        <a
+                          href={`https://wa.me/${user.phone}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles["whatsapp-link"]}
+                        >
+                          {user.phone}
+                        </a>
+                      </td>
                       <td className={`${styles.tds}`}>{user.createdAtDate}</td>
                       <td className={`${styles.tds}`}>
                         <span

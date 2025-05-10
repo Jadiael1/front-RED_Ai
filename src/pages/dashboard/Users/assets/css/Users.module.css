@@ -405,3 +405,17 @@
     align-items: center;
     gap: 8px;
 }
+
+.whatsapp-link {
+    color: #25d366;
+    /* Cor oficial do WhatsApp */
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.whatsapp-link:hover {
+    color: #128c7e;
+    /* Cor mais escura ao passar o mouse */
+    text-decoration: underline;
+}
