@@ -215,7 +215,305 @@ const ProductPage = () => {
               </div>
             ))
           ) : (
-            <div>Loading...</div>
+            <>
+              <div className={styles["product-card"]} key="1654A8G7J8941985">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="A0X18S5G6F9D">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="A7F45S2X5H9LD87">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="Z9X8C1W5H5">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="0A1Q4E5XC38A">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="13A2S8E9J2B">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="ALDF845H698D9E4Q">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="157A5B5K9YE8">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+              <div className={styles["product-card"]} key="15487A5F5J2R">
+                <span className={styles["product-badge"]}>Loading...</span>
+                <h3 className={styles["product-title"]}>Loading...</h3>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Investimento:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Renda Diária:</span>
+                  <span className={styles.value}>Loading... Kz (10%)</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Duração:</span>
+                  <span className={styles.value}>Loading... dias</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Rendimento Total:</span>
+                  <span className={styles.value}>Loading... Kz</span>
+                </div>
+
+                <div className={styles["product-detail"]}>
+                  <span className={styles.label}>Disponíveis:</span>
+                  <span className={styles.value}>Loading...</span>
+                </div>
+
+                <button className={styles["buy-btn"]} disabled>
+                  COMPRAR
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>
