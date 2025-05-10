@@ -29,6 +29,8 @@ export type TTransactionData = {
   created_at: string;
   updated_at: string;
   gross_value?: number | null;
+  user_name?: string | null;
+  user_email?: string | null;
 };
 
 // export const transactions = async (): Promise<IApiResponseBase> => {
@@ -37,6 +39,23 @@ export type TTransactionData = {
 //   );
 //   return response.data;
 // };
+
+export const getTransactionsAdm = async (
+  param: Partial<TTransaction>
+): Promise<IApiResponseBase<IApiResponseBasePaginate<TTransactionData[]>>> => {
+  param.id = param.id ?? 0;
+  param.status = param.status ?? "pending";
+  param.sortBy = param.sortBy ?? "created_at";
+  param.sortOrder = param.sortOrder ?? "desc";
+  param.perPage = param.perPage ?? 1;
+  param.type = param.type ?? "";
+  const response = await api.get<
+    IApiResponseBase<IApiResponseBasePaginate<TTransactionData[]>>
+  >(
+    `/wallet/transactions?type=${param.type}&status=${param.status}&sort_by=${param.sortBy}&sort_order=${param.sortOrder}&per_page=${param.perPage}`
+  );
+  return response.data;
+};
 
 export const getTransactions = async (
   param: Partial<TTransaction>
